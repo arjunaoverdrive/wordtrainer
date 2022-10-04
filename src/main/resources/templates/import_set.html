@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script defer src="/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+
+<body>
+<div id="central-container" style="display:flex; flex-direction:column;align-items:center; justify-content:center;">
+    <h1>Welcome to the best words training app!</h1>
+    <h3>Import a set of words</h3>
+    <div id="form-div">
+        <form id="form" th:action="@{/import}" method="post" th:object="${importDto}" enctype="application/json"
+              autocomplete="off">
+            <label for="name">Name</label><br>
+            <input id="name" required="required" type="text" th:field="*{name}" autofocus="autofocus"
+                   placeholder="Name of the set" style="width:98%"><br><br>
+            <label for="import">Words</label><br>
+            <textarea id="import" required="required" cols="50" rows="25"
+                      placeholder="Word-translation pairs separated by a delimiter" th:field="*{words}"></textarea>
+            <h3>Select a delimiter</h3>
+            <div>
+                <input id="-" type="radio" checked="checked" name="delimiter" th:field="*{delimiter}"
+                       th:value="'-'">
+                <label for="-">-</label><br>
+                <input id="tab" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'    '">
+                <label for="tab">Tab</label><br>
+                <input id="slash" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'/'">
+                <label for="slash">/</label><br>
+                <input id="custom" type="radio" name="delimiter" th:value="custom" placeholder="custom">
+                <label for="custom">Set a custom delimiter</label><br>
+                <input id="custom-val" type="text" disabled th:field="*{delimiter}"
+                       placeholder="Your custom delimiter">
+            </div>
+            <button id="submit" type="submit">Send</button>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

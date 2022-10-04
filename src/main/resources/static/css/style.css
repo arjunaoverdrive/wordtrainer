@@ -1,0 +1,101 @@
+ body {
+     font-family: "Open Sans", cursive, "Lucida Console", sans-serif;
+     font-size: larger;
+     background-color: aliceblue;
+     padding-top: 40px;
+ }
+
+ h1 {
+     text-align: center;
+ }
+
+ #central-container {
+     margin: 0 auto;
+     width: max-content;
+     padding: 40px;
+     background-color: ghostwhite;
+ }
+
+ #main-container {
+     padding: 5px;
+ }
+
+ #sets-container {
+     padding: 5px;
+ }
+
+ a {
+     margin: 15px;
+ }
+
+ .delete-set-form {
+     display: inline-block;
+ }
+
+ .delete-btn {
+     margin-left: 10px;
+ }
+
+ #title {
+     display: inline-block;
+ }
+
+ 
+
+ #words-container {
+     width: 100%;
+ }
+
+ .word-col {
+     width: 35%;
+ }
+
+ .translation-col {
+     width: 35%;
+ }
+
+ .hidden {
+     display: none;
+ }
+
+ #showTranslation{
+    border: none;
+ }
+
+ #word-item-container{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+ }
+
+ #answer{
+    width: 83%;
+ }
+
+ #prompt{
+    color:cornflowerblue;
+    font-size: 14px;
+ }
+
+ #main>div{
+    margin-top: 20px; 
+ }
+
+ #finish-block>div>div{
+    margin: 10px auto;
+ }
+
+ #name-container{
+    transform: translate(10%);
+ }
+ #name{
+    width: 60%;
+    padding: 5px 10px;
+    margin: 5px auto;
+ }
+ .input{
+    width: 85%;
+    padding: 5px 10px;
+    margin: 5px auto;
+ }
+

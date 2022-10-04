@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Set Page</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
+</head>
+<body>
+<div id="central-container">
+    <h1>Welcome to the best words training app!</h1>
+    <h3 id="title" th:text="${title}"></h3>&nbsp;
+    <form th:method="post" enctype="application/json" th:object="${words}">
+        <div id="name-container">
+        <label for="name">Name</label><br>
+            <input type="text" id="name" name="name" th:field="*{name}"></div>
+        <table id="words-container">
+            <thead>
+            <th>Word</th>
+            <th>Translation</th>
+            </thead>
+            <tr class="word-item" th:each="word, status :*{wordList}">
+                <td>
+                    <input type="text" class="input" th:name="|wordList[${status.index}].word|"
+                           th:value="${word.word}">
+                </td>
+                <td>
+                    <input type="text" class="input" th:name="|wordList[${status.index}].translation|"
+                           th:value="${word.translation}">
+                </td>
+                <td>
+                    <button class="delete-new-item" type="button">Delete
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <button id="save-changes" type="submit" th:formmethod="post"
+                th:formaction="@{/sets/save}">Save changes
+        </button>
+
+    </form>
+    <br>
+    <div>
+        <a th:href="@{/practice/{id}(id=${id})}">Practice</a><br>
+        <a href="/">Return home</a>
+    </div>
+</div>
+</body>
+
+</html>

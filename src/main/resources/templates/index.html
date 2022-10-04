@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Word Trainer Home Page</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+
+<body>
+    <div id="central-container">
+        <h1>Welcome to the best words training app!</h1>
+        <div id="main-container">
+            <a href="/add">Add new set</a><br>
+            <a href="/choose_set">Choose set</a><br>
+            <a href="/import">Import new set</a><br>
+            <h3>Recent sets</h3>
+            <div id="sets-container">
+                <div class="set-item" th:each="set : ${sets}">
+                    <a th:href="@{/sets/{id}(id=${set.id})}" th:text="${set.name}"></a>
+
+                    <form class="delete-set-form">
+                        <button class="delete-btn" th:formmethod="post" th:type="submit" th:attr="data-id=${set.id}"
+                            th:formaction="@{/sets/delete/{set.id}(set.id=${set.id})}">Delete set</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
