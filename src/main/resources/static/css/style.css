@@ -22,6 +22,19 @@
 
  #sets-container {
      padding: 5px;
+     width: 100%;
+ }
+
+ #links{
+    display: flex;
+    justify-content: space-between;
+ }
+ #recent{
+    text-align: center;
+ }
+
+ .set-item>td{
+    text-align: center;
  }
 
  a {
@@ -97,5 +110,11 @@
     width: 85%;
     padding: 5px 10px;
     margin: 5px auto;
+ }
+
+ #import{
+    padding: 10px;
+    font-family: cursive, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 14px;
  }
 

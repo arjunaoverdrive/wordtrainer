@@ -11,30 +11,34 @@
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
     <h3 id="title" th:text="${title}"></h3>&nbsp;
+    <input type="hidden" id="set-id" name="id" value="-1">
     <form th:method="post" enctype="application/json" th:object="${words}">
         <div id="name-container">
-        <label for="name">Name</label><br>
+            <label for="name">Name</label><br>
             <input type="text" id="name" name="name" th:field="*{name}"></div>
         <table id="words-container">
             <thead>
             <th>Word</th>
             <th>Translation</th>
             </thead>
+            <tbody id="word-items-body">
             <tr class="word-item" th:each="word, status :*{wordList}">
                 <td>
-                    <input type="text" class="input" th:name="|wordList[${status.index}].word|"
+                    <input type="text" class="input word" th:name="|wordList[${status.index}].word|" required
                            th:value="${word.word}">
                 </td>
                 <td>
-                    <input type="text" class="input" th:name="|wordList[${status.index}].translation|"
+                    <input type="text" class="input translation" th:name="|wordList[${status.index}].translation|" required
                            th:value="${word.translation}">
                 </td>
                 <td>
-                    <button class="delete-new-item" type="button">Delete
+                    <button class="delete-item" type="button">Delete
                     </button>
                 </td>
             </tr>
+            </tbody>
         </table>
+        <button id="add-more" type="button">Add more</button>
         <button id="save-changes" type="submit" th:formmethod="post"
                 th:formaction="@{/sets/save}">Save changes
         </button>

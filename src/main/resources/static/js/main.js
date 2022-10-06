@@ -126,19 +126,19 @@ if (window.location.href.includes('/practice')) {
         main.classList.add("hidden");
     }
 
-    function showNavigationLinks(){
+    function showNavigationLinks() {
         const navLinks = document.getElementById("navigation-links");
         navLinks.classList.remove("hidden");
     }
 
-    function calculateCorrectness(){
+    function calculateCorrectness() {
         let keyCount = 0;
         let sum = 0;
-        for (key in resultObject){
+        for (key in resultObject) {
             sum += resultObject[key];
             keyCount++;
         }
-        return (Math.round(keyCount/sum * 100 - 1) % 100) + 1;
+        return (Math.round(keyCount / sum * 100 - 1) % 100) + 1;
     }
 
 }
@@ -154,24 +154,15 @@ else if (window.location.href.endsWith("/import")) {
     }
 }
 
-else if (window.location.href.includes("/sets/")) {
+else {
 
+    const more = document.getElementById("add-more");
+    const setid = document.getElementById("set-id").value;
+    const itemsBlock = document.getElementById("word-items-body");
+    const saveSet = document.getElementById("save-changes");
     const deleteBtns = document.getElementsByClassName("delete-item");
 
-    const editSet = document.getElementById("edit-set-btn");
-    const saveSet = document.getElementById("save-changes");
-    const inputs = document.getElementsByClassName("input");
-
-    editSet.addEventListener("click", toggleSaveAndEdit);
-
-    function toggleSaveAndEdit(event) {
-        editSet.classList.toggle("hidden");
-        saveSet.classList.toggle("hidden");
-        enableInputs();
-        toggleElems(deleteBtns);
-    }
-
-
+    more.addEventListener("click", addOneItemMore);
 
     for (let delBtn of deleteBtns) {
         delBtn.addEventListener("click", handleDeleteClick);
@@ -181,54 +172,79 @@ else if (window.location.href.includes("/sets/")) {
         let btn = event.target;
         let wordItem = btn.parentElement.parentElement;
         wordItem.parentElement.removeChild(wordItem);
-        let id = btn.attributes.id.value;
-        let setid = document.getElementById("set-id").value;
-        doAjaxCall(id, setid);
-    }
 
-    function doAjaxCall(id, setid) {
-        let deleteCall = new XMLHttpRequest();
-        let url = "/sets/" + setid + "/words/delete/" + id;
-
-        deleteCall.open("post", url);
-        deleteCall.setRequestHeader("Content-type", "application/json");
-        deleteCall.send();
-    }
-
-    function handleEditClick(event) {
-        let target = event.target;
-        toggleElement(target);
-        enableInputs(target);
-    }
-
-    function toggleElement(elem) {
-        elem.classList.toggle("hidden");
-        let siblingSave = elem.nextElementSibling;
-        siblingSave.classList.toggle("hidden");
-    }
-
-    function enableInputs() {
-        for (let item of inputs) {
-            item.attributes.removeNamedItem("disabled");
+        if (setid != -1) {
+            let id = btn.attributes.id.value;
+            doAjaxCall(id, setid);
         }
     }
 
+    function addOneItemMore() {
+        let i = itemsBlock.childElementCount;
+
+        let oneMoreItemMarkup = generateOneMoreItemMarkup(i);
+
+        let oneMore = itemsBlock.appendChild(document.createElement("tr"));
+        oneMore.classList.add("word-item");
+        oneMore.innerHTML += oneMoreItemMarkup;
+    }
+
+    function generateOneMoreItemMarkup(i) {
+        const setidInputField = setid == -1 ? '' : '<input type="hidden" name="wordList[' + i + '].wordSet" value=' + setid + '></input>';
+        const newItemMarkup = '<td><input type="text" class="input word" name="wordList[' + i + '].word" required value></td>' +
+            '<td><input type="text" class="input translation" name="wordList[' + i + '].translation" required value"></td>' +
+            '<td><button class="delete-item" type="button">Delete</button></td>';
+        return setidInputField + newItemMarkup;
+    }
 
 
-
-    // function enableInputs(elem) {
-    //     let cells = elem.parentElement.parentElement.cells;
-    //     for (let cell of cells) {
-    //         if (cell.children[0].hasAttribute("disabled")) {
-    //             cell.children[0].attributes.removeNamedItem("disabled")
-    //         }
-    //     }
-    // }
+    if (window.location.href.includes("/sets/")) {
 
 
-    function toggleElems(elems) {
-        for (let elem of elems) {
+        const editSet = document.getElementById("edit-set-btn");
+        const inputs = document.getElementsByClassName("input");
+
+        editSet.addEventListener("click", toggleSaveAndEdit);
+
+        function toggleSaveAndEdit() {
+            editSet.classList.toggle("hidden");
+            saveSet.classList.toggle("hidden");
+            more.classList.toggle("hidden");
+            enableInputs();
+            toggleElems(deleteBtns);
+        }
+
+        function doAjaxCall(id, setid) {
+            let deleteCall = new XMLHttpRequest();
+            let url = "/sets/" + setid + "/words/delete/" + id;
+
+            deleteCall.open("post", url);
+            deleteCall.setRequestHeader("Content-type", "application/json");
+            deleteCall.send();
+        }
+
+        function handleEditClick(event) {
+            let target = event.target;
+            toggleElement(target);
+            enableInputs(target);
+        }
+
+        function toggleElement(elem) {
             elem.classList.toggle("hidden");
+            let siblingSave = elem.nextElementSibling;
+            siblingSave.classList.toggle("hidden");
+        }
+
+        function enableInputs() {
+            for (let item of inputs) {
+                item.attributes.removeNamedItem("disabled");
+            }
+        }
+
+        function toggleElems(elems) {
+            for (let elem of elems) {
+                elem.classList.toggle("hidden");
+            }
         }
     }
 }

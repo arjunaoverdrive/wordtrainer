@@ -10,7 +10,9 @@ public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false)
     private String word;
+    @Column(nullable = false)
     private String translation;
 
     @ManyToOne
