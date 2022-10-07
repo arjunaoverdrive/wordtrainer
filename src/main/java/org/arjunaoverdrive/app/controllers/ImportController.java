@@ -1,6 +1,7 @@
 package org.arjunaoverdrive.app.controllers;
 
 import org.arjunaoverdrive.app.DTO.ImportDto;
+import org.arjunaoverdrive.app.services.ImportService;
 import org.arjunaoverdrive.app.services.ImportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ImportController {
 
     @Autowired
-    private final ImportServiceImpl importServiceImpl;
+    private final ImportService importService;
 
     public ImportController(ImportServiceImpl importServiceImpl) {
-        this.importServiceImpl = importServiceImpl;
+        this.importService = importServiceImpl;
     }
 
     @ModelAttribute("importDto")
@@ -30,7 +31,7 @@ public class ImportController {
 
     @PostMapping("/import")
     public String importWords(ImportDto importDto){
-        importServiceImpl.importSet(importDto);
+        importService.importSet(importDto);
         return "redirect:/";
     }
 }

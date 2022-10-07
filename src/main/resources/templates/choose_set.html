@@ -3,21 +3,22 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Choose set</title>
+    <title>Choose Set</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
 </head>
 
 <body>
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
-    <h3>Select a set to practice</h3>
+    <h3 id="choose-set">Select a set to practice</h3>
     <div id="main-container">
-        <h3 id="recent">Recent sets</h3>
         <table id="sets-container">
             <tr class="set-item" th:each="set : ${sets}">
                 <td>
                     <a th:href="@{/sets/{id}(id=${set.id})}" th:text="${set.name}"></a>
                 </td>
+                <td><button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button></td>
                 <td>
                     <form class="delete-set-form">
                         <button class="delete-btn" th:formmethod="post" th:type="submit" th:attr="data-id=${set.id}"

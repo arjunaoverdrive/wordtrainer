@@ -1,6 +1,5 @@
 package org.arjunaoverdrive.app.services;
 
-
 import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.DAO.WordSetRepository;
 import org.arjunaoverdrive.app.DTO.ImportDto;
@@ -9,6 +8,7 @@ import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +30,8 @@ public class ImportServiceImpl implements ImportService{
         String name = importDto.getName();
         WordSet set = new WordSet();
         set.setName(name);
+        Timestamp creationDate = new Timestamp(System.currentTimeMillis());
+        set.setCreatedOn(creationDate);
         wordSetRepository.save(set);
         List<Word> wordList = parseWords(words, delimiter);
         wordList.forEach(word -> word.setWordSet(set));

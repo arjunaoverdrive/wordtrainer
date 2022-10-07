@@ -29,7 +29,7 @@
     display: flex;
     justify-content: space-between;
  }
- #recent{
+ #recent, #choose-set{
     text-align: center;
  }
 
@@ -52,8 +52,6 @@
  #title {
      display: inline-block;
  }
-
- 
 
  #words-container {
      width: 100%;

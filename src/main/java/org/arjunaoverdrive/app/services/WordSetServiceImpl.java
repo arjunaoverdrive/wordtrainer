@@ -7,10 +7,8 @@ import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Timestamp;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +24,11 @@ public class WordSetServiceImpl implements WordSetService {
     }
 
     public List<WordSet> findAll() {
-        return this.wordSetRepository.findAll().isEmpty() ? new ArrayList<>() : this.wordSetRepository.findAll();
+        return this.wordSetRepository.findAll().isEmpty() ? new ArrayList<>() :
+                this.wordSetRepository.findAll()
+                        .stream()
+                        .sorted(Comparator.comparing(WordSet::getCreatedOn).reversed())
+                        .collect(Collectors.toList());
     }
 
     public WordSet findById(Integer id) {
@@ -45,7 +47,19 @@ public class WordSetServiceImpl implements WordSetService {
         this.wordSetRepository.delete(ws);
     }
 
+    @Override
+    public List<WordSet> findAllRecent() {
+        List<WordSet> res = findAll()
+                .stream()
+                .sorted(Comparator.comparing(WordSet::getCreatedOn).reversed())
+                .collect(Collectors.toList());
+        return res.size() < 10 ? res :
+                res.stream().limit(10).collect(Collectors.toList());
+    }
+
     public void save(WordSet wordSet) {
+        Timestamp createdOn = new Timestamp(System.currentTimeMillis());
+        wordSet.setCreatedOn(createdOn);
         WordSet set = this.wordSetRepository.save(wordSet);
         List<Word> wordList = wordSet.getWordList();
         wordList.forEach(word -> word.setWordSet(set)); // TODO: 05.10.2022 handle NPE when saving a set with no words

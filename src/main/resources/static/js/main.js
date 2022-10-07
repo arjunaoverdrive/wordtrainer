@@ -154,6 +154,19 @@ else if (window.location.href.endsWith("/import")) {
     }
 }
 
+else if(document.title === "Home Page" || document.title === "Choose Set"){
+    let practiceBtns = document.getElementsByClassName("practice-set-btn");
+
+    for(btn of practiceBtns){
+        btn.addEventListener("click", handlePracticeClick);
+    }
+
+    function handlePracticeClick(event){
+        let setid = event.target.attributes.id.value;
+        window.location.replace("/practice/" + setid);
+    }
+}
+
 else {
 
     const more = document.getElementById("add-more");

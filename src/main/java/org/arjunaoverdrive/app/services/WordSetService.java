@@ -1,5 +1,6 @@
 package org.arjunaoverdrive.app.services;
 
+import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 
 import java.util.List;
@@ -10,4 +11,10 @@ public interface WordSetService {
     List<WordSet> findAll();
     void save(WordSet wordSet);
     void deleteSet(Integer id);
+
+    List<WordSet> findAllRecent();
+
+    List<Word> getWordList(Integer id);
+
+    void update(WordSet wordSet);
 }

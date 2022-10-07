@@ -1,6 +1,7 @@
 package org.arjunaoverdrive.app.controllers;
 
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,16 +13,16 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    private final WordSetServiceImpl wordSetServiceImpl;
+    private final WordSetService wordSetService;
 
     @Autowired
     public HomeController(WordSetServiceImpl wordSetServiceImpl) {
-        this.wordSetServiceImpl = wordSetServiceImpl;
+        this.wordSetService = wordSetServiceImpl;
     }
 
     @ModelAttribute("sets")
     public List<WordSet>wordSetList(){
-        return wordSetServiceImpl.findAll();
+        return wordSetService.findAllRecent();
     }
 
     @RequestMapping("/")

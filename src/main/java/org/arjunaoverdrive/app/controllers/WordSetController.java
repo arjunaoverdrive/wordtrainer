@@ -1,6 +1,7 @@
 package org.arjunaoverdrive.app.controllers;
 
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/sets")
 public class WordSetController {
 
-    private final WordSetServiceImpl wordSetServiceImpl;
+    private final WordSetService wordSetService;
 
     @Autowired
     public WordSetController(WordSetServiceImpl wordSetServiceImpl) {
-        this.wordSetServiceImpl = wordSetServiceImpl;
+        this.wordSetService = wordSetServiceImpl;
     }
 
     @GetMapping("/{id}")
     public String getSetPage(@PathVariable("id") Integer id, Model model) {
-        WordSet words = wordSetServiceImpl.findById(id);
+        WordSet words = wordSetService.findById(id);
         model.addAttribute("words", words);
         model.addAttribute("title", words.getName());
         model.addAttribute("id", id);
@@ -29,26 +30,29 @@ public class WordSetController {
 
     @PostMapping("/save")
     public String saveSet(@ModelAttribute("words") WordSet wordSet){
-        wordSetServiceImpl.save(wordSet);
+        wordSetService.save(wordSet);
         return "redirect:/";
     }
 
     @PostMapping("/save/{id}")
     public String updateSet(@PathVariable("id")Integer id, @ModelAttribute("words") WordSet wordSet){
-        wordSetServiceImpl.update(wordSet);
+        wordSetService.update(wordSet);
 
         return "redirect:/sets/" + id;
     }
 
     @PostMapping(value = "/delete/{id}")
     public String deleteSet(@PathVariable("id") Integer id){
-        wordSetServiceImpl.deleteSet(id);
+        wordSetService.deleteSet(id);
         return "redirect:/";
     }
 
     // TODO: 04.10.2022 add features:
-    //  Typo
-    //  change language
-    //  persist results in db
-    //  recent sets
+    //  Typo ~2h
+    //  change language ~3h
+    //  sort results ~2h
+    //  persist results in db ~ 3h
+    //  recent sets ~ 2h 45 min
+    //  practice set button on home page ~ 1h  20 min
+
 }
