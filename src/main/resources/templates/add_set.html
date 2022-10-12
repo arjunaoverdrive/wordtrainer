@@ -14,8 +14,9 @@
     <input type="hidden" id="set-id" name="id" value="-1">
     <form th:method="post" enctype="application/json" th:object="${words}">
         <div id="name-container">
-            <label for="name">Name</label><br>
-            <input type="text" id="name" name="name" th:field="*{name}"></div>
+            <label for="new-set-name">Name</label><br>
+            <input type="text" id="new-set-name" name="name" th:field="*{name}" required autofocus="autofocus"></div>
+
         <table id="words-container">
             <thead>
             <th>Word</th>

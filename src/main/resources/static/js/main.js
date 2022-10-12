@@ -1,16 +1,18 @@
-if (window.location.href.includes('/practice')) {
+if (document.title === "Practice") {
     const translation = document.getElementById("translation");
 
     const answerInput = document.getElementById("answer");
-    const answerBtn = document.getElementById("verify");
     let translationBtn = document.getElementById("showTranslation");
     const startOverBtn = document.getElementById("start-over");
+    const typo = document.getElementById("typo");
 
     startOverBtn.addEventListener("click", (event) => {
         window.location.reload(true);
     })
 
     let isShowTranslation = false;
+
+    typo.addEventListener("click", handleTypo);
 
     //read words to an array of words
     const wordObjectsArr = cacheWordObjects();
@@ -51,11 +53,10 @@ if (window.location.href.includes('/practice')) {
 
     //answer input and answer button handler
     answerInput.addEventListener("change", handleAnswer, false);
-    answerBtn.addEventListener("click", handleAnswer, false);
-    translationBtn.addEventListener("click", handleIncorrectAnswer, false);
+    translationBtn.addEventListener("click", handleEmptyAnswer, false);
 
     function handleAnswer() {
-        verifyAnswer(wordToDisplay, answerInput.value);
+        verifyAnswer(wordToDisplay, answerInput.value.trim());
     }
 
     function verifyAnswer(currentWord, answer) {
@@ -74,7 +75,7 @@ if (window.location.href.includes('/practice')) {
                 isShowTranslation = false;
             }
         } else if (answer != correctAnswer || answer.length == 0) {
-            handleIncorrectAnswer(currentWord);
+            handleIncorrectAnswer(currentWord, answer);
         }
     }
 
@@ -92,7 +93,15 @@ if (window.location.href.includes('/practice')) {
         }
     }
 
-    function handleIncorrectAnswer(currentWord) {
+    function handleEmptyAnswer() {
+        handleIncorrectAnswer(wordToDisplay, "");
+        typo.classList.add("hidden");
+    }
+
+    function handleIncorrectAnswer(currentWord, answer) {
+        if (answer.length != 0) {
+            typo.classList.remove("hidden");
+        }
         isShowTranslation = true;
         showTranslation(currentWord);
     }
@@ -102,29 +111,125 @@ if (window.location.href.includes('/practice')) {
         translation.children[0].innerHTML = wordObjectsArr[currentIndex].translation;
     }
 
+    function handleTypo() {
+        typo.classList.add("hidden");
+        isShowTranslation = false;
+        handleCorrectAnswer(wordToDisplay);
+        hideTranslation();
+    }
+
     function hideTranslation() {
         translation.classList.add("hidden");
     }
 
+    //display results
     function showResults() {
         const finishBlock = document.getElementById("finish-block");
-        const finishHeading = finishBlock.appendChild(document.createElement("h3"));
-        finishHeading.textContent = "Results";
-        const resultsContainer = finishBlock.appendChild(document.createElement("div"));
-        resultsContainer.classList.add("results-container");
 
-        for (let res in resultObject) {
-            let finishItem = resultsContainer.appendChild(document.createElement("div"));
-            finishItem.classList.add("res-item");
-            finishItem.textContent = res + " => " + resultObject[res] + " tries"
-        }
+        appendReultsHeader(finishBlock);
+        appendAccuracy(finishBlock);
+        appendResults(finishBlock);
 
-        const accuracy = resultsContainer.appendChild(document.createElement("div"));
-        accuracy.textContent = "Accuracy: " + calculateCorrectness() + "%";
-        finishBlock.classList.remove("hidden");
         const main = document.getElementById("main");
+        finishBlock.classList.remove("hidden");
         main.classList.add("hidden");
     }
+
+    function appendReultsHeader(finishBlock) {
+        const finishHeading = finishBlock.appendChild(document.createElement("h3"));
+        finishHeading.textContent = "Results";
+    }
+
+    function appendResults(finishBlock) {
+        const resultsContainer = finishBlock.appendChild(document.createElement("div"));
+        resultsContainer.id = "results-container";
+        let markup = getMarkupForSortedResults();
+        resultsContainer.innerHTML = markup;
+    }
+
+    function appendAccuracy(finishBlock) {
+        const accuracy = finishBlock.appendChild(document.createElement("div"));
+        accuracy.textContent = "Accuracy: " + calculateCorrectness() + "%";
+    }
+
+    function getMarkupForSortedResults() {
+        let sortedResultsObject = getSortedReultsObject();
+        let attemptsMarkup = document.createElement("div");
+        for (item of sortedResultsObject) {
+            for (key in item) {
+                attemptsMarkup.innerHTML += generateMarkupForWordResArray(key, item[key]);
+            }
+        }
+        return attemptsMarkup.innerHTML;
+    }
+
+    function getSortedReultsObject() {
+        let sortedObject = new Array();
+        let attemptsArr = getAttemptsArray();
+        for (i of attemptsArr) {
+            let wordResArr = populateWordResArray(i);
+            let resItem = {};
+            resItem[i] = wordResArr;
+            sortedObject.push(resItem);
+        }
+        return sortedObject;
+    }
+
+    function getAttemptsArray() {
+        let attemptsArr = new Array();
+        for (word in resultObject) {
+            let attempts = resultObject[word];
+            attemptsArr[attempts] = attempts;
+        }
+        attemptsArr = removeEmptySlots(attemptsArr);
+        attemptsArr.sort();
+        attemptsArr.reverse();
+
+        return attemptsArr;
+    }
+
+    function removeEmptySlots(arr) {
+        let res = new Array();
+        for (i of arr) {
+            if (i == undefined) {
+                continue;
+            } res.push(i);
+        }
+        return res;
+    }
+
+    function populateWordResArray(tries) {
+        let resultWordsArr = new Array();
+        for (res in resultObject) {
+            if (resultObject[res] == tries) {
+                resultWordsArr.push(res);
+                delete resultObject[res];
+            }
+        }
+        return resultWordsArr;
+    }
+
+    function generateMarkupForWordResArray(tries, wordsArr) {
+        const triesSection = document.createElement("div");
+        triesSection.classList.add("tries-section")
+        let triesItem = triesSection.appendChild(document.createElement("div"));
+        let triesHeading = triesItem.appendChild(document.createElement("h4"));
+        if (tries == 1) {
+            triesHeading.textContent = "Great result: ";
+            triesItem.id = "success";
+        } else {
+            triesHeading.textContent = tries + " attempts. Repeat these words:";
+            triesItem.classList.add("attempts");
+        }
+        for (let i = 0; i < wordsArr.length; i++) {
+            let resItem = triesItem.appendChild(document.createElement("div"));
+            resItem.classList.add("res-item");
+            resItem.textContent = wordsArr[i];
+        }
+        // if (triesHeading.nextSibling == null) return "";
+        return triesSection.innerHTML;
+    }
+
 
     function showNavigationLinks() {
         const navLinks = document.getElementById("navigation-links");
@@ -143,25 +248,23 @@ if (window.location.href.includes('/practice')) {
 
 }
 
-else if (window.location.href.endsWith("/import")) {
-    console.log(true);
+else if (document.title === "Import") {
     markDefaultRadioBtnSelected();
 
     function markDefaultRadioBtnSelected() {
         const defaultDelimiter = document.getElementById("-");
-        console.log("in function")
         defaultDelimiter.checked = "checked";
     }
 }
 
-else if(document.title === "Home Page" || document.title === "Choose Set"){
+else if (document.title === "Home Page" || document.title === "Choose Set") {
     let practiceBtns = document.getElementsByClassName("practice-set-btn");
 
-    for(btn of practiceBtns){
+    for (btn of practiceBtns) {
         btn.addEventListener("click", handlePracticeClick);
     }
 
-    function handlePracticeClick(event){
+    function handlePracticeClick(event) {
         let setid = event.target.attributes.id.value;
         window.location.replace("/practice/" + setid);
     }
@@ -184,6 +287,7 @@ else {
     function handleDeleteClick(event) {
         let btn = event.target;
         let wordItem = btn.parentElement.parentElement;
+
         wordItem.parentElement.removeChild(wordItem);
 
         if (setid != -1) {
@@ -194,10 +298,9 @@ else {
 
     function addOneItemMore() {
         let i = itemsBlock.childElementCount;
-
         let oneMoreItemMarkup = generateOneMoreItemMarkup(i);
-
         let oneMore = itemsBlock.appendChild(document.createElement("tr"));
+
         oneMore.classList.add("word-item");
         oneMore.innerHTML += oneMoreItemMarkup;
     }
@@ -211,8 +314,7 @@ else {
     }
 
 
-    if (window.location.href.includes("/sets/")) {
-
+    if (document.title === "Set Page") {
 
         const editSet = document.getElementById("edit-set-btn");
         const inputs = document.getElementsByClassName("input");
@@ -238,12 +340,14 @@ else {
 
         function handleEditClick(event) {
             let target = event.target;
+
             toggleElement(target);
             enableInputs(target);
         }
 
         function toggleElement(elem) {
             elem.classList.toggle("hidden");
+
             let siblingSave = elem.nextElementSibling;
             siblingSave.classList.toggle("hidden");
         }
@@ -261,3 +365,4 @@ else {
         }
     }
 }
+

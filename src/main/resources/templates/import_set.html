@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Import</title>
     <script defer src="/js/main.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
 </head>
@@ -18,7 +18,7 @@
               autocomplete="off">
             <label for="name">Name</label><br>
             <input id="name" required="required" type="text" th:field="*{name}" autofocus="autofocus"
-                   placeholder="Name of the set" style="width:98%"><br><br>
+                   placeholder="Name of the set"><br><br>
             <label for="import">Words</label><br>
             <textarea id="import" required="required" cols="50" rows="25"
                       placeholder="Word-translation pairs separated by a delimiter" th:field="*{words}"></textarea>

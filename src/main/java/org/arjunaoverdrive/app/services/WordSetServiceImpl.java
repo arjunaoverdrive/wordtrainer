@@ -62,14 +62,19 @@ public class WordSetServiceImpl implements WordSetService {
         wordSet.setCreatedOn(createdOn);
         WordSet set = this.wordSetRepository.save(wordSet);
         List<Word> wordList = wordSet.getWordList();
-        wordList.forEach(word -> word.setWordSet(set)); // TODO: 05.10.2022 handle NPE when saving a set with no words
+        wordList.forEach(word -> word.setWordSet(set));
         this.wordRepository.saveAll(wordList);
     }
 
-    public void update(WordSet wordSet) {
+    public boolean update(WordSet wordSet) {
+        if(wordSet.getWordList() == null){
+            deleteSet(wordSet.getId());
+            return false;
+        }
         List<Word> words = wordSet.getWordList().stream().filter(w -> w.getWord() != null).collect(Collectors.toList());
         wordSet.setWordList(words);
         this.wordSetRepository.save(wordSet);
+        return true;
     }
 
 }

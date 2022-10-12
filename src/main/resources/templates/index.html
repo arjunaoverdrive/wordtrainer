@@ -21,7 +21,8 @@
             <table id="sets-container">
                 <tr class="set-item" th:each="set : ${sets}">
                     <td>
-                        <a th:href="@{/sets/{id}(id=${set.id})}" th:text="${set.name}"></a>
+                        <a th:href="@{/sets/{id}(id=${set.id})}" th:with="words=${set.wordList}, size=${#lists.size(words)}"
+                           th:text="${set.name} + '  (' + ${size} + ' words)'"></a>
                     </td>
                     <td><button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button></td>
                     <td>

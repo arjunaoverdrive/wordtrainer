@@ -16,6 +16,7 @@
         <form th:method="post" enctype="application/json" th:object="${words}">
             <input type="hidden" id="set-id" name="id" th:value="${id}">
             <input type="hidden" name="name" th:value="${title}">
+            <input type="hidden" name="createdOn" th:field="*{createdOn}">
             <table id="words-container">
                 <thead>
                     <th>Word</th>

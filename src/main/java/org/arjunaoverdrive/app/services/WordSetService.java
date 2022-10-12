@@ -16,5 +16,5 @@ public interface WordSetService {
 
     List<Word> getWordList(Integer id);
 
-    void update(WordSet wordSet);
+    boolean update(WordSet wordSet);
 }

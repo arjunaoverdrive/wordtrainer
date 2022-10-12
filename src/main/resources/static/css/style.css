@@ -9,6 +9,33 @@
      text-align: center;
  }
 
+ button{
+    border: none;
+    font-family: "Open Sans", cursive, "Lucida Console", sans-serif;
+    font-size: 18px;
+    border-radius: 2px;
+    background-color: inherit;
+ }
+
+ button:hover{
+   text-decoration: underline;
+ }
+
+ input{
+    padding: 10px;
+    font-family: cursive;
+    font-size: 16px;
+}
+
+a{
+    text-decoration: none;
+    color: green;
+}
+
+a:hover{
+   text-decoration: underline;
+}
+
  #central-container {
      margin: 0 auto;
      width: max-content;
@@ -37,16 +64,13 @@
     text-align: center;
  }
 
- a {
-     margin: 15px;
- }
-
  .delete-set-form {
      display: inline-block;
  }
 
  .delete-btn {
      margin-left: 10px;
+     color:red;
  }
 
  #title {
@@ -69,10 +93,6 @@
      display: none;
  }
 
- #showTranslation{
-    border: none;
- }
-
  #word-item-container{
     display:flex;
     flex-direction: row;
@@ -80,7 +100,7 @@
  }
 
  #answer{
-    width: 83%;
+    width: 96%;
  }
 
  #prompt{
@@ -100,7 +120,7 @@
     transform: translate(10%);
  }
  #name{
-    width: 60%;
+    width: 96%;
     padding: 5px 10px;
     margin: 5px auto;
  }
@@ -113,6 +133,35 @@
  #import{
     padding: 10px;
     font-family: cursive, Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
  }
 
+ #typo{
+    float: right;
+    border: none;
+    font-family: cursive;
+ }
+
+ .practice-set-btn{
+    background-color: inherit;
+    color: green;
+   
+ }
+
+ #new-set-name{
+    width: 60%;
+ }
+
+ #finish-block{
+   margin: 0 auto;
+   padding: 3px 20px;
+ }
+
+ .attempts:first-of-type>.res-item{
+   color: crimson;
+   border-radius: 2px;
+ }
+
+#success>.res-item{
+   color: limegreen;
+}
