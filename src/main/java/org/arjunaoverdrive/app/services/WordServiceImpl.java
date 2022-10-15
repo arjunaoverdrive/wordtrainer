@@ -3,8 +3,11 @@ package org.arjunaoverdrive.app.services;
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.model.Word;
+import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -22,5 +25,20 @@ public class WordServiceImpl implements WordService {
         Word word = this.wordRepository.findById(id).get();
         this.wordRepository.delete(word);
         log.info("delete word " + id);
+    }
+
+//    @Override
+//    public List <Word> findAllByWord(List<String> words) {
+//        return this.wordRepository.findAllByWord(words);
+//    }
+
+    @Override
+    public void saveAll(Iterable<Word> words) {
+        this.wordRepository.saveAll(words);
+    }
+
+    @Override
+    public List<Word> findAllBySet(WordSet set) {
+        return this.wordRepository.findAllByWordSet(set);
     }
 }

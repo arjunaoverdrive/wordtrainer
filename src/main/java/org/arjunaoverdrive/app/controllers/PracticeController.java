@@ -25,6 +25,7 @@ public class PracticeController {
     @GetMapping("{id}")
     public String practice(@PathVariable("id")Integer id, Model model){
         model.addAttribute("words" , wordSetService.getWordList(id));
+        model.addAttribute("id", id);
         return "practice";
     }
 }

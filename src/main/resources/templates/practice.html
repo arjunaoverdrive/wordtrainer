@@ -10,8 +10,8 @@
 <div id="central-container">
     <h2>Keep practicing until you get 100%!</h2>
     <div id=main>
-        <div id="words-container">
-            <div id="hiddenList" style="display:none" th:text="${words}"></div>
+        <div id="words-container" >
+            <div id="hiddenList" style="display:none" th:text="${words}" th:attr="setid=${id}"></div>
         </div>
         <div id="word-item-container">
             <div id="word-item"></div>

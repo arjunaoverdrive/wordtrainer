@@ -36,9 +36,7 @@ public class WordSetController {
 
     @PostMapping("/save/{id}")
     public String updateSet(@PathVariable("id")Integer id, @ModelAttribute("words") WordSet wordSet){
-        wordSetService.update(wordSet);
-
-        return "redirect:/sets/" + id;
+        return wordSetService.update(wordSet) ? "redirect:/sets/" + id : "redirect:/";
     }
 
     @PostMapping(value = "/delete/{id}")
@@ -48,10 +46,10 @@ public class WordSetController {
     }
 
     // TODO: 04.10.2022 add features:
-    //  Typo ~2h
+    //  Typo ~2h 40 min
     //  change language ~3h
-    //  sort results ~2h
-    //  persist results in db ~ 3h
+    //  sort results ~2h 4h
+    //  persist results in db ~ 3h - 4h
     //  recent sets ~ 2h 45 min
     //  practice set button on home page ~ 1h  20 min
 

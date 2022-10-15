@@ -5,6 +5,7 @@ if (document.title === "Practice") {
     let translationBtn = document.getElementById("showTranslation");
     const startOverBtn = document.getElementById("start-over");
     const typo = document.getElementById("typo");
+    const hiddenListContent = document.getElementById("hiddenList").textContent;
 
     startOverBtn.addEventListener("click", (event) => {
         window.location.reload(true);
@@ -19,7 +20,6 @@ if (document.title === "Practice") {
     const resultObject = createResultObject();
 
     function cacheWordObjects() {
-        const hiddenListContent = document.getElementById("hiddenList").textContent;
         let words = hiddenListContent.substring(1, hiddenListContent.length - 1);
         const wordsArr = words.split(", ");
         const wordObjects = new Array();
@@ -135,6 +135,22 @@ if (document.title === "Practice") {
         main.classList.add("hidden");
     }
 
+    function doAjaxCallToPersistResults(result) {
+        let ajaxCall = new XMLHttpRequest();
+        let setId = getSetId();
+        let url = "/results/save/" + setId;
+
+        let json = JSON.stringify(result);
+
+        ajaxCall.open("post", url);
+        ajaxCall.setRequestHeader("Content-type", "application/json");
+        ajaxCall.send(json);
+    }
+
+    function getSetId() {
+        return document.getElementById("hiddenList").attributes.setid.value;
+    }
+
     function appendReultsHeader(finishBlock) {
         const finishHeading = finishBlock.appendChild(document.createElement("h3"));
         finishHeading.textContent = "Results";
@@ -154,6 +170,7 @@ if (document.title === "Practice") {
 
     function getMarkupForSortedResults() {
         let sortedResultsObject = getSortedReultsObject();
+        doAjaxCallToPersistResults(sortedResultsObject);
         let attemptsMarkup = document.createElement("div");
         for (item of sortedResultsObject) {
             for (key in item) {
@@ -226,7 +243,6 @@ if (document.title === "Practice") {
             resItem.classList.add("res-item");
             resItem.textContent = wordsArr[i];
         }
-        // if (triesHeading.nextSibling == null) return "";
         return triesSection.innerHTML;
     }
 
