@@ -14,25 +14,33 @@
         <div id="main-container">
             <div id="links">
                 <a href="/add">Add new set</a>&nbsp;&nbsp;
-                <a href="/choose">Choose set</a>&nbsp;&nbsp;
+                <a href="/choose">My sets</a>&nbsp;&nbsp;
                 <a href="/import">Import new set</a>
             </div>
             <h3 id="recent">Recent sets</h3>
             <table id="sets-container">
-                <tr class="set-item" th:each="set : ${sets}">
-                    <td>
-                        <a th:href="@{/sets/{id}(id=${set.id})}" th:with="words=${set.wordList}, size=${#lists.size(words)}"
-                           th:text="${set.name} + '  (' + ${size} + ' words)'"></a>
-                    </td>
-                    <td><button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button></td>
-                    <td>
-                        <form class="delete-set-form">
-                            <button class="delete-btn" th:formmethod="post" th:type="submit" th:attr="data-id=${set.id}"
-                                th:formaction="@{/sets/delete/{set.id}(set.id=${set.id})}">Delete set
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+                <tbody>
+                    <tr class="set-item" th:each="set : ${sets}">
+
+                        <td>
+                            <!--                            th:href="@{/sets/{id}(id=${set.id})}"-->
+                            <button class="set-page" th:attr="id=${set.id}"
+                                th:with="words=${set.wordList}, size=${#lists.size(words)}"
+                                th:text="${set.name} + '  (' + ${size} + ' words)'"></button>
+                        </td>
+                        <td>
+                            <button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button>
+                        </td>
+                        <td>
+                            <form class="delete-set-form">
+                                <button class="delete-set-btn" th:formmethod="post" th:type="submit"
+                                    th:attr="data-id=${set.id}"
+                                    th:formaction="@{/sets/delete/{set.id}(set.id=${set.id})}">Delete set
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

@@ -4,55 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Set Page</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <script defer src="/js/main.js"></script>
 </head>
 
 <body>
-    <div id="central-container">
-        <h1>Welcome to the best words training app!</h1>
-        <h3 id="title" th:text="${title}"></h3>&nbsp;&nbsp;&nbsp;<button id="edit-set-btn" type="button">Edit
-            set</button>
-        <form th:method="post" enctype="application/json" th:object="${words}">
-            <input type="hidden" id="set-id" name="id" th:value="${id}">
-            <input type="hidden" name="name" th:value="${title}">
-            <input type="hidden" name="createdOn" th:field="*{createdOn}">
-            <table id="words-container">
-                <thead>
-                    <th>Word</th>
-                    <th>Translation</th>
-                </thead>
-                <tbody id="word-items-body">
-                    <tr class="word-item" th:each="word, status :${words.wordList}">
-                        <input type="hidden" th:name="|wordList[${status.index}].id|" th:value="${word.getId()}">
-                        <input type="hidden" th:name="|wordList[${status.index}].wordSet|" th:value="${id}">
-                        <td>
-                            <input type="text" class="input" disabled th:name="|wordList[${status.index}].word|"
-                                th:value="${word.word}">
-                        </td>
-                        <td>
-                            <input type="text" class="input" disabled th:name="|wordList[${status.index}].translation|"
-                                th:value="${word.translation}">
-                        </td>
-                        <td>
-                            <button class="delete-item hidden" type="button" th:id="${word.id}">Delete
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button id="add-more" class="hidden" type="button">Add more</button>
-            <button id="save-changes" class="hidden" type="submit" th:formmethod="post"
-                th:formaction="@{/sets/save/{set_id}(set_id=${id})}">Save changes
+<div id="central-container">
+    <h1>Welcome to the best words training app!</h1>
+    <h3 id="title" th:text="${title}"></h3>
+    <div >
+        <div class="edit-practice-return-btns">
+            <button id="edit-set-btn" type="button">Edit
+                set
             </button>
-
-        </form>
-        <br>
-        <div>
-            <a th:href="@{/practice/{id}(id=${id})}">Practice</a><br>
+            <a id="practice-set-link" th:href="@{/practice/{id}(id=${id})}">Practice</a>
             <a href="/">Return home</a>
         </div>
+        <div class="more-items-and-save-set-btns">
+            <button id="add-more" class="hidden" type="button">Add one more item</button>
+            <button id="save-changes" class="hidden"  type="submit" form="set-form" th:formmethod="post"
+                    th:formaction="@{/sets/save/{set_id}(set_id=${id})}">Save changes
+            </button>
+        </div>
     </div>
+
+    <form id="set-form" th:method="post" enctype="application/json" th:object="${words}">
+        <input type="hidden" id="set-id" name="id" th:value="${id}">
+        <input type="hidden" name="name" th:value="${title}">
+        <input type="hidden" name="createdOn" th:field="*{createdOn}">
+        <table id="words-container">
+            <thead>
+            <th>Word</th>
+            <th>Translation</th>
+            </thead>
+            <tbody id="word-items-body">
+            <tr class="word-item" th:each="word, status :${words.wordList}">
+                <input type="hidden" th:name="|wordList[${status.index}].id|" th:value="${word.getId()}">
+                <input type="hidden" th:name="|wordList[${status.index}].wordSet|" th:value="${id}">
+                <td>
+                    <input type="text" class="input" disabled th:name="|wordList[${status.index}].word|"
+                           th:value="${word.word}">
+                </td>
+                <td>
+                    <input type="text" class="input" disabled th:name="|wordList[${status.index}].translation|"
+                           th:value="${word.translation}">
+                </td>
+                <td>
+                    <button class="delete-item hidden" type="button" th:id="${word.id}">Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
 </body>
 
 </html>

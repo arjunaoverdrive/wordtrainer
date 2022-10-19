@@ -80,9 +80,13 @@ if (document.title === "Practice") {
     }
 
     function handleCorrectAnswer(currentWord) {
+        answerInput.setAttribute("style", "background-color:#7bfd7c5e");
         wordObjectsArr.splice(0, 1);
         resultObject[currentWord]++;
         answerInput.value = "";
+        setTimeout(()=>{
+            answerInput.removeAttribute("style");
+        }, 150)
         if (wordObjectsArr.length > 0) {
             wordToDisplay = wordObjectsArr[currentIndex].word;
             displayWord(wordToDisplay);
@@ -274,10 +278,22 @@ else if (document.title === "Import") {
 }
 
 else if (document.title === "Home Page" || document.title === "Choose Set") {
+    
+    let setBtns = document.getElementsByClassName("set-page"); 
     let practiceBtns = document.getElementsByClassName("practice-set-btn");
+
+    for(btn of setBtns){
+        btn.addEventListener("click", handleSetClick);
+    }
+
 
     for (btn of practiceBtns) {
         btn.addEventListener("click", handlePracticeClick);
+    }
+
+    function handleSetClick(event){
+        let setid = event.target.attributes.id.value;
+        window.location.replace("/sets/" + setid);
     }
 
     function handlePracticeClick(event) {
@@ -319,6 +335,10 @@ else {
 
         oneMore.classList.add("word-item");
         oneMore.innerHTML += oneMoreItemMarkup;
+
+        let newItemDeleteBtn = oneMore.lastChild.children.item(0);
+        console.log("added new item");
+        newItemDeleteBtn.addEventListener("click", handleDeleteClick);
     }
 
     function generateOneMoreItemMarkup(i) {
@@ -335,10 +355,15 @@ else {
         const editSet = document.getElementById("edit-set-btn");
         const inputs = document.getElementsByClassName("input");
 
+        const visibleBtns = document.getElementsByClassName("edit-practice-return-btns");
+
         editSet.addEventListener("click", toggleSaveAndEdit);
 
         function toggleSaveAndEdit() {
-            editSet.classList.toggle("hidden");
+            for(btn of visibleBtns){
+                btn.classList.toggle("hidden");
+            }
+            
             saveSet.classList.toggle("hidden");
             more.classList.toggle("hidden");
             enableInputs();
@@ -372,12 +397,20 @@ else {
             for (let item of inputs) {
                 item.attributes.removeNamedItem("disabled");
             }
+            autofocusFirstWord();
         }
 
         function toggleElems(elems) {
             for (let elem of elems) {
                 elem.classList.toggle("hidden");
             }
+        }
+        
+        function autofocusFirstWord(){
+            let firstWord = document.querySelector("#word-items-body > tr:nth-child(1) > td:nth-child(3) > input");
+            let text = firstWord.value;
+            firstWord.focus();
+            firstWord.setSelectionRange(0, text.length);
         }
     }
 }

@@ -1,167 +1,224 @@
  body {
-     font-family: "Open Sans", cursive, "Lucida Console", sans-serif;
-     font-size: larger;
-     background-color: aliceblue;
-     padding-top: 40px;
+    font-family: "Open Sans", cursive, "Lucida Console", sans-serif;
+    font-size: larger;
+    background-color: aliceblue;
+    padding-top: 40px;
+    color: #4d46b4;
  }
 
  h1 {
-     text-align: center;
+    text-align: center;
  }
 
- button{
+ button {
     border: none;
     font-family: "Open Sans", cursive, "Lucida Console", sans-serif;
     font-size: 18px;
     border-radius: 2px;
+    color: #4d46b4;
     background-color: inherit;
  }
 
- button:hover{
-   text-decoration: underline;
+ button:hover {
+    background-color: azure;
  }
 
- input{
+ input {
     padding: 10px;
     font-family: cursive;
     font-size: 16px;
-}
+    color:#4d46b4;
+ }
 
-a{
+ a, a:visited {
     text-decoration: none;
-    color: green;
-}
+    background-color: aliceblue;
+    padding: 5px;
+    color: #4d46b4;
+ }
 
-a:hover{
-   text-decoration: underline;
-}
+ a:hover {
+    background-color: azure;
+ }
 
  #central-container {
-     margin: 0 auto;
-     width: max-content;
-     padding: 40px;
-     background-color: ghostwhite;
+    margin: 0 auto;
+    width: max-content;
+    padding: 40px;
+    background-color: ghostwhite;
+    margin-bottom: 40px;
  }
 
  #main-container {
-     padding: 5px;
+    padding: 5px;
  }
 
  #sets-container {
-     padding: 5px;
-     width: 100%;
+    padding: 5px;
+    width: 100%;
  }
 
- #links{
+ .edit-practice-return-btns,  .more-items-and-save-set-btns, #links {
     display: flex;
     justify-content: space-between;
  }
- #recent, #choose-set{
+
+ #edit-set-btn{
+   background-color: aliceblue;
+ }
+
+ #edit-set-btn:hover{
+   background-color: beige;
+ }
+
+ #recent,
+ #choose-set {
     text-align: center;
  }
 
- .set-item>td{
-    text-align: center;
+ .set-item>td:first-child {
+    width: 75%;
  }
 
  .delete-set-form {
-     display: inline-block;
+    display: inline-block;
  }
 
- .delete-btn {
-     margin-left: 10px;
-     color:red;
+ .delete-set-btn {
+    margin-left: 10px;
+    background-color: aliceblue;
+ }
+
+ .delete-set-btn:hover{
+   background-color: lavender;
  }
 
  #title {
-     display: inline-block;
+    display: inline-block;
  }
 
  #words-container {
-     width: 100%;
+    width: 100%;
+ }
+
+ #practice-set-link:hover{
+   background-color: #7bfd7c5e;
+ }
+
+ .word-item>td {
+    text-align: center;
  }
 
  .word-col {
-     width: 35%;
+    width: 35%;
  }
 
  .translation-col {
-     width: 35%;
+    width: 35%;
  }
 
  .hidden {
-     display: none;
+    display: none;
  }
 
- #word-item-container{
-    display:flex;
+ #word-item-container {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
  }
 
- #answer{
+ #answer {
     width: 96%;
  }
 
- #prompt{
-    color:cornflowerblue;
+ #prompt {
+    color: cornflowerblue;
     font-size: 14px;
  }
 
- #main>div{
-    margin-top: 20px; 
+ #main>div {
+    margin-top: 20px;
  }
 
- #finish-block>div>div{
+ #finish-block>div>div {
     margin: 10px auto;
  }
 
- #name-container{
+ #name-container {
     transform: translate(10%);
  }
- #name{
+
+ #name {
     width: 96%;
     padding: 5px 10px;
     margin: 5px auto;
  }
- .input{
+
+ .input {
     width: 85%;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     margin: 5px auto;
+    background-color: aliceblue;
+    border: none;
+    text-align: center;
  }
 
- #import{
+ .input:enabled{
+   background-color: #7bfd7c5e;
+ }
+
+ #import {
     padding: 10px;
     font-family: cursive, Verdana, Geneva, Tahoma, sans-serif;
     font-size: 16px;
  }
 
- #typo{
+ #typo {
     float: right;
     border: none;
     font-family: cursive;
  }
 
- .practice-set-btn{
-    background-color: inherit;
-    color: green;
-   
+ .practice-set-btn {
+    background-color: aliceblue;
  }
 
- #new-set-name{
+ .practice-set-btn:hover {
+   background-color: #7bfd7c5e;
+}
+
+ #new-set-name {
     width: 60%;
  }
 
- #finish-block{
-   margin: 0 auto;
-   padding: 3px 20px;
+ #finish-block {
+    margin: 0 auto;
+    padding: 3px 20px;
  }
 
- .attempts:first-of-type>.res-item{
-   color: crimson;
-   border-radius: 2px;
+ .attempts:first-of-type>.res-item {
+    color: crimson;
+    border-radius: 2px;
  }
 
-#success>.res-item{
-   color: limegreen;
-}
+ #success>.res-item {
+    color: limegreen;
+ }
+
+ .set-page{
+   background-color: aliceblue;
+ }
+
+ .delete-item:hover{
+   background-color: lavender;
+ }
+
+ #add-more, #save-changes{
+   background-color: aliceblue;
+ }
+
+ #add-more:hover, #save-changes:hover{
+   background-color: azure;
+ }
+
+ 
