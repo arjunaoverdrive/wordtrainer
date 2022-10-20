@@ -15,7 +15,9 @@ public class Word {
     @Column(nullable = false)
     private String translation;
     @Column(columnDefinition = "INT DEFAULT 0") //the higher the value -- the more mistakes have been made
-    private Integer correctness;
+    private int correctness;
+    @Column(columnDefinition = "INT DEFAULT 0", name = "translation_correctness")
+    private int translationCorrectness;
     @ManyToOne
     @JoinColumn(name = "set_id", referencedColumnName = "id")
     @JsonIgnore
@@ -57,8 +59,16 @@ public class Word {
         return correctness;
     }
 
-    public void setCorrectness(int correctness) {
+    public void setCorrectness(Integer correctness) {
         this.correctness = correctness;
+    }
+
+    public int getTranslationCorrectness() {
+        return translationCorrectness;
+    }
+
+    public void setTranslationCorrectness(int translationCorrectness) {
+        this.translationCorrectness = translationCorrectness;
     }
 
     @Override

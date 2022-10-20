@@ -1,11 +1,16 @@
 if (document.title === "Practice") {
     const translation = document.getElementById("translation");
-
     const answerInput = document.getElementById("answer");
+
     let translationBtn = document.getElementById("showTranslation");
+    let originalLanguage = getOriginalLanguage();
+
     const startOverBtn = document.getElementById("start-over");
     const typo = document.getElementById("typo");
     const hiddenListContent = document.getElementById("hiddenList").textContent;
+    const changeLang = document.getElementById("change-lang-btn");
+
+    changeLang.addEventListener("click", swapLanguages);
 
     startOverBtn.addEventListener("click", (event) => {
         window.location.reload(true);
@@ -15,6 +20,20 @@ if (document.title === "Practice") {
 
     typo.addEventListener("click", handleTypo);
 
+
+    //get language to practice from session storage
+
+    function getOriginalLanguage(){
+        let originalLang = sessionStorage.getItem("originalLang");
+        let lang;
+        if(originalLang == null ){
+            lang = true;
+        } else {
+            lang = originalLang == "true";
+        }
+        return lang;
+    }
+
     //read words to an array of words
     const wordObjectsArr = cacheWordObjects();
     const resultObject = createResultObject();
@@ -23,9 +42,17 @@ if (document.title === "Practice") {
         let words = hiddenListContent.substring(1, hiddenListContent.length - 1);
         const wordsArr = words.split(", ");
         const wordObjects = new Array();
+
         for (w in wordsArr) {
             let word = JSON.parse(wordsArr[w]);
-            wordObjects.push(word);
+            if (originalLanguage == true) {
+                wordObjects.push(word);
+            } else {
+                let inverted = {};
+                inverted.word = word.translation;
+                inverted.translation = word.word;
+                wordObjects.push(inverted);
+            }
         }
         return wordObjects;
     }
@@ -38,6 +65,13 @@ if (document.title === "Practice") {
             res[item] = 0;
         }
         return res;
+    }
+
+    //swap languages
+
+    function swapLanguages() {
+        sessionStorage.setItem("originalLang", !originalLanguage);
+        window.location.reload(true);
     }
 
     //displaying first element
@@ -84,7 +118,7 @@ if (document.title === "Practice") {
         wordObjectsArr.splice(0, 1);
         resultObject[currentWord]++;
         answerInput.value = "";
-        setTimeout(()=>{
+        setTimeout(() => {
             answerInput.removeAttribute("style");
         }, 150)
         if (wordObjectsArr.length > 0) {
@@ -144,7 +178,12 @@ if (document.title === "Practice") {
         let setId = getSetId();
         let url = "/results/save/" + setId;
 
-        let json = JSON.stringify(result);
+        let dto = {};
+        dto.lang = originalLanguage;
+        dto.result = result;
+
+        let json = JSON.stringify(dto);
+        console.log(json);
 
         ajaxCall.open("post", url);
         ajaxCall.setRequestHeader("Content-type", "application/json");
@@ -173,7 +212,7 @@ if (document.title === "Practice") {
     }
 
     function getMarkupForSortedResults() {
-        let sortedResultsObject = getSortedReultsObject();
+        let sortedResultsObject = getSortedReultsArray();
         doAjaxCallToPersistResults(sortedResultsObject);
         let attemptsMarkup = document.createElement("div");
         for (item of sortedResultsObject) {
@@ -184,16 +223,16 @@ if (document.title === "Practice") {
         return attemptsMarkup.innerHTML;
     }
 
-    function getSortedReultsObject() {
-        let sortedObject = new Array();
+    function getSortedReultsArray() {
+        let sortedArray = new Array();
         let attemptsArr = getAttemptsArray();
         for (i of attemptsArr) {
             let wordResArr = populateWordResArray(i);
             let resItem = {};
             resItem[i] = wordResArr;
-            sortedObject.push(resItem);
+            sortedArray.push(resItem);
         }
-        return sortedObject;
+        return sortedArray;
     }
 
     function getAttemptsArray() {
@@ -278,11 +317,11 @@ else if (document.title === "Import") {
 }
 
 else if (document.title === "Home Page" || document.title === "Choose Set") {
-    
-    let setBtns = document.getElementsByClassName("set-page"); 
+
+    let setBtns = document.getElementsByClassName("set-page");
     let practiceBtns = document.getElementsByClassName("practice-set-btn");
 
-    for(btn of setBtns){
+    for (btn of setBtns) {
         btn.addEventListener("click", handleSetClick);
     }
 
@@ -291,7 +330,7 @@ else if (document.title === "Home Page" || document.title === "Choose Set") {
         btn.addEventListener("click", handlePracticeClick);
     }
 
-    function handleSetClick(event){
+    function handleSetClick(event) {
         let setid = event.target.attributes.id.value;
         window.location.replace("/sets/" + setid);
     }
@@ -360,10 +399,10 @@ else {
         editSet.addEventListener("click", toggleSaveAndEdit);
 
         function toggleSaveAndEdit() {
-            for(btn of visibleBtns){
+            for (btn of visibleBtns) {
                 btn.classList.toggle("hidden");
             }
-            
+
             saveSet.classList.toggle("hidden");
             more.classList.toggle("hidden");
             enableInputs();
@@ -405,8 +444,8 @@ else {
                 elem.classList.toggle("hidden");
             }
         }
-        
-        function autofocusFirstWord(){
+
+        function autofocusFirstWord() {
             let firstWord = document.querySelector("#word-items-body > tr:nth-child(1) > td:nth-child(3) > input");
             let text = firstWord.value;
             firstWord.focus();

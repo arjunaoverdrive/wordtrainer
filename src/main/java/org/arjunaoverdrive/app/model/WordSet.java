@@ -16,8 +16,12 @@ public class WordSet implements Comparable<WordSet>{
     private float accuracy;
     @Column(name = "created_on", nullable = false, columnDefinition = "DATETIME")
     private Timestamp createdOn;
-    @Column(name = "last_practiced", columnDefinition = "DATETIME", nullable = true)
+    @Column(name = "last_practiced", columnDefinition = "DATETIME")
     private Timestamp lastPracticed;
+    @Column(name = "translation_accuracy", columnDefinition = "FLOAT DEFAULT 0.0")
+    private float translationAccuracy;
+    @Column(name = "translation_times_practiced", columnDefinition = "INT DEFAULT 0")
+    private int translationTimesPracticed;
 
     @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)
     private List<Word>wordList;
@@ -76,6 +80,22 @@ public class WordSet implements Comparable<WordSet>{
 
     public void setLastPracticed(Timestamp lastPracticed) {
         this.lastPracticed = lastPracticed;
+    }
+
+    public float getTranslationAccuracy() {
+        return translationAccuracy;
+    }
+
+    public void setTranslationAccuracy(float translationAccuracy) {
+        this.translationAccuracy = translationAccuracy;
+    }
+
+    public int getTranslationTimesPracticed() {
+        return translationTimesPracticed;
+    }
+
+    public void setTranslationTimesPracticed(int translationTimesPracticed) {
+        this.translationTimesPracticed = translationTimesPracticed;
     }
 
     @Override

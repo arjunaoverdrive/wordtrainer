@@ -45,12 +45,4 @@ public class WordSetController {
         return "redirect:/";
     }
 
-    // TODO: 04.10.2022 add features:
-    //  Typo ~2h 40 min
-    //  change language ~3h
-    //  sort results ~2h 4h
-    //  persist results in db ~ 3h - 4h
-    //  recent sets ~ 2h 45 min
-    //  practice set button on home page ~ 1h  20 min
-
 }
