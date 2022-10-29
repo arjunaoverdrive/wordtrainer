@@ -341,6 +341,10 @@ else if (document.title === "Home Page" || document.title === "Choose Set") {
     }
 }
 
+else if(document.title == "Statistics"){
+    
+}
+
 else {
 
     const more = document.getElementById("add-more");

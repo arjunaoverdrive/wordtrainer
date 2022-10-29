@@ -32,7 +32,6 @@ public class SetResultServiceImpl implements SetResultService {
     }
 
     private void updateWordSet(WordSet set, ResultDto result) {
-
         updateLastPracticed(set);
         updateAccuracy(result, set);
         updateTimesPracticed(result,set);
@@ -46,30 +45,30 @@ public class SetResultServiceImpl implements SetResultService {
 
     private void updateTimesPracticed(ResultDto result, WordSet set) {
         if(result.isLang()) {
-            int timesPracticed = set.getTimesPracticed();
+            int timesPracticed = set.getSrcTimesPracticed();
             timesPracticed++;
-            set.setTimesPracticed(timesPracticed);
+            set.setSrcTimesPracticed(timesPracticed);
         } else updateTranslationTimesPracticed(set);
     }
 
     private void updateTranslationTimesPracticed(WordSet set) {
-        int translationTimesPracticed = set.getTranslationTimesPracticed();
+        int translationTimesPracticed = set.getTargetLangTimesPracticed();
         translationTimesPracticed++;
-        set.setTranslationTimesPracticed(translationTimesPracticed);
+        set.setTargetLangTimesPracticed(translationTimesPracticed);
     }
 
     private void updateAccuracy(ResultDto result, WordSet set) {
         if(result.isLang()) {
             float accuracy = calculateAccuracy(result.getWordResults());
-            accuracy += set.getAccuracy();
-            set.setAccuracy(accuracy);
+            accuracy += set.getSrcLangAccuracy();
+            set.setSrcLangAccuracy(accuracy);
         } else updateTranslationAccuracy(result, set);
     }
 
     private void updateTranslationAccuracy(ResultDto result, WordSet set) {
         float translationAccuracy = calculateAccuracy(result.getWordResults());
-        translationAccuracy += set.getTranslationAccuracy();
-        set.setTranslationAccuracy(translationAccuracy);
+        translationAccuracy += set.getTargetLangAccuracy();
+        set.setTargetLangAccuracy(translationAccuracy);
     }
 
     private float calculateAccuracy(List<WordRes> wordResults) {
@@ -78,17 +77,15 @@ public class SetResultServiceImpl implements SetResultService {
                 .map(WordRes::getAttempts)
                 .reduce(Integer::sum)
                 .get();
-        return (float) sum / wordsCount;
+        float res = (float)  wordsCount/sum;
+        return res;
     }
 
     private void updateWords(WordSet set, ResultDto result) {
         List<WordRes> wordResults = result.getWordResults();
-
         List<Word> wordList = wordService.findAllBySet(set);
 
         Map<String, Word> string2word = new HashMap<>();
-
-
         if (result.isLang()) {
             wordList.forEach(w -> string2word.put(w.getWord(), w));
             updateCorrectness(wordResults, string2word);
@@ -102,16 +99,16 @@ public class SetResultServiceImpl implements SetResultService {
     private void updateCorrectnessForTranslations(List<WordRes> wordResults, Map<String, Word> string2word) {
         for (WordRes wr : wordResults) {
             Word w = string2word.get(wr.getWord());
-            int translationCorrectness = w.getCorrectness() + wr.getAttempts();
-            w.setTranslationCorrectness(translationCorrectness);
+            int translationCorrectness = w.getTranslationErrorRate() + wr.getAttempts();
+            w.setTranslationErrorRate(translationCorrectness);
         }
     }
 
     private void updateCorrectness(List<WordRes> wordResults, Map<String, Word> string2word) {
         for (WordRes wr : wordResults) {
             Word w = string2word.get(wr.getWord());
-            int correctness = w.getCorrectness() + wr.getAttempts();
-            w.setCorrectness(correctness);
+            int correctness = w.getErrorRate() + wr.getAttempts();
+            w.setErrorRate(correctness);
         }
     }
 }

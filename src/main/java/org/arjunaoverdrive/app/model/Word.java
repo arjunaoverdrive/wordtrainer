@@ -14,10 +14,10 @@ public class Word {
     private String word;
     @Column(nullable = false)
     private String translation;
-    @Column(columnDefinition = "INT DEFAULT 0") //the higher the value -- the more mistakes have been made
-    private int correctness;
-    @Column(columnDefinition = "INT DEFAULT 0", name = "translation_correctness")
-    private int translationCorrectness;
+    @Column(columnDefinition = "INT DEFAULT 0", name = "error_rate") //the higher the value -- the more mistakes have been made
+    private int errorRate;
+    @Column(columnDefinition = "INT DEFAULT 0", name = "translation_error_rate")
+    private int translationErrorRate;
     @ManyToOne
     @JoinColumn(name = "set_id", referencedColumnName = "id")
     @JsonIgnore
@@ -55,20 +55,20 @@ public class Word {
         this.wordSet = wordSet;
     }
 
-    public int getCorrectness() {
-        return correctness;
+    public int getErrorRate() {
+        return errorRate;
     }
 
-    public void setCorrectness(Integer correctness) {
-        this.correctness = correctness;
+    public void setErrorRate(Integer errorRate) {
+        this.errorRate = errorRate;
     }
 
-    public int getTranslationCorrectness() {
-        return translationCorrectness;
+    public int getTranslationErrorRate() {
+        return translationErrorRate;
     }
 
-    public void setTranslationCorrectness(int translationCorrectness) {
-        this.translationCorrectness = translationCorrectness;
+    public void setTranslationErrorRate(int translationErrorRate) {
+        this.translationErrorRate = translationErrorRate;
     }
 
     @Override

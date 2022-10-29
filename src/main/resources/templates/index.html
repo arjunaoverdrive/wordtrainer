@@ -13,9 +13,10 @@
         <h1>Welcome to the best words training app!</h1>
         <div id="main-container">
             <div id="links">
-                <a href="/add">Add new set</a>&nbsp;&nbsp;
-                <a href="/choose">My sets</a>&nbsp;&nbsp;
+                <a href="/add">Add new set</a>
+                <a href="/choose">My sets</a>
                 <a href="/import">Import new set</a>
+                <a href="/statistics">Statistics</a>
             </div>
             <h3 id="recent">Recent sets</h3>
             <table id="sets-container">
@@ -23,7 +24,6 @@
                     <tr class="set-item" th:each="set : ${sets}">
 
                         <td>
-                            <!--                            th:href="@{/sets/{id}(id=${set.id})}"-->
                             <button class="set-page" th:attr="id=${set.id}"
                                 th:with="words=${set.wordList}, size=${#lists.size(words)}"
                                 th:text="${set.name} + '  (' + ${size} + ' words)'"></button>

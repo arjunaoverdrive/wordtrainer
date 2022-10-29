@@ -22,8 +22,7 @@ public class SetResultController {
     }
 
     @PostMapping("/results/save/{id}")
-    public void saveResults(@PathVariable("id")Integer id, @RequestBody ResultDto result){
-      log.info(result.toString());
+    public void saveResults(@PathVariable("id") Integer id, @RequestBody ResultDto result) {
         service.save(id, result);
     }
 }

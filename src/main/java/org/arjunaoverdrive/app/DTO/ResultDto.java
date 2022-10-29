@@ -35,12 +35,4 @@ public class ResultDto {
     public boolean isLang() {
         return lang;
     }
-
-    @Override
-    public String toString() {
-        return "ResultDto{" +
-                "originalLanguage=" + lang +
-                ", res=" + result.size() +
-                '}';
-    }
 }
