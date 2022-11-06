@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface WordService {
     void deleteWord(Long id);
-
-//    List<Word> findAllByWord(List<String> words);
     void saveAll(Iterable<Word>words);
-
     List<Word> findAllBySet(WordSet set);
+
+    List<Word> getWordListWithProblematicWords(Integer setId, Integer lang);
+
+    List<Word> getLang2Words(Integer setId, Integer lang);
+
 }

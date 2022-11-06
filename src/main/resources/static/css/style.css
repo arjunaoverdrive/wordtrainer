@@ -83,6 +83,10 @@
     text-align: center;
  }
 
+ .set-item>td{
+   padding-bottom: 10px;
+ }
+
  .set-item>td:first-child {
     width: 75%;
  }
@@ -106,6 +110,7 @@
 
  #words-container {
     width: 100%;
+    margin-bottom:20px;
  }
 
  #practice-set-link:hover {
@@ -152,7 +157,8 @@
  }
 
  #name-container {
-    transform: translate(10%);
+    margin: 10px auto;
+    text-align: center;
  }
 
  #name {
@@ -163,7 +169,6 @@
 
  .input {
     width: 85%;
-    /* padding: 5px 10px; */
     margin: 5px auto;
     background-color: aliceblue;
     border: none;
@@ -174,11 +179,7 @@
     background-color: #7bfd7c5e;
  }
 
- #import {
-    padding: 10px;
-    font-family: cursive, Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 16px;
- }
+ 
 
  #typo {
     float: right;
@@ -216,6 +217,8 @@
     background-color: aliceblue;
  }
 
+/* addset */
+
  .delete-item:hover {
     background-color: lavender;
  }
@@ -228,6 +231,15 @@
  #add-more:hover,
  #save-changes:hover {
     background-color: azure;
+ }
+
+ #add-set-form{
+   margin-top:40px;
+ }
+
+ #add-set-btns{
+   display:flex;
+   justify-content: space-around;
  }
 
  /* statistics */
@@ -298,3 +310,33 @@
     margin: 1em 0;
     padding: 0;
  }
+
+
+ /* problematic words */
+ .form-btns{
+   display:flex;
+   flex-direction: row;
+   justify-content: space-between;
+ }
+
+ .form-btns>button{
+   margin: 15px;
+ }
+
+ /* import */
+ #import {
+   padding: 10px;
+   font-family: cursive, Verdana, Geneva, Tahoma, sans-serif;
+   font-size: 16px;
+   background-color: aliceblue;
+   border-radius: 3px;
+}
+
+#submit-cont{
+   margin:20px 0;
+}
+
+#delimiters-cont{
+   display: flex;
+   justify-content: space-between;
+}

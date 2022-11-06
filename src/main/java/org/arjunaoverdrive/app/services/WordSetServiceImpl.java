@@ -1,5 +1,6 @@
 package org.arjunaoverdrive.app.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.DAO.WordSetRepository;
 import org.arjunaoverdrive.app.model.Word;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class WordSetServiceImpl implements WordSetService {
 
     @Autowired
@@ -45,6 +47,7 @@ public class WordSetServiceImpl implements WordSetService {
     public void deleteSet(Integer id) {
         WordSet ws = findById(id);
         this.wordSetRepository.delete(ws);
+        log.info("delete set " + id);
     }
 
     @Override
@@ -61,20 +64,31 @@ public class WordSetServiceImpl implements WordSetService {
         Timestamp createdOn = new Timestamp(System.currentTimeMillis());
         wordSet.setCreatedOn(createdOn);
         WordSet set = this.wordSetRepository.save(wordSet);
+        log.info("save set " + set.getId());
+
         List<Word> wordList = wordSet.getWordList();
         wordList.forEach(word -> word.setWordSet(set));
         this.wordRepository.saveAll(wordList);
+        log.info("save words set " + set.getId());
     }
 
     public boolean update(WordSet wordSet) {
         if(wordSet.getWordList() == null){
             deleteSet(wordSet.getId());
+            log.info("word list is empty. Delete set " + wordSet.getId());
             return false;
         }
         List<Word> words = wordSet.getWordList().stream().filter(w -> w.getWord() != null).collect(Collectors.toList());
         wordSet.setWordList(words);
         this.wordSetRepository.save(wordSet);
+        log.info("update set " + wordSet.getId());
         return true;
+    }
+
+    @Override
+    public String getSetNameById(Integer setId) {
+        return setId == 0 ? "all sets" :
+                findById(setId).getName();
     }
 
 }

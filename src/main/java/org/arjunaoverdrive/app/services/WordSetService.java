@@ -17,4 +17,6 @@ public interface WordSetService {
     List<Word> getWordList(Integer id);
 
     boolean update(WordSet wordSet);
+
+    String getSetNameById(Integer setId);
 }

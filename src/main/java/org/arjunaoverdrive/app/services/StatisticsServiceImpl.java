@@ -1,5 +1,6 @@
 package org.arjunaoverdrive.app.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DTO.OverallStatistics;
 import org.arjunaoverdrive.app.DTO.SetStats;
 import org.arjunaoverdrive.app.model.WordSet;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final WordSetService wordSetService;
@@ -30,6 +32,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         stats.setSetsStatsList(statsList);
         stats.setSetsCount(statsList.size());
         stats.setAvgResults(createAVGResults(statsList));
+        log.info("return overall statistics");
         return stats;
     }
 
@@ -38,6 +41,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<SetStats> setStats = wordSetList.stream()
                 .map(this::buildSetStats)
                 .collect(Collectors.toList());
+        log.info("return sets statistics");
         return setStats;
     }
 
@@ -48,7 +52,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 ws.getSrcLangAccuracy(),
                 ws.getSrcTimesPracticed(),
                 ws.getTargetLangAccuracy(),
-                ws.getTargetLangTimesPracticed());
+                ws.getTargetTimesPracticed());
     }
 
     private SetStats createAVGResults(List<SetStats> statsList) {
@@ -59,6 +63,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         setTargetTotalTimesPracticed(statsList, avgResults);
         setTargetLangAccuracy(statsList, avgResults);
 
+        log.info("return average results");
         return avgResults;
     }
 
@@ -68,6 +73,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .reduce(Float::sum);
         if (accuracy.isPresent()) {
             avgResults.setSrcLangAccuracy(accuracy.get());
+            log.info("calculate sets source language average accuracy");
         } else avgResults.setSrcLangAccuracy(0);
     }
 
@@ -77,6 +83,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .reduce(Integer::sum);
         if (totalTimesPracticed.isPresent()) {
             avgResults.setSrcTimesPracticed(totalTimesPracticed.get());
+            log.info("calculate sets source language total times practiced");
         } else {
             avgResults.setSrcTimesPracticed(0);
         }
@@ -88,6 +95,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .reduce(Float::sum);
         if (targetLangAccuracy.isPresent()) {
             avgResults.setTargetLangAccuracy(targetLangAccuracy.get());
+            log.info("calculate target language average accuracy");
         } else {
             avgResults.setTargetLangAccuracy(0);
         }
@@ -99,6 +107,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                 .reduce(Integer::sum);
         if (targetTotalTimesPracticed.isPresent()) {
             avgResults.setTargetTimesPracticed(targetTotalTimesPracticed.get());
+            log.info("calculate target language total times practiced");
         } else {
             avgResults.setTargetTimesPracticed(0);
         }

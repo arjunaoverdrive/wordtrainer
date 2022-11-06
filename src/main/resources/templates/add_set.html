@@ -3,19 +3,18 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Set Page</title>
+    <title>Add Set</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <script defer src="/js/main.js"></script>
 </head>
 <body>
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
-    <h3 id="title" th:text="${title}"></h3>&nbsp;
     <input type="hidden" id="set-id" name="id" value="-1">
-    <form th:method="post" enctype="application/json" th:object="${words}">
+    <form id="add-set-form" th:method="post" enctype="application/json" th:object="${words}">
         <div id="name-container">
-            <label for="new-set-name">Name</label><br>
-            <input type="text" id="new-set-name" name="name" th:field="*{name}" required autofocus="autofocus"></div>
+            <input type="text" id="new-set-name" name="name" th:field="*{name}" required autofocus="autofocus"
+                   placeholder="Set name"></div>
 
         <table id="words-container">
             <thead>
@@ -29,7 +28,8 @@
                            th:value="${word.word}">
                 </td>
                 <td>
-                    <input type="text" class="input translation" th:name="|wordList[${status.index}].translation|" required
+                    <input type="text" class="input translation" th:name="|wordList[${status.index}].translation|"
+                           required
                            th:value="${word.translation}">
                 </td>
                 <td>
@@ -39,15 +39,16 @@
             </tr>
             </tbody>
         </table>
-        <button id="add-more" type="button">Add more</button>
-        <button id="save-changes" type="submit" th:formmethod="post"
-                th:formaction="@{/sets/save}">Save changes
-        </button>
-
+        <div id="add-set-btns">
+            <button id="add-more" type="button">Add more</button>
+            <button id="save-changes" type="submit" th:formmethod="post"
+                    th:formaction="@{/sets/save}">Save changes
+            </button>
+        </div>
     </form>
     <br>
     <div>
-        <a th:href="@{/practice/{id}(id=${id})}">Practice</a><br>
+        <!--        <a th:href="@{/practice/{id}(id=${id})}">Practice</a><br>-->
         <a href="/">Return home</a>
     </div>
 </div>

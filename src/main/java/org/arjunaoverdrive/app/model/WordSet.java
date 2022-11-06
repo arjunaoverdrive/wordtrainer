@@ -22,7 +22,7 @@ public class WordSet implements Comparable<WordSet>{
     @Column(name = "target_lang_accuracy", columnDefinition = "FLOAT DEFAULT 0.0")
     private float targetLangAccuracy;
     @Column(name = "target_times_practiced", columnDefinition = "INT DEFAULT 0")
-    private int targetLangTimesPracticed;
+    private int targetTimesPracticed;
 
     @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)
     private List<Word>wordList;
@@ -91,12 +91,12 @@ public class WordSet implements Comparable<WordSet>{
         this.targetLangAccuracy = targetLangAccuracy;
     }
 
-    public int getTargetLangTimesPracticed() {
-        return targetLangTimesPracticed;
+    public int getTargetTimesPracticed() {
+        return targetTimesPracticed;
     }
 
-    public void setTargetLangTimesPracticed(int targetLangTimesPracticed) {
-        this.targetLangTimesPracticed = targetLangTimesPracticed;
+    public void setTargetTimesPracticed(int targetTimesPracticed) {
+        this.targetTimesPracticed = targetTimesPracticed;
     }
 
     @Override

@@ -18,25 +18,40 @@
               autocomplete="off">
             <label for="name">Name</label><br>
             <input id="name" required="required" type="text" th:field="*{name}" autofocus="autofocus"
-                   placeholder="Name of the set"><br><br>
+                   placeholder="Set title"><br>
             <label for="import">Words</label><br>
-            <textarea id="import" required="required" cols="50" rows="25"
+            <textarea id="import" required="required" cols="50" rows="15"
                       placeholder="Word-translation pairs separated by a delimiter" th:field="*{words}"></textarea>
-            <h3>Select a delimiter</h3>
-            <div>
+                      <br>
+            <span>Select a delimiter</span>
+            <div id="delimiters-cont">
+                <div>
                 <input id="-" type="radio" checked="checked" name="delimiter" th:field="*{delimiter}"
                        th:value="'-'">
-                <label for="-">-</label><br>
+                <label for="-">-</label>
+            </div>
+            <div>
                 <input id="tab" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'    '">
-                <label for="tab">Tab</label><br>
-                <input id="slash" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'/'">
-                <label for="slash">/</label><br>
-                <input id="custom" type="radio" name="delimiter" th:value="custom" placeholder="custom">
-                <label for="custom">Set a custom delimiter</label><br>
+                <label for="tab">Tab</label>
+                </div>
+                <div>
+                <input
+                 id="slash" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'/'">
+                <label for="slash">/</label>
+                </div>
+                
+                
+            </div>
+            <div id="custom-delimiter-cont">
+            <input id="custom" type="radio" name="delimiter" th:value="custom" placeholder="custom">
+            <label for="custom">Custom</label>
                 <input id="custom-val" type="text" disabled th:field="*{delimiter}"
                        placeholder="Your custom delimiter">
+</div>
+            <div id="submit-cont">
+                <button id="submit" type="submit">Send</button>
             </div>
-            <button id="submit" type="submit">Send</button>
+            <a href="/">Return Home</a>
         </form>
     </div>
 </div>

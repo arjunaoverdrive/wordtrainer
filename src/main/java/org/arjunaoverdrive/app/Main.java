@@ -12,6 +12,5 @@ public class Main {
 
 // TODO: 21.10.2022
 //  fragments for duplicated html code
-//  statistics page
-//  set statistics page
-//  create a set from problematic words feature
+//  statistics page ++
+//  create a set from problematic words feature ++-

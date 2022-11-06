@@ -1,5 +1,6 @@
 package org.arjunaoverdrive.app.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/sets")
+@Slf4j
 public class WordSetController {
 
     private final WordSetService wordSetService;
@@ -36,7 +38,11 @@ public class WordSetController {
 
     @PostMapping("/save/{id}")
     public String updateSet(@PathVariable("id")Integer id, @ModelAttribute("words") WordSet wordSet){
-        return wordSetService.update(wordSet) ? "redirect:/sets/" + id : "redirect:/";
+
+        if(wordSetService.update(wordSet)){
+            return "redirect:/sets/" + id;
+        }
+        return "redirect:/";
     }
 
     @PostMapping(value = "/delete/{id}")

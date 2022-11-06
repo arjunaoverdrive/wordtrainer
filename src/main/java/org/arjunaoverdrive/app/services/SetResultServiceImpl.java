@@ -1,5 +1,6 @@
 package org.arjunaoverdrive.app.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DTO.ResultDto;
 import org.arjunaoverdrive.app.DTO.WordRes;
 import org.arjunaoverdrive.app.model.Word;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class SetResultServiceImpl implements SetResultService {
 
     private final WordSetService setService;
@@ -31,44 +33,56 @@ public class SetResultServiceImpl implements SetResultService {
         updateWords(set, result);
     }
 
+    @Override
+    public void updateWordsRates(List<WordRes> wordResultsList) {
+
+    }
+
     private void updateWordSet(WordSet set, ResultDto result) {
         updateLastPracticed(set);
+        updateTimesPracticed(result, set);
         updateAccuracy(result, set);
-        updateTimesPracticed(result,set);
         setService.update(set);
+        log.info("update set " + set.getId());
     }
 
     private void updateLastPracticed(WordSet set) {
         Timestamp instant = new Timestamp(System.currentTimeMillis());
         set.setLastPracticed(instant);
+        log.info("update set last practiced: " + set.getId());
     }
 
     private void updateTimesPracticed(ResultDto result, WordSet set) {
-        if(result.isLang()) {
+        if (result.isLang()) {
             int timesPracticed = set.getSrcTimesPracticed();
             timesPracticed++;
             set.setSrcTimesPracticed(timesPracticed);
-        } else updateTranslationTimesPracticed(set);
+            log.info("update set src times practiced " + set.getId());
+        } else
+            updateTargetLangTimesPracticed(set);
     }
 
-    private void updateTranslationTimesPracticed(WordSet set) {
-        int translationTimesPracticed = set.getTargetLangTimesPracticed();
-        translationTimesPracticed++;
-        set.setTargetLangTimesPracticed(translationTimesPracticed);
+    private void updateTargetLangTimesPracticed(WordSet set) {
+        int targetLangTimesPracticed = set.getTargetTimesPracticed();
+        targetLangTimesPracticed++;
+        set.setTargetTimesPracticed(targetLangTimesPracticed);
+        log.info("update set trg times practiced " + set.getId());
     }
 
     private void updateAccuracy(ResultDto result, WordSet set) {
-        if(result.isLang()) {
+        if (result.isLang()) {
             float accuracy = calculateAccuracy(result.getWordResults());
             accuracy += set.getSrcLangAccuracy();
             set.setSrcLangAccuracy(accuracy);
-        } else updateTranslationAccuracy(result, set);
+            log.info("update set src lang accuracy " + set.getId() + ". Source language accuracy " + accuracy);
+        } else updateTargetLangAccuracy(result, set);
     }
 
-    private void updateTranslationAccuracy(ResultDto result, WordSet set) {
-        float translationAccuracy = calculateAccuracy(result.getWordResults());
-        translationAccuracy += set.getTargetLangAccuracy();
-        set.setTargetLangAccuracy(translationAccuracy);
+    private void updateTargetLangAccuracy(ResultDto result, WordSet set) {
+        float targetLangAccuracy = calculateAccuracy(result.getWordResults());
+        targetLangAccuracy += set.getTargetLangAccuracy();
+        set.setTargetLangAccuracy(targetLangAccuracy);
+        log.info("update set target lang accuracy " + set.getId() + ". Target language accuracy " +targetLangAccuracy);
     }
 
     private float calculateAccuracy(List<WordRes> wordResults) {
@@ -77,38 +91,41 @@ public class SetResultServiceImpl implements SetResultService {
                 .map(WordRes::getAttempts)
                 .reduce(Integer::sum)
                 .get();
-        float res = (float)  wordsCount/sum;
-        return res;
+        return (float) wordsCount / sum;
     }
 
     private void updateWords(WordSet set, ResultDto result) {
         List<WordRes> wordResults = result.getWordResults();
         List<Word> wordList = wordService.findAllBySet(set);
-
+        int timesPracticed = result.isLang() ? set.getSrcTimesPracticed() : set.getTargetTimesPracticed();
         Map<String, Word> string2word = new HashMap<>();
         if (result.isLang()) {
             wordList.forEach(w -> string2word.put(w.getWord(), w));
-            updateCorrectness(wordResults, string2word);
+            updateSrcRate(wordResults, string2word, timesPracticed);
         } else {
             wordList.forEach(w -> string2word.put(w.getTranslation(), w));
-            updateCorrectnessForTranslations(wordResults, string2word);
+            updateTrgtRate(wordResults, string2word, timesPracticed);
         }
         wordService.saveAll(string2word.values());
+        log.info("update set words " + set.getId());
     }
 
-    private void updateCorrectnessForTranslations(List<WordRes> wordResults, Map<String, Word> string2word) {
+    private void updateTrgtRate(List<WordRes> wordResults, Map<String, Word> string2word, int timesPracticed) {
         for (WordRes wr : wordResults) {
             Word w = string2word.get(wr.getWord());
-            int translationCorrectness = w.getTranslationErrorRate() + wr.getAttempts();
-            w.setTranslationErrorRate(translationCorrectness);
+            float targetRate =
+                    (w.getTrgtRate() + 1/(float) wr.getAttempts())/timesPracticed;
+            w.setTrgtRate(targetRate);
+            log.info("update set words translation rate " + w.getWord() + " : " + targetRate);
         }
     }
 
-    private void updateCorrectness(List<WordRes> wordResults, Map<String, Word> string2word) {
+    private void updateSrcRate(List<WordRes> wordResults, Map<String, Word> string2word, int timesPracticed) {
         for (WordRes wr : wordResults) {
             Word w = string2word.get(wr.getWord());
-            int correctness = w.getErrorRate() + wr.getAttempts();
-            w.setErrorRate(correctness);
+            float srcRate =  (w.getSrcRate() + 1 /(float) wr.getAttempts())/ timesPracticed;
+            w.setSrcRate(srcRate);
+            log.info("update set words rate " + w.getWord() + " : " + srcRate);
         }
     }
 }
