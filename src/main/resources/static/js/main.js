@@ -34,6 +34,8 @@ function processAddSetAndSetPage(){
     const saveSet = document.getElementById("save-changes");
     const deleteBtns = document.getElementsByClassName("delete-item");
 
+    let itemsCount = getItemsCount();
+
     more.addEventListener("click", addOneItemMore);
 
     for (let delBtn of deleteBtns) {
@@ -52,9 +54,16 @@ function processAddSetAndSetPage(){
         }
     }
 
-    function addOneItemMore() {
+    function getItemsCount(){
         let i = itemsBlock.childElementCount;
-        let oneMoreItemMarkup = generateOneMoreItemMarkup(i);
+        return i;
+    }
+
+    function addOneItemMore() {
+        
+        let oneMoreItemMarkup = generateOneMoreItemMarkup(itemsCount);
+        itemsCount++;
+        
         let oneMore = itemsBlock.appendChild(document.createElement("tr"));
 
         oneMore.classList.add("word-item");

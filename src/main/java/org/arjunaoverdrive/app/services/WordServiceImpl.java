@@ -56,8 +56,8 @@ public class WordServiceImpl implements WordService {
         if(setId != null){
             return getLang2WordsForSet(setId, lang);
         }
-        List<Word> words = lang == 0 ? wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(1f, 0) :
-                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(1f, 0);
+        List<Word> words = lang == 0 ? wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(0.92f, 0) :
+                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(0.92f, 0);
         return new ArrayList<>(words);
     }
 
@@ -69,15 +69,15 @@ public class WordServiceImpl implements WordService {
 
     private List<Word> getProblematicWordsFromAllSets(Integer lang) {
         List<Word> problematicWords = lang == 0 ?
-                wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(1f, 0) :
-                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(1f, 0);
+                wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(0.92f, 0) :
+                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(0.92f, 0);
         return new ArrayList<>(problematicWords);
     }
 
     public List<Word> findProblematicWordsForSet(WordSet set, Integer lang) {
         List<Word> words = lang == 0 ?
-                wordRepository.findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(set, 1f, 0) :
-                wordRepository.findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(set, 1f, 0);
+                wordRepository.findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(set, 0.92f, 0) :
+                wordRepository.findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(set, 0.92f, 0);
         return words;
     }
 }

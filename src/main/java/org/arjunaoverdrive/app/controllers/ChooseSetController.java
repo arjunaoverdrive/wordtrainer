@@ -1,6 +1,5 @@
 package org.arjunaoverdrive.app.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@Slf4j
 @RequestMapping("/choose")
 public class ChooseSetController {
 
@@ -24,7 +22,6 @@ public class ChooseSetController {
 
     @ModelAttribute("sets")
     public List<WordSet> sets(){
-        log.info("return all sets");
         return this.wordSetService.findAll();
     }
 

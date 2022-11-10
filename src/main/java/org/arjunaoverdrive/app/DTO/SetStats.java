@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 public class SetStats {
     private int setId;
     private String name;
-    private float srcLangAccuracy;
+    private double srcLangProgress;
     private int srcTimesPracticed;
-    private float targetLangAccuracy;
+    private double targetLangProgress;
     private int targetTimesPracticed;
 
 }

@@ -3,6 +3,7 @@ package org.arjunaoverdrive.app.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Word {
@@ -69,6 +70,19 @@ public class Word {
 
     public void setTrgtRate(float trgtRate) {
         this.trgtRate = trgtRate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Word)) return false;
+        Word word1 = (Word) o;
+        return getId() == word1.getId() && getWord().equals(word1.getWord()) && getTranslation().equals(word1.getTranslation());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getWord(), getTranslation());
     }
 
     @Override

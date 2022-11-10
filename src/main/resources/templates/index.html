@@ -14,15 +14,14 @@
         <div id="main-container">
             <div id="links">
                 <a href="/sets/add">Add new set</a>
-                <a href="/choose">My sets</a>
                 <a href="/import">Import new set</a>
+                <a href="/choose">My sets</a>
                 <a href="/statistics">Statistics</a>
             </div>
             <h3 id="recent">Recent sets</h3>
             <table id="sets-container">
                 <tbody>
                     <tr class="set-item" th:each="set : ${sets}">
-
                         <td>
                             <button class="set-page" th:attr="id=${set.id}"
                                 th:with="words=${set.wordList}, size=${#lists.size(words)}"

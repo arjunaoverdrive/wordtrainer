@@ -41,8 +41,7 @@ public class SetResultServiceImpl implements SetResultService {
     private void updateWordSet(WordSet set, ResultDto result) {
         updateLastPracticed(set);
         updateTimesPracticed(result, set);
-        updateAccuracy(result, set);
-        setService.update(set);
+        setService.updateStats(set);
         log.info("update set " + set.getId());
     }
 
@@ -69,61 +68,36 @@ public class SetResultServiceImpl implements SetResultService {
         log.info("update set trg times practiced " + set.getId());
     }
 
-    private void updateAccuracy(ResultDto result, WordSet set) {
-        if (result.isLang()) {
-            float accuracy = calculateAccuracy(result.getWordResults());
-            accuracy += set.getSrcLangAccuracy();
-            set.setSrcLangAccuracy(accuracy);
-            log.info("update set src lang accuracy " + set.getId() + ". Source language accuracy " + accuracy);
-        } else updateTargetLangAccuracy(result, set);
-    }
-
-    private void updateTargetLangAccuracy(ResultDto result, WordSet set) {
-        float targetLangAccuracy = calculateAccuracy(result.getWordResults());
-        targetLangAccuracy += set.getTargetLangAccuracy();
-        set.setTargetLangAccuracy(targetLangAccuracy);
-        log.info("update set target lang accuracy " + set.getId() + ". Target language accuracy " +targetLangAccuracy);
-    }
-
-    private float calculateAccuracy(List<WordRes> wordResults) {
-        int wordsCount = wordResults.size();
-        int sum = wordResults.stream()
-                .map(WordRes::getAttempts)
-                .reduce(Integer::sum)
-                .get();
-        return (float) wordsCount / sum;
-    }
-
     private void updateWords(WordSet set, ResultDto result) {
         List<WordRes> wordResults = result.getWordResults();
         List<Word> wordList = wordService.findAllBySet(set);
-        int timesPracticed = result.isLang() ? set.getSrcTimesPracticed() : set.getTargetTimesPracticed();
+
         Map<String, Word> string2word = new HashMap<>();
         if (result.isLang()) {
             wordList.forEach(w -> string2word.put(w.getWord(), w));
-            updateSrcRate(wordResults, string2word, timesPracticed);
+            updateSrcRate(wordResults, string2word);
         } else {
             wordList.forEach(w -> string2word.put(w.getTranslation(), w));
-            updateTrgtRate(wordResults, string2word, timesPracticed);
+            updateTrgtRate(wordResults, string2word);
         }
         wordService.saveAll(string2word.values());
         log.info("update set words " + set.getId());
     }
 
-    private void updateTrgtRate(List<WordRes> wordResults, Map<String, Word> string2word, int timesPracticed) {
+    private void updateTrgtRate(List<WordRes> wordResults, Map<String, Word> string2word) {
         for (WordRes wr : wordResults) {
             Word w = string2word.get(wr.getWord());
             float targetRate =
-                    (w.getTrgtRate() + 1/(float) wr.getAttempts())/timesPracticed;
+                    (w.getTrgtRate() + 1/(float) wr.getAttempts()) / 2;
             w.setTrgtRate(targetRate);
             log.info("update set words translation rate " + w.getWord() + " : " + targetRate);
         }
     }
 
-    private void updateSrcRate(List<WordRes> wordResults, Map<String, Word> string2word, int timesPracticed) {
+    private void updateSrcRate(List<WordRes> wordResults, Map<String, Word> string2word) {
         for (WordRes wr : wordResults) {
             Word w = string2word.get(wr.getWord());
-            float srcRate =  (w.getSrcRate() + 1 /(float) wr.getAttempts())/ timesPracticed;
+            float srcRate =  (w.getSrcRate() + 1 /(float) wr.getAttempts()) / 2;
             w.setSrcRate(srcRate);
             log.info("update set words rate " + w.getWord() + " : " + srcRate);
         }

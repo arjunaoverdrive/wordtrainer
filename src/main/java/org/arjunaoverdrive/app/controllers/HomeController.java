@@ -1,6 +1,5 @@
 package org.arjunaoverdrive.app.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@Slf4j
 public class HomeController {
 
     private final WordSetService wordSetService;
@@ -24,7 +22,6 @@ public class HomeController {
 
     @ModelAttribute("sets")
     public List<WordSet>wordSetList(){
-        log.info("return recent sets");
         return wordSetService.findAllRecent();
     }
 

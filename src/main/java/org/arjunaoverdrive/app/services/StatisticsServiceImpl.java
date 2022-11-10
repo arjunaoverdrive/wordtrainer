@@ -1,27 +1,23 @@
 package org.arjunaoverdrive.app.services;
 
-import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DTO.OverallStatistics;
 import org.arjunaoverdrive.app.DTO.SetStats;
+import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final WordSetService wordSetService;
-    private final WordService wordService;
 
     @Autowired
-    public StatisticsServiceImpl(WordSetService wordSetService, WordService wordService) {
+    public StatisticsServiceImpl(WordSetService wordSetService) {
         this.wordSetService = wordSetService;
-        this.wordService = wordService;
     }
 
 
@@ -32,7 +28,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         stats.setSetsStatsList(statsList);
         stats.setSetsCount(statsList.size());
         stats.setAvgResults(createAVGResults(statsList));
-        log.info("return overall statistics");
         return stats;
     }
 
@@ -41,7 +36,6 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<SetStats> setStats = wordSetList.stream()
                 .map(this::buildSetStats)
                 .collect(Collectors.toList());
-        log.info("return sets statistics");
         return setStats;
     }
 
@@ -49,67 +43,87 @@ public class StatisticsServiceImpl implements StatisticsService {
         return new SetStats(
                 ws.getId(),
                 ws.getName(),
-                ws.getSrcLangAccuracy(),
+                calculateSrcLangProgress(ws),
                 ws.getSrcTimesPracticed(),
-                ws.getTargetLangAccuracy(),
+                getTargetLangProgress(ws),
                 ws.getTargetTimesPracticed());
+    }
+
+    private double getTargetLangProgress(WordSet ws) {
+        List<Word> wordList = ws.getWordList();
+        double trgtAccuracy = wordList
+                .stream()
+                .map(Word::getTrgtRate)
+                .reduce(Float::sum)
+                .orElse(0f) / wordList.size();
+
+        return trgtAccuracy >= 0.99 ? 1.0 : trgtAccuracy;
+    }
+
+    private double calculateSrcLangProgress(WordSet ws) {
+        List<Word> wordList = ws.getWordList();
+        double srcProgress = wordList
+                .stream()
+                .map(Word::getSrcRate)
+                .reduce(Float::sum)
+                .orElse(0f) / wordList.size();
+
+        return srcProgress >= 0.99 ? 1.0 : srcProgress;
     }
 
     private SetStats createAVGResults(List<SetStats> statsList) {
         SetStats avgResults = new SetStats();
 
-        setAccuracy(statsList, avgResults);
+        setProgress(statsList, avgResults);
         setTotalTimesPracticed(statsList, avgResults);
         setTargetTotalTimesPracticed(statsList, avgResults);
-        setTargetLangAccuracy(statsList, avgResults);
+        setTargetLangProgress(statsList, avgResults);
 
-        log.info("return average results");
         return avgResults;
     }
 
-    private void setAccuracy(List<SetStats> statsList, SetStats avgResults) {
-        Optional<Float> accuracy = statsList.stream()
-                .map(SetStats::getSrcLangAccuracy)
-                .reduce(Float::sum);
-        if (accuracy.isPresent()) {
-            avgResults.setSrcLangAccuracy(accuracy.get());
-            log.info("calculate sets source language average accuracy");
-        } else avgResults.setSrcLangAccuracy(0);
+    private void setProgress(List<SetStats> statsList, SetStats avgResults) {
+        int practicedSetsSize = (int) statsList.stream()
+                .filter(s -> s.getSrcTimesPracticed() > 0)
+                .count();
+        double progress = statsList.stream()
+                .map(SetStats::getSrcLangProgress)
+                .reduce(Double::sum)
+                .orElse(0.0) /  practicedSetsSize;
+
+        double res = progress > 0.99 ? 1.0 : progress;
+        avgResults.setSrcLangProgress(res);
     }
 
     private void setTotalTimesPracticed(List<SetStats> statsList, SetStats avgResults) {
-        Optional<Integer> totalTimesPracticed = statsList.stream()
+        int totalTimesPracticed = statsList.stream()
                 .map(SetStats::getSrcTimesPracticed)
-                .reduce(Integer::sum);
-        if (totalTimesPracticed.isPresent()) {
-            avgResults.setSrcTimesPracticed(totalTimesPracticed.get());
-            log.info("calculate sets source language total times practiced");
-        } else {
-            avgResults.setSrcTimesPracticed(0);
-        }
+                .reduce(Integer::sum)
+                .orElse(0);
+
+        avgResults.setSrcTimesPracticed(totalTimesPracticed);
     }
 
-    private void setTargetLangAccuracy(List<SetStats> statsList, SetStats avgResults) {
-        Optional<Float> targetLangAccuracy = statsList.stream()
-                .map(SetStats::getTargetLangAccuracy)
-                .reduce(Float::sum);
-        if (targetLangAccuracy.isPresent()) {
-            avgResults.setTargetLangAccuracy(targetLangAccuracy.get());
-            log.info("calculate target language average accuracy");
-        } else {
-            avgResults.setTargetLangAccuracy(0);
-        }
+    private void setTargetLangProgress(List<SetStats> statsList, SetStats avgResults) {
+        int practicedSetsSize = (int) statsList.stream()
+                .filter(s -> s.getTargetTimesPracticed() > 0)
+                .count();
+
+        double targetLangProgress = statsList.stream()
+                .map(SetStats::getTargetLangProgress)
+                .reduce(Double::sum)
+                .orElse(0.0) /  practicedSetsSize;
+        double res = targetLangProgress > 0.99 ? 1.0 : targetLangProgress;
+
+        avgResults.setTargetLangProgress(res);
     }
 
     private void setTargetTotalTimesPracticed(List<SetStats> statsList, SetStats avgResults) {
-        Optional<Integer> targetTotalTimesPracticed = statsList.stream()
+        int targetTotalTimesPracticed = statsList.stream()
                 .map(SetStats::getTargetTimesPracticed)
-                .reduce(Integer::sum);
-        if (targetTotalTimesPracticed.isPresent()) {
-            avgResults.setTargetTimesPracticed(targetTotalTimesPracticed.get());
-            log.info("calculate target language total times practiced");
-        } else {
-            avgResults.setTargetTimesPracticed(0);
-        }
+                .reduce(Integer::sum)
+                .orElse(0);
+
+        avgResults.setTargetTimesPracticed(targetTotalTimesPracticed);
     }
 }

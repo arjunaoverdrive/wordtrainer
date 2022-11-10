@@ -8,33 +8,31 @@
 </head>
 <body>
 <div id="central-container">
-    <h2>Here's your statistics. Practice more to raise accuracy!</h2>
+    <h2>Here's your statistics. Practice more to progress more!</h2>
 
     <div id=statistics-container>
         <div class="avgResults" th:object="${stats}"
              th:with="
-                rate= ${stats.avgResults.srcTimesPracticed} == 0 ? 0 :
-                    ${#numbers.formatDecimal(100*stats.avgResults.srcLangAccuracy/stats.avgResults.srcTimesPracticed,1,0)},
-                trate=${stats.avgResults.targetTimesPracticed} == 0 ? 0 :
-                    ${#numbers.formatDecimal(100*stats.avgResults.targetLangAccuracy/stats.avgResults.targetTimesPracticed,1,0)},
+                rate= ${#numbers.formatDecimal(100*stats.avgResults.srcLangProgress,1,0)},
+                trate=${#numbers.formatDecimal(100*stats.avgResults.targetLangProgress,1,0)},
                 total=${stats.avgResults.srcTimesPracticed + stats.avgResults.targetTimesPracticed}">
             <h3>Overall statistics</h3>
 
-            <div class="avgResults src-lang">Language 1 accuracy: <span
+            <div class="avgResults src-lang">Language 1 progress: <span
                     th:text="${rate} + '%'"></span>
             </div>
-            <div class="info-src" th:with="errorRate= ${stats.avgResults.srcTimesPracticed} == 0 ? 0 :
-                    ${#numbers.formatDecimal(100-100*stats.avgResults.srcLangAccuracy/stats.avgResults.srcTimesPracticed,1,0)}">
+            <div class="info-src" th:with="errorRate=${stats.avgResults.srcTimesPracticed == 0} ? 0 :
+            ${#numbers.formatDecimal(100-100*stats.avgResults.srcLangProgress,1,0)}">
                 <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%; height:15px;'"></div>
                 <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
                      th:attr="id=0, lang=0"></div>
             </div>
 
-            <div class="avgResults targ-lang">Language 2 accuracy: <span
+            <div class="avgResults targ-lang">Language 2 progress: <span
                     th:text="${trate} + '%'"></span></div>
             <div class="info-trg"
-                 th:with="errorRate= ${stats.avgResults.targetTimesPracticed} == 0 ? 0 :
-                    ${#numbers.formatDecimal(100-100*stats.avgResults.targetLangAccuracy/stats.avgResults.targetTimesPracticed,1,0)}">
+                 th:with="errorRate=${stats.avgResults.targetTimesPracticed == 0} ? 0 :
+                    ${#numbers.formatDecimal(100-100*stats.avgResults.targetLangProgress,1,0)}">
                 <div class="info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>
                 <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
                      th:attr="id=0, lang=1"></div>
@@ -50,18 +48,18 @@
         <div class="detailedStats">
             <h3>Detailed statistics</h3>
             <div class="stats-item" th:each="setStats : ${stats.setsStatsList}"
-                 th:with="rate=${setStats.srcTimesPracticed == 0}? 0 : ${#numbers.formatDecimal(100*setStats.srcLangAccuracy/setStats.srcTimesPracticed,1,0)},
-                trate=${setStats.targetTimesPracticed == 0}? 0 : ${#numbers.formatDecimal(100*setStats.targetLangAccuracy/setStats.targetTimesPracticed,1,0)}">
+                 th:with="rate=${#numbers.formatDecimal(100*setStats.srcLangProgress,1,0)},
+                trate=${#numbers.formatDecimal(100*setStats.targetLangProgress,1,0)}">
 
                 <span>
                     <a class="detailed set-link" th:href="@{/sets/{setId}(setId=${setStats.setId})}"
                        th:text="${setStats.name}"></a>
                 </span>
                 <div class="detailed src-lang">
-                    <div class="detailed-stats srcLangAccuracy">Language 1 accuracy: <span
+                    <div class="detailed-stats srcLangAccuracy">Language 1 progress: <span
                             th:text="${rate} + '%'"></span></div>
-                    <div class="detailed info-src" th:with="errorRate= ${setStats.srcTimesPracticed} == 0 ? 0 :
-                   ${#numbers.formatDecimal(100-100*setStats.srcLangAccuracy/setStats.srcTimesPracticed,1,0)}">
+                    <div class="detailed info-src" th:with="errorRate=${setStats.srcTimesPracticed == 0} ? 0 :
+                    ${#numbers.formatDecimal(100-100*setStats.srcLangProgress,1,0)}">
                         <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%'"></div>
                         <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
                         th:attr="id=${setStats.setId}, lang=0"></div>
@@ -69,10 +67,10 @@
                 </div>
 
                 <div class="detailed targ-lang">
-                    <div class="detailed-stats targetLangAccuracy">Language 2 accuracy: <span
+                    <div class="detailed-stats targetLangAccuracy">Language 2 progress: <span
                             th:text=" ${trate} + '%'"></span></div>
-                    <div class="detailed info-trg" th:with="errorRate= ${setStats.targetTimesPracticed} == 0 ? 0 :
-                   ${#numbers.formatDecimal(100-100*setStats.targetLangAccuracy/setStats.targetTimesPracticed,1,0)}">
+                    <div class="detailed info-trg" th:with="errorRate=${setStats.targetTimesPracticed == 0} ? 0 :
+                    ${#numbers.formatDecimal(100-100*setStats.targetLangProgress,1,0)}">
                         <div class="info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>
                         <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
                         th:attr="id=${setStats.setId},lang=1"></div>
