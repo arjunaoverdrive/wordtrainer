@@ -273,17 +273,17 @@
     transform: scaleY(1.3);
  }
 
- .info-src.srcLangAccuracy {
+ .info-src.srcLangAccuracy, .words-stats.info-src.srcLangAccuracy {
     background-color: #7bfd7c;
     height: 15px;
  }
 
- .info-trg.targetLangAccuracy {
+ .info-trg.targetLangAccuracy, .words-stats.info-src.targetLangAccuracy  {
     background-color: aqua;
     height: 15px;
  }
 
- .info-src.error-zone, .info-trg.error-zone {
+ .info-src.error-zone, .info-trg.error-zone , .words-stats.info-trg.error-zone, .words-stats.info-src.error-zone{
     background-color: red;
     height: 15px;
  }
@@ -339,4 +339,13 @@
 #delimiters-cont{
    display: flex;
    justify-content: space-between;
+}
+
+/*set stats*/
+#words-cont{
+   text-align: center;
+}
+
+.word-stats{
+   display: flex;
 }

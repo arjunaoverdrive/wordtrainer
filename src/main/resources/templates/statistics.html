@@ -24,7 +24,8 @@
             <div class="info-src" th:with="errorRate=${stats.avgResults.srcTimesPracticed == 0} ? 0 :
             ${#numbers.formatDecimal(100-100*stats.avgResults.srcLangProgress,1,0)}">
                 <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%; height:15px;'"></div>
-                <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
+                <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%'"
+                     title="Study problematic words"
                      th:attr="id=0, lang=0"></div>
             </div>
 
@@ -34,12 +35,13 @@
                  th:with="errorRate=${stats.avgResults.targetTimesPracticed == 0} ? 0 :
                     ${#numbers.formatDecimal(100-100*stats.avgResults.targetLangProgress,1,0)}">
                 <div class="info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>
-                <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
+                <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%'"
+                     title="Study problematic words"
                      th:attr="id=0, lang=1"></div>
             </div>
             <div class="avgResults total">Total practiced: <span
                     th:text="${total} + ' (' + ${stats.avgResults.srcTimesPracticed} + '/' + ${stats.avgResults.targetTimesPracticed + ')'}"
-                    ></span>
+            ></span>
             </div>
         </div>
 
@@ -47,47 +49,18 @@
 
         <div class="detailedStats">
             <h3>Detailed statistics</h3>
-            <div class="stats-item" th:each="setStats : ${stats.setsStatsList}"
-                 th:with="rate=${#numbers.formatDecimal(100*setStats.srcLangProgress,1,0)},
-                trate=${#numbers.formatDecimal(100*setStats.targetLangProgress,1,0)}">
-
+            <div th:each="setStats : ${stats.setsStatsList}">
                 <span>
-                    <a class="detailed set-link" th:href="@{/sets/{setId}(setId=${setStats.setId})}"
-                       th:text="${setStats.name}"></a>
+                        <a class="detailed set-link" th:href="@{/statistics/{setId}(setId=${setStats.setId})}"
+                           th:text="${setStats.name}"></a>
                 </span>
-                <div class="detailed src-lang">
-                    <div class="detailed-stats srcLangAccuracy">Language 1 progress: <span
-                            th:text="${rate} + '%'"></span></div>
-                    <div class="detailed info-src" th:with="errorRate=${setStats.srcTimesPracticed == 0} ? 0 :
-                    ${#numbers.formatDecimal(100-100*setStats.srcLangProgress,1,0)}">
-                        <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%'"></div>
-                        <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
-                        th:attr="id=${setStats.setId}, lang=0"></div>
-                    </div>
-                </div>
-
-                <div class="detailed targ-lang">
-                    <div class="detailed-stats targetLangAccuracy">Language 2 progress: <span
-                            th:text=" ${trate} + '%'"></span></div>
-                    <div class="detailed info-trg" th:with="errorRate=${setStats.targetTimesPracticed == 0} ? 0 :
-                    ${#numbers.formatDecimal(100-100*setStats.targetLangProgress,1,0)}">
-                        <div class="info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>
-                        <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%'" title="Study problematic words"
-                        th:attr="id=${setStats.setId},lang=1"></div>
-                    </div>
-                </div>
-                <div class="detailed-stats total">Total practiced: <span
-                        th:with="total=${setStats.srcTimesPracticed + setStats.targetTimesPracticed}"
-                        th:text="${total} + ' (' + ${setStats.srcTimesPracticed} + '/' + ${setStats.targetTimesPracticed + ')'}"></span>
-                </div>
-
+                <div th:replace="~{/fragments/stats_fragment :: statistics(${setStats})}"></div>
             </div>
         </div>
+        <div id="navigation-links">
+            <a href="/">Return Home</a>
+        </div>
     </div>
-    <div id="navigation-links">
-        <a href="/">Return Home</a>
-    </div>
-
 </div>
 
 </body>

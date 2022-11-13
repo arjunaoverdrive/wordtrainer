@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Set Statistics</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
+</head>
+
+<body>
+<div id="central-container">
+    <div id="header">
+        <h2>Practice this set until progress is 100%</h2>
+        <div id="links">
+            <a href="/">Return Home</a>
+            <a th:href="@{/sets/{setId}(setId=${setStats.setId})}">Set Page</a>
+        </div>
+    </div>
+
+    <div id="main-cont">
+
+        <div class="set-stats" th:replace="~{fragments/stats_fragment::statistics(setStats=${setStats})}"></div>
+
+        <div id="words-cont" th:each="item : ${words}"
+            th:with="rate=${item.srcRate*50},
+                trate=${item.trgtRate*50},
+                error=${#numbers.formatDecimal(50-item.srcRate*50, 1, 0)},
+                trerror=${#numbers.formatDecimal(50-item.trgtRate*50, 1, 0)}">
+            <div class="word-item" th:text="${item.word} + ' &mdash; ' + ${item.translation}"></div>
+            <div class="word-stats">
+                <div class="words-stats info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%'"></div>
+                <div class="words-stats info-src error-zone" th:style="'width:' + ${error} + '%'"></div>
+                <div class="words-stats info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>
+                <div class="words-stats info-trg error-zone" th:style="'width:' + ${trerror} + '%'"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

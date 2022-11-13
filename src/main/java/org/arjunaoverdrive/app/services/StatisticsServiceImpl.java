@@ -31,6 +31,18 @@ public class StatisticsServiceImpl implements StatisticsService {
         return stats;
     }
 
+    @Override
+    public SetStats getSetStatistics(Integer setId) {
+        WordSet ws = wordSetService.findById(setId);
+        return buildSetStats(ws);
+    }
+
+    @Override
+    public List<Word> getWordsStatistics(Integer setId) {
+        WordSet ws = wordSetService.findById(setId);
+        return ws.getWordList();
+    }
+
     private List<SetStats> getSetsStatsList() {
         List<WordSet> wordSetList = wordSetService.findAll();
         List<SetStats> setStats = wordSetList.stream()

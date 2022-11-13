@@ -16,6 +16,7 @@ switch(page){
         break;
 
     case 'Statistics':
+    case 'Set Statistics':    
         processStatisticsPage();
         break;
 
