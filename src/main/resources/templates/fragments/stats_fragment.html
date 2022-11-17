@@ -27,10 +27,9 @@
             </div>
         </div>
         <div class="detailed-stats total">Total practiced:
-            <span
-                    th:with="total=${setStats.srcTimesPracticed + setStats.targetTimesPracticed}"
+            <span th:with="total=${setStats.srcTimesPracticed + setStats.targetTimesPracticed}"
                     th:text="${total} + ' (' + ${setStats.srcTimesPracticed} + '/' + ${setStats.targetTimesPracticed + ')'}">
-                        </span>
+            </span>
         </div>
 
     </div>

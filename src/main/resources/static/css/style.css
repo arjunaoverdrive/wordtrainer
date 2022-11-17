@@ -349,3 +349,7 @@
 .word-stats{
    display: flex;
 }
+
+.word-stats.info-trg, .word-stats.info-src{
+   width: 50%;
+}
