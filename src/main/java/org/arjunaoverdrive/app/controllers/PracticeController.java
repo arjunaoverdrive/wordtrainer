@@ -31,7 +31,7 @@ public class PracticeController {
 
     @PostMapping("/mistaken")
     public String mistakenWords(MistakenWordsDto words, Model model){
-        model.addAttribute("words", words.getWords());
+        model.addAttribute("words", words.getShuffledWords());
         return "mistaken_words";
     }
 }

@@ -2,6 +2,7 @@ package org.arjunaoverdrive.app.DTO;
 
 import org.arjunaoverdrive.app.model.Word;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MistakenWordsDto {
@@ -20,5 +21,11 @@ public class MistakenWordsDto {
 
     public void setWords(List<Word> words) {
         this.words = words;
+    }
+
+    public List<Word> getShuffledWords(){
+        List<Word> words = getWords();
+        Collections.shuffle(words);
+        return words;
     }
 }
