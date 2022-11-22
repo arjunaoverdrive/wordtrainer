@@ -11,31 +11,17 @@
 <body>
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
-    <h3 id="choose-set">Select a set to practice</h3>
+    <div id="links">
+        <a href="/">Return Home</a>
+        <a href="/sets/add">Add new set</a>
+        <a href="/import">Import new set</a>
+        <a href="/statistics">Statistics</a>
+    </div>
     <div id="main-container">
-        <table id="sets-container">
-            <tr class="set-item" th:each="set : ${sets}">
-                <td>
-                    <button class="set-page"
-                            th:attr="id=${set.id}"
-                            th:with="words=${set.wordList}, size=${#lists.size(words)}"
-                            th:text="${set.name} + '  (' + ${size} + ' words)'"
-                    ></button>
-                </td>
-                <td><button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button></td>
-                <td>
-                    <form class="delete-set-form">
-                        <button class="delete-set-btn" th:formmethod="post" th:type="submit" th:attr="data-id=${set.id}"
-                                th:formaction="@{/sets/delete/{set.id}(set.id=${set.id})}">Delete set
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        </table>
+
+        <h3 id="choose-set">Select a set to practice</h3>
+        <div th:replace="~{fragments/sets_fragment :: sets_container(${sets})}"></div>
         <br>
-        <div>
-            <a href="/">Return home</a>
-        </div>
     </div>
 </div>
 </body>

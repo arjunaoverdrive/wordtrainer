@@ -9,6 +9,9 @@
 <body>
 <div id="central-container">
     <h2>Here's your statistics. Practice more to progress more!</h2>
+    <div id="navigation-links">
+        <a href="/">Return Home</a>
+    </div>
 
     <div id=statistics-container>
         <div class="avgResults" th:object="${stats}"
@@ -59,9 +62,7 @@
                 <div th:replace="~{/fragments/stats_fragment :: statistics(${setStats})}"></div>
             </div>
         </div>
-        <div id="navigation-links">
-            <a href="/">Return Home</a>
-        </div>
+
     </div>
 </div>
 

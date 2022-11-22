@@ -11,7 +11,7 @@ public class Main {
 }
 
 // TODO: 21.10.2022
-//  fragments for duplicated html code+
-//  statistics page +++
-//  create a set from problematic words feature +++
 //  add logic for adding other sets words
+//  enable delete buttons on the Correct Mistakes page
+//  add logic to persist practice mistaken words results ???
+//  add logic to upload a file to import words

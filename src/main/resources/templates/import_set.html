@@ -12,6 +12,9 @@
 <body>
 <div id="central-container" style="display:flex; flex-direction:column;align-items:center; justify-content:center;">
     <h1>Welcome to the best words training app!</h1>
+    <div style="align-self: flex-start">
+        <a href="/">Return home</a>
+    </div>
     <h3>Import a set of words</h3>
     <div id="form-div">
         <form id="form" th:action="@{/import}" method="post" th:object="${importDto}" enctype="application/json"
@@ -51,7 +54,6 @@
             <div id="submit-cont">
                 <button id="submit" type="submit">Send</button>
             </div>
-            <a href="/">Return Home</a>
         </form>
     </div>
 </div>

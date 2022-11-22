@@ -8,10 +8,13 @@
 </head>
 <body>
 <div id="central-container">
-    <h1>Welcome to the best words training app!</h1>
+    <h2>Here's the list of words to pay additional attention to!</h2>
+    <div>
+        <a href="/">Return home</a>
+    </div>
     <input type="hidden" id="set-id" th:value="${setId}">
     <input type="hidden" id="lang" th:value="${lang}">
-    <form id="add-set-form"  enctype="application/json" th:object="${words}">
+    <form id="add-set-form" enctype="application/json" th:object="${words}">
 
         <table id="words-container">
             <thead>
@@ -26,8 +29,7 @@
                 </td>
                 <td>
                     <input type="text" class="input translation" th:name="|words[${status.index}].translation|"
-                           required
-                           th:value="${word.translation}">
+                           required th:value="${word.translation}">
                 </td>
                 <td>
                     <button class="delete-item" type="button">Delete
@@ -44,9 +46,7 @@
             <button type="submit" th:formaction="@{/practice/mistaken}" th:formmethod="post">Practice</button>
         </div>
     </form>
-    <div>
-        <a href="/">Return home</a>
-    </div>
+
 </div>
 </body>
 </html>

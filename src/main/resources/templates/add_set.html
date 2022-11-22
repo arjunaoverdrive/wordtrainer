@@ -10,6 +10,9 @@
 <body>
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
+    <div>
+        <a href="/">Return home</a>
+    </div>
     <input type="hidden" id="set-id" name="id" value="-1">
     <form id="add-set-form" th:method="post" enctype="application/json" th:object="${words}">
         <div id="name-container">
@@ -47,10 +50,7 @@
         </div>
     </form>
     <br>
-    <div>
-        <!--        <a th:href="@{/practice/{id}(id=${id})}">Practice</a><br>-->
-        <a href="/">Return home</a>
-    </div>
+
 </div>
 </body>
 
