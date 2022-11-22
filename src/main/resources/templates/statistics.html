@@ -13,8 +13,10 @@
     <div id=statistics-container>
         <div class="avgResults" th:object="${stats}"
              th:with="
-                rate= ${#numbers.formatDecimal(100*stats.avgResults.srcLangProgress,1,0)},
-                trate=${#numbers.formatDecimal(100*stats.avgResults.targetLangProgress,1,0)},
+                rate=${stats.avgResults.srcTimesPracticed == 0} ?
+                 0 : ${#numbers.formatDecimal(100*stats.avgResults.srcLangProgress,1,0)},
+                trate=${stats.avgResults.targetTimesPracticed == 0} ?
+                0 : ${#numbers.formatDecimal(100*stats.avgResults.targetLangProgress,1,0)},
                 total=${stats.avgResults.srcTimesPracticed + stats.avgResults.targetTimesPracticed}">
             <h3>Overall statistics</h3>
 
