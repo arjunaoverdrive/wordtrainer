@@ -13,8 +13,8 @@
     <div id="header">
         <h2>Practice this set until progress is 100%</h2>
         <div id="links">
-            <a href="/">Return Home</a>
-            <a th:href="@{/sets/{setId}(setId=${setStats.setId})}">Set Page</a>
+            <a href="/api/v1/">Return Home</a>
+            <a th:href="@{/api/v1/sets/{setId}(setId=${setStats.setId})}">Set Page</a>
         </div>
     </div>
 
@@ -28,12 +28,12 @@
                 error=${setStats.srcTimesPracticed == 0} ? 0 : ${#numbers.formatDecimal(100-item.srcRate*100, 1, 0)},
                 trerror=${setStats.targetTimesPracticed == 0} ? 0 : ${#numbers.formatDecimal(100-item.trgtRate*100, 1, 0)}">
             <div class="word-item" th:text="${item.word} + ' &mdash; ' + ${item.translation}"></div>
-            <div class="word-stats" >
+            <div class="word-stats">
                 <div class="word-stats info-src">
                     <div class="words-stats info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%'"></div>
                     <div class="words-stats info-src error-zone" th:style="'width:' + ${error} + '%'"></div>
                 </div>
-                <div class="word-stats info-trg" >
+                <div class="word-stats info-trg">
                     <div class="words-stats info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>
                     <div class="words-stats info-trg error-zone" th:style="'width:' + ${trerror} + '%'"></div>
                 </div>

@@ -1,7 +1,7 @@
 package org.arjunaoverdrive.app.services;
 
-import org.arjunaoverdrive.app.DTO.ResultDto;
-import org.arjunaoverdrive.app.DTO.WordRes;
+import org.arjunaoverdrive.app.web.DTO.ResultDto;
+import org.arjunaoverdrive.app.web.DTO.WordRes;
 
 import java.util.List;
 

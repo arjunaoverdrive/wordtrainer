@@ -353,3 +353,47 @@
 .word-stats.info-trg, .word-stats.info-src{
    width: 50%;
 }
+
+
+/*login form*/
+.login-form{
+   display: flex;
+   justify-content: center;
+   height: 185px;
+}
+
+.login-form-form{
+   display: flex;
+   justify-content: space-between;
+   flex-direction: column;
+}
+
+.sign-up{
+   margin-top: 20px;
+}
+
+.sign-up-link{
+   text-decoration: none;
+}
+
+
+/*register-form*/
+.register-form{
+   display: flex;
+   justify-content: center;
+   height: 25vw;
+}
+
+.register-form-form{
+   display: flex;
+   justify-content: space-between;
+   flex-direction: column;
+}
+
+.sign-in{
+   margin-top: 20px;
+}
+
+.sign-in-link{
+   text-decoration: none;
+}

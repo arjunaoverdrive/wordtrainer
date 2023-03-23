@@ -1,16 +1,18 @@
-package org.arjunaoverdrive.app.controllers;
+package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/api/v1")
 public class HomeController {
 
     private final WordSetService wordSetService;
@@ -25,7 +27,7 @@ public class HomeController {
         return wordSetService.findAllRecent();
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String home() {
         return "index";
     }

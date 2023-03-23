@@ -18,13 +18,13 @@
                 set
             </button>
             <a id="practice-set-link" th:href="@{/practice/{id}(id=${id})}">Practice</a>
-            <a th:href="@{/statistics/{id}(id=${id})}">Statistics</a>
+            <a th:href="@{/api/v1/statistics/{id}(id=${id})}">Statistics</a>
             <a href="/">Return home</a>
         </div>
         <div class="more-items-and-save-set-btns">
             <button id="add-more" class="hidden" type="button">Add one more item</button>
             <button id="save-changes" class="hidden"  type="submit" form="set-form" th:formmethod="post"
-                    th:formaction="@{/sets/save/{set_id}(set_id=${id})}">Save changes
+                    th:formaction="@{/api/v1/sets/save/{set_id}(set_id=${id})}">Save changes
             </button>
         </div>
     </div>

@@ -1,8 +1,8 @@
 package org.arjunaoverdrive.app.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arjunaoverdrive.app.DTO.ResultDto;
-import org.arjunaoverdrive.app.DTO.WordRes;
+import org.arjunaoverdrive.app.web.DTO.ResultDto;
+import org.arjunaoverdrive.app.web.DTO.WordRes;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;

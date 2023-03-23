@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.DTO;
+package org.arjunaoverdrive.app.web.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

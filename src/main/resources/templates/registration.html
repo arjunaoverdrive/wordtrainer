@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+<body>
+<div class="central-container" id="central-container">
+    <div th:if="${param.success}">
+        <div class="alert alert-info">You've successfully registered to the App</div>
+    </div>
+    <h2>Create an account!</h2>
+    <div class="register-form">
+        <form class="register-form-form" th:action="@{/api/v1/registration/signup}" method="post" enctype="multipart/form-data"
+              th:object="${registerForm}">
+            <input type="text" class="first-name" placeholder="Type your first name" th:field="*{firstName}" required>
+            <input type="text" class="second-name" placeholder="Type your second name" th:field="*{lastName}" required>
+            <input type="email" class="email" placeholder="TYpe your email" th:field="*{email}" required>
+            <input type="password" class="pass" placeholder="Type your password" minlength="5" maxlength="12"
+                   th:field="*{password}" required>
+            <input type="text" class="role" placeholder="Select role" th:field="*{role}" required>
+            <input type="submit" value="Sign up">
+        </form>
+    </div>
+    <div class="sign-in">
+        <span>Already have an account?</span>
+        <a class="sign-in-link" th:href="@{/api/v1/login}">Log in</a>
+    </div>
+</div>
+
+</body>
+</html>

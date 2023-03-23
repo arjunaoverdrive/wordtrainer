@@ -1,15 +1,17 @@
-package org.arjunaoverdrive.app.controllers;
+package org.arjunaoverdrive.app.web.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arjunaoverdrive.app.DTO.WordsL2List;
+import org.arjunaoverdrive.app.web.DTO.WordsL2List;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.services.WordService;
-import org.arjunaoverdrive.app.services.WordSetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Controller
 @Slf4j
+@RequestMapping("/api/v1")
 public class MistakenWordsController {
 
     private final WordService wordService;
@@ -27,6 +30,7 @@ public class MistakenWordsController {
         this.wordService = wordService;
     }
 
+    @PreAuthorize("hasAuthority('set:read')")
     @GetMapping("/problematicWords")
     public String mistakenWordsPage(@RequestParam Integer setId, @RequestParam Integer lang, Model model){
         model.addAttribute("words", wordService.getWordListWithProblematicWords(setId, lang));
@@ -36,6 +40,7 @@ public class MistakenWordsController {
         return "problematic_words";
     }
 
+    @PreAuthorize("hasAuthority('set:read')")
     @GetMapping("/problematicWords/l2")
     @ResponseBody
     public ResponseEntity<WordsL2List> mistakenWordsLang2AllSets(@RequestParam Integer lang, @RequestParam(required = false) Integer setId, Model model){

@@ -11,7 +11,7 @@
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
     <div>
-        <a href="/">Return home</a>
+        <a href="/api/v1/">Return home</a>
     </div>
     <input type="hidden" id="set-id" name="id" value="-1">
     <form id="add-set-form" th:method="post" enctype="application/json" th:object="${words}">
@@ -45,7 +45,7 @@
         <div id="add-set-btns">
             <button id="add-more" type="button">Add more</button>
             <button id="save-changes" type="submit" th:formmethod="post"
-                    th:formaction="@{/sets/save}">Save changes
+                    th:formaction="@{/api/v1/sets/save}">Save changes
             </button>
         </div>
     </form>

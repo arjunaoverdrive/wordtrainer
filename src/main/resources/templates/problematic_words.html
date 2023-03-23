@@ -10,7 +10,7 @@
 <div id="central-container">
     <h2>Here's the list of words to pay additional attention to!</h2>
     <div>
-        <a href="/">Return home</a>
+        <a href="/api/v1/">Return home</a>
     </div>
     <input type="hidden" id="set-id" th:value="${setId}">
     <input type="hidden" id="lang" th:value="${lang}">
@@ -43,7 +43,7 @@
                 Add other language words
             </button>
             <button id="add-more-words" type="button">Add words from other sets</button>
-            <button type="submit" th:formaction="@{/practice/mistaken}" th:formmethod="post">Practice</button>
+            <button type="submit" th:formaction="@{/api/v1/practice/mistaken}" th:formmethod="post">Practice</button>
         </div>
     </form>
 

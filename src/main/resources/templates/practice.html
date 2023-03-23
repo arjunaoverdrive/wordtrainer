@@ -10,7 +10,7 @@
 <div id="central-container">
     <h2>Keep practicing until you get 100%!</h2>
     <div id=main>
-        <div id="words-container" >
+        <div id="words-container">
             <div id="hiddenList" style="display:none" th:text="${words}" th:attr="setid=${id}"></div>
         </div>
         <button type="button" id="change-lang-btn">Change language</button>
@@ -26,7 +26,8 @@
         </div>
         <div id="translation" class="hidden">
             <span> </span>
-            <button type="button" id="typo" class="hidden">I mistyped</button><br>
+            <button type="button" id="typo" class="hidden">I mistyped</button>
+            <br>
             <span id="prompt">Copy the translation and press Enter</span>
         </div>
     </div>
@@ -37,7 +38,7 @@
 
     <div id="navigation-links" class="hidden">
         <a href="#" id="start-over">Start over</a><br><br>
-        <a href="/">Return Home</a>
+        <a href="/api/v1/">Return Home</a>
     </div>
 
 </div>

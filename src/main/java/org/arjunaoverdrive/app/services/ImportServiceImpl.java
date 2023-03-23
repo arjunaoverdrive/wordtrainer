@@ -3,7 +3,7 @@ package org.arjunaoverdrive.app.services;
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.DAO.WordSetRepository;
-import org.arjunaoverdrive.app.DTO.ImportDto;
+import org.arjunaoverdrive.app.web.DTO.ImportDto;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;

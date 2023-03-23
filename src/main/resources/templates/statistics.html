@@ -10,7 +10,7 @@
 <div id="central-container">
     <h2>Here's your statistics. Practice more to progress more!</h2>
     <div id="navigation-links">
-        <a href="/">Return Home</a>
+        <a href="/api/v1/">Return Home</a>
     </div>
 
     <div id=statistics-container>
@@ -56,7 +56,7 @@
             <h3>Detailed statistics</h3>
             <div th:each="setStats : ${stats.setsStatsList}">
                 <span>
-                        <a class="detailed set-link" th:href="@{/statistics/{setId}(setId=${setStats.setId})}"
+                        <a class="detailed set-link" th:href="@{/api/v1/statistics/{setId}(setId=${setStats.setId})}"
                            th:text="${setStats.name}"></a>
                 </span>
                 <div th:replace="~{/fragments/stats_fragment :: statistics(${setStats})}"></div>

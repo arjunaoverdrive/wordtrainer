@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Best Word Training App Ever!</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+<body>
+    <div class="central-container" id="central-container">
+        <div th:if="${param.error}">
+            <div class="alert alert-info">Authorization error. Wrong email or password<br> Please try again</div>
+        </div>
+        <div th:if="${param.logout}">
+            <div class="alert alert-info">You've been logged out</div>
+        </div>
+        <div class="login-form">
+            <form class="login-form-form" th:action="@{/api/v1/login}" th:method="post">
+                <input type="email" class="email" name="username" placeholder="email" >
+                <input type="password" class="pass" name="password" placeholder="password" >
+                <input type="submit" value="Sign in"> 
+            </form>
+        </div>
+        <div class="sign-up">
+            <span>Don't have an account yet?</span>
+            <a class="sign-up-link" th:href="@{/api/v1/registration}">Create one!</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 package org.arjunaoverdrive.app.services;
 
-import org.arjunaoverdrive.app.DTO.OverallStatistics;
-import org.arjunaoverdrive.app.DTO.SetStats;
+import org.arjunaoverdrive.app.web.DTO.OverallStatistics;
+import org.arjunaoverdrive.app.web.DTO.SetStats;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;
