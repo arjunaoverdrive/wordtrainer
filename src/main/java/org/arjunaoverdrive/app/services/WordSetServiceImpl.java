@@ -5,6 +5,7 @@ import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.DAO.WordSetRepository;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.services.WordSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,11 +99,6 @@ public class WordSetServiceImpl implements WordSetService {
 
     private void populateWordSetFields(WordSet wordSet, List<Word> words) {
         WordSet fromDb = findById(wordSet.getId());
-
-        wordSet.setLastPracticed(fromDb.getLastPracticed());
-        wordSet.setSrcTimesPracticed(fromDb.getSrcTimesPracticed());
-        wordSet.setTargetTimesPracticed(fromDb.getTargetTimesPracticed());
-
         wordSet.setCreatedOn(fromDb.getCreatedOn());
         wordSet.setWordList(words);
     }
@@ -156,5 +152,4 @@ public class WordSetServiceImpl implements WordSetService {
         return setId == 0 ? "all sets" :
                 findById(setId).getName();
     }
-
 }

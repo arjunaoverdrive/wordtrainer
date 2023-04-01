@@ -10,11 +10,9 @@
 </head>
 
 <body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
 <div id="central-container" style="display:flex; flex-direction:column;align-items:center; justify-content:center;">
     <h1>Welcome to the best words training app!</h1>
-    <div style="align-self: flex-start">
-        <a href="/api/v1/">Return home</a>
-    </div>
     <h3>Import a set of words</h3>
     <div id="form-div">
         <form id="form" th:action="@{/api/v1/import}" method="post" th:object="${importDto}" enctype="application/json"
@@ -25,32 +23,33 @@
             <label for="import">Words</label><br>
             <textarea id="import" required="required" cols="50" rows="15"
                       placeholder="Word-translation pairs separated by a delimiter" th:field="*{words}"></textarea>
-                      <br>
+            <br>
             <span>Select a delimiter</span>
             <div id="delimiters-cont">
                 <div>
-                <input id="-" type="radio" checked="checked" name="delimiter" th:field="*{delimiter}"
-                       th:value="'-'">
-                <label for="-">-</label>
-            </div>
-            <div>
-                <input id="tab" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'    '">
-                <label for="tab">Tab</label>
+                    <input class="delimiter standard-delimiter" id="-" type="radio" checked="checked" name="delimiter"
+                           th:field="*{delimiter}"
+                           th:value="'-'">
+                    <label for="-">-</label>
                 </div>
                 <div>
-                <input
-                 id="slash" type="radio" name="delimiter" th:field="*{delimiter}" th:value="'/'">
-                <label for="slash">/</label>
+                    <input class="delimiter standard-delimiter" id="tab" type="radio" name="delimiter" th:field="*{delimiter}"
+                           th:value="'    '">
+                    <label for="tab">Tab</label>
                 </div>
-                
-                
+                <div>
+                    <input class="delimiter standard-delimiter" id="slash" type="radio" name="delimiter" th:field="*{delimiter}"
+                           th:value="'/'">
+                    <label for="slash">/</label>
+                </div>
+
+
             </div>
             <div id="custom-delimiter-cont">
-            <input id="custom" type="radio" name="delimiter" th:value="custom" placeholder="custom">
-            <label for="custom">Custom</label>
-                <input id="custom-val" type="text" disabled th:field="*{delimiter}"
+                <label for="custom">Custom</label>
+                <input class="delimiter" id="custom" type="text"  th:field="*{delimiter}" th:value="*{delimiter}"
                        placeholder="Your custom delimiter">
-</div>
+            </div>
             <div id="submit-cont">
                 <button id="submit" type="submit">Send</button>
             </div>

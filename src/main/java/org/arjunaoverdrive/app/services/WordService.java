@@ -10,8 +10,4 @@ public interface WordService {
     void saveAll(Iterable<Word>words);
     List<Word> findAllBySet(WordSet set);
 
-    List<Word> getWordListWithProblematicWords(Integer setId, Integer lang);
-
-    List<Word> getLang2Words(Integer setId, Integer lang);
-
 }

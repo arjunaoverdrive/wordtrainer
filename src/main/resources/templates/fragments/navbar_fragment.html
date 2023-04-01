@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="navbar(user)">
+    <div class="navbar-container">
+        <nav>
+            <div id="links">
+                <a id="home" href="/api/v1/" class="navbar-link">Home</a>
+                <a id="add-set" href="/api/v1/sets/add" class="navbar-link">Add a Set</a>
+                <a id="import-set" href="/api/v1/import" class="navbar-link">Import a Set</a>
+                <a id="choose-set" href="/api/v1/choose" class="navbar-link">Choose a Set</a>
+                <a id="statistics" href="/api/v1/statistics" class="navbar-link">My Statistics</a>
+                <a th:href="@{/api/v1/user/{id}(id=${user.id})}" class="navbar-link">Profile</a>
+                <a href="/api/v1/logout" class="navbar-link">Exit</a>
+            </div>
+        </nav>
+    </div>
+
+</div>
+</html>

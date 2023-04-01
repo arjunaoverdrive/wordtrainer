@@ -1,6 +1,8 @@
 package org.arjunaoverdrive.app.web.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.arjunaoverdrive.app.model.User;
+import org.arjunaoverdrive.app.services.user.UserService;
 import org.arjunaoverdrive.app.web.DTO.ImportDto;
 import org.arjunaoverdrive.app.services.ImportService;
 import org.arjunaoverdrive.app.services.ImportServiceImpl;
@@ -17,16 +19,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/v1")
 public class ImportController {
 
-    @Autowired
-    private final ImportService importService;
 
-    public ImportController(ImportServiceImpl importServiceImpl) {
+    private final ImportService importService;
+    private final UserService userService;
+
+    @Autowired
+    public ImportController(ImportServiceImpl importServiceImpl, UserService userService) {
         this.importService = importServiceImpl;
+        this.userService = userService;
     }
 
     @ModelAttribute("importDto")
     public ImportDto importDto() {
         return new ImportDto();
+    }
+
+    @ModelAttribute("user")
+    public User user(){
+        return userService.getUserFromSecurityContext();
     }
 
     @GetMapping("/import")
@@ -40,6 +50,6 @@ public class ImportController {
     public String importWords(ImportDto importDto){
         log.info("import new set " + importDto.getName());
         importService.importSet(importDto);
-        return "redirect:/";
+        return "redirect:/api/v1/";
     }
 }

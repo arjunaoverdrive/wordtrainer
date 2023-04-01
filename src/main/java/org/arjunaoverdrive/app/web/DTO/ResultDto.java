@@ -1,35 +1,25 @@
 package org.arjunaoverdrive.app.web.DTO;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ResultDto {
-
+    private final int setId;
     private final boolean lang;
     private final List<Map<String, List<String>>> result;
 
-    public ResultDto(boolean lang, List<Map<String, List<String>>> result) {
+    public ResultDto(int setId, boolean lang, List<Map<String, List<String>>> result) {
+        this.setId = setId;
         this.lang = lang;
         this.result = result;
     }
 
-    public List<WordRes> getWordResults() {
-        List<WordRes> wordResults = new ArrayList<>();
-        createWordObjects(wordResults);
-        return wordResults;
+    public int getSetId() {
+        return setId;
     }
 
-    private void createWordObjects(List<WordRes> wordResults) {
-        for (Map<String, List<String>> m : result) {
-            int attempts = Integer.parseInt(m.keySet().stream().findFirst().get());
-            m.values()
-                    .forEach(v -> {
-                        v.forEach(s ->
-                                wordResults.add(new WordRes(attempts, s))
-                        );
-                    });
-        }
+    public List<Map<String, List<String>>> getResult() {
+        return result;
     }
 
     public boolean isLang() {

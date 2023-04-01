@@ -4,6 +4,7 @@ import org.arjunaoverdrive.app.security.ApplicationUserRole;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -23,17 +24,15 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private ApplicationUserRole role;
-//
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinTable(
-//            name = "users_roles",
-//            joinColumns = @JoinColumn(
-//                    name = "user_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(
-//                    name = "role_id", referencedColumnName = "id"))
-//    private Collection<Role> roles;
+
     @Column(name = "is_active")
     private boolean isActive;
+
+    @OneToMany(mappedBy = "createdBy")
+    private Set<WordSet> userSets;
+
+    @ManyToMany(mappedBy = "practicedBy")
+    private Set<WordSet> practicedSets;
 
     public User() {
     }
@@ -99,15 +98,23 @@ public class User {
         isActive = active;
     }
 
-    //    public Collection<Role> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(Collection<Role> roles) {
-//        this.roles = roles;
-//    }
-
     public boolean isActive() {
         return isActive;
+    }
+
+    public Set<WordSet> getUserSets() {
+        return userSets;
+    }
+
+    public void setUserSets(Set<WordSet> userSets) {
+        this.userSets = userSets;
+    }
+
+    public Collection<WordSet> getPracticedSets() {
+        return practicedSets;
+    }
+
+    public void setPracticedSets(Set<WordSet> practicedSets) {
+        this.practicedSets = practicedSets;
     }
 }

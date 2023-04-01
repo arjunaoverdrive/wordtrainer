@@ -1,6 +1,6 @@
 package org.arjunaoverdrive.app.security;
 
-import org.arjunaoverdrive.app.services.UserServiceImpl;
+import org.arjunaoverdrive.app.services.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +32,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/registration/**", "/api/v1/sign_in", "/css/*", "/js/*").permitAll()
+                .antMatchers("/api/v1/registration/**", "/css/*", "/js/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

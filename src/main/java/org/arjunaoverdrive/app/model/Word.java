@@ -15,10 +15,7 @@ public class Word {
     private String word;
     @Column(nullable = false)
     private String translation;
-    @Column(columnDefinition = "FLOAT DEFAULT 0.0", name = "src_rate") //the higher the value -- the more mistakes have been made
-    private float srcRate;
-    @Column(columnDefinition = "FLOAT DEFAULT 0.0", name = "target_rate")
-    private float trgtRate;
+
     @ManyToOne
     @JoinColumn(name = "set_id", referencedColumnName = "id")
     @JsonIgnore
@@ -54,22 +51,6 @@ public class Word {
 
     public void setWordSet(WordSet wordSet) {
         this.wordSet = wordSet;
-    }
-
-    public float getSrcRate() {
-        return srcRate;
-    }
-
-    public void setSrcRate(float srcRate) {
-        this.srcRate = srcRate;
-    }
-
-    public float getTrgtRate() {
-        return trgtRate;
-    }
-
-    public void setTrgtRate(float trgtRate) {
-        this.trgtRate = trgtRate;
     }
 
     @Override

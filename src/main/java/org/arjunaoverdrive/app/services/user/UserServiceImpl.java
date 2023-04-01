@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.services;
+package org.arjunaoverdrive.app.services.user;
 
 import org.arjunaoverdrive.app.DAO.UserRepository;
 import org.arjunaoverdrive.app.model.User;
@@ -6,17 +6,14 @@ import org.arjunaoverdrive.app.security.ApplicationUserRole;
 import org.arjunaoverdrive.app.security.SecurityUser;
 import org.arjunaoverdrive.app.web.DTO.user.RegisterForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,6 +42,15 @@ public class UserServiceImpl implements UserService {
                 getRoleFromFormData(formData.getRole()),
                 true);
         return userRepository.save(user).getId();
+    }
+
+    @Override
+    public User getUserFromSecurityContext() {
+        org.springframework.security.core.userdetails.User user =  (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User appUser = Optional.ofNullable(userRepository.findUserByEmail(user.getUsername()))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found " + user.getUsername()));
+        return appUser;
     }
 
     @Override

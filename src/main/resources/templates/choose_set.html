@@ -9,14 +9,9 @@
 </head>
 
 <body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
-    <div id="links">
-        <a href="/api/v1/">Return Home</a>
-        <a href="/api/v1/sets/add">Add new set</a>
-        <a href="/api/v1/import">Import new set</a>
-        <a href="/api/v1/statistics">Statistics</a>
-    </div>
     <div id="main-container">
 
         <h3 id="choose-set">Select a set to practice</h3>

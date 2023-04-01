@@ -2,7 +2,7 @@
     font-family: "Open Sans", cursive, "Lucida Console", sans-serif;
     font-size: 20px;
     background-color: aliceblue;
-    padding-top: 40px;
+    padding-top: 10px;
     color: #4d46b4;
  }
 
@@ -48,6 +48,7 @@
     padding: 40px;
     background-color: ghostwhite;
     margin-bottom: 40px;
+    border-radius: 10px;
  }
 
  #main-container {
@@ -64,8 +65,7 @@
  }
 
  .edit-practice-return-btns,
- .more-items-and-save-set-btns,
- #links {
+ .more-items-and-save-set-btns{
     display: flex;
     justify-content: space-between;
  }
@@ -381,7 +381,7 @@
 .register-form{
    display: flex;
    justify-content: center;
-   height: 25vw;
+   height: 430px;
 }
 
 .register-form-form{
@@ -396,4 +396,30 @@
 
 .sign-in-link{
    text-decoration: none;
+}
+
+select.role {
+   height: 47px;
+   border-radius: 5px;
+   padding: 10px;
+}
+
+
+/*navbar fragment*/
+nav{
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+
+#links{
+   width: 100%;
+   display: flex;
+   justify-content: space-evenly;
+}
+
+
+/*user page*/
+details>div{
+   margin-left: 20px;
 }

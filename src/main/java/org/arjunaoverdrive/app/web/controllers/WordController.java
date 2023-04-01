@@ -26,6 +26,6 @@ public class WordController {
     public String deleteWord(@PathVariable("setid")Integer setId, @PathVariable("id") Long id){
         wordService.deleteWord(id);
         log.info("delete word " + id);
-        return "redirect:/sets/" + setId;
+        return "redirect:/api/v1/sets/" + setId;
     }
 }

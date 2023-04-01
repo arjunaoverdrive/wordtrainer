@@ -2,7 +2,7 @@ package org.arjunaoverdrive.app.web.controllers.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.web.DTO.user.RegisterForm;
-import org.arjunaoverdrive.app.services.UserServiceImpl;
+import org.arjunaoverdrive.app.services.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +36,8 @@ public class RegistrationController {
         }
         catch (Exception e){
             log.warn(String.format("Cannot sign up with these %s credentials.\n", registerForm) + e.getMessage());
-            return "redirect:registration?error";
+            return "redirect:/api/v1/registration?error";
         }
-        return "redirect:/registration?success";
+        return "redirect:/login";
     }
 }

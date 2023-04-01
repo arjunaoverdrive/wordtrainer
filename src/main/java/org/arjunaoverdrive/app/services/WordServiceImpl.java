@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.services.WordService;
+import org.arjunaoverdrive.app.services.WordSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,68 +43,68 @@ public class WordServiceImpl implements WordService {
         return this.wordRepository.findAllByWordSet(set);
     }
 
-    @Override
-    public List<Word> getWordListWithProblematicWords(Integer setId, Integer lang) {
-        if (setId == 0) {
-            return getProblematicWordsFromAllSets(lang);
-        }
-        WordSet set = wordSetService.findById(setId);
-        List<Word> problematicWords = findProblematicWordsForSet(set, lang);
-        return new ArrayList<>(problematicWords);
-    }
+//    @Override
+//    public List<Word> getWordListWithProblematicWords(Integer setId, Integer lang) {
+//        if (setId == 0) {
+//            return getProblematicWordsFromAllSets(lang);
+//        }
+//        WordSet set = wordSetService.findById(setId);
+//        List<Word> problematicWords = findProblematicWordsForSet(set, lang);
+//        return new ArrayList<>(problematicWords);
+//    }
 
-    private List<Word> getProblematicWordsFromAllSets(Integer lang) {
-        List<Word> problematicWords = lang == 0 ?
-                wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(0.92f, 0) :
-                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(0.92f, 0);
-        return new ArrayList<>(problematicWords);
-    }
+//    private List<Word> getProblematicWordsFromAllSets(Integer lang) {
+//        List<Word> problematicWords = lang == 0 ?
+//                wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(0.92f, 0) :
+//                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(0.92f, 0);
+//        return new ArrayList<>(problematicWords);
+//    }
+//
+//    public List<Word> findProblematicWordsForSet(WordSet set, Integer lang) {
+//        List<Word> words = lang == 0 ?
+//                wordRepository.findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(set, 0.92f, 0) :
+//                wordRepository.findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(set, 0.92f, 0);
+//        return words;
+//    }
 
-    public List<Word> findProblematicWordsForSet(WordSet set, Integer lang) {
-        List<Word> words = lang == 0 ?
-                wordRepository.findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(set, 0.92f, 0) :
-                wordRepository.findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(set, 0.92f, 0);
-        return words;
-    }
+//    @Override
+//    public List<Word> getLang2Words(Integer setId, Integer lang) {
+//        if(setId != null){
+//            return getLang2WordsForSet(setId, lang);
+//        }
+//        List<Word> srcWordsWhereRateLessThanNormal =
+//                wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(0.92f, 0);
+//        List<Word> trgtWordsWhereRateLessThanNormal =
+//                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(0.92f, 0);
+//
+//        List<Word> words = getUniqueWords(lang, srcWordsWhereRateLessThanNormal, trgtWordsWhereRateLessThanNormal);
+//        return new ArrayList<>(words);
+//    }
 
-    @Override
-    public List<Word> getLang2Words(Integer setId, Integer lang) {
-        if(setId != null){
-            return getLang2WordsForSet(setId, lang);
-        }
-        List<Word> srcWordsWhereRateLessThanNormal =
-                wordRepository.findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(0.92f, 0);
-        List<Word> trgtWordsWhereRateLessThanNormal =
-                wordRepository.findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(0.92f, 0);
+//    private List<Word> getUniqueWords(Integer lang, List<Word> srcWordsWhereRateLessThanNormal, List<Word> trgtWordsWhereRateLessThanNormal) {
+//        List<Word>words = new ArrayList<>();
+//        if (lang == 0){
+//            srcWordsWhereRateLessThanNormal.stream().filter(w -> !trgtWordsWhereRateLessThanNormal.contains(w)).forEach(words::add);
+//        } else {
+//            trgtWordsWhereRateLessThanNormal.stream().filter(w -> !srcWordsWhereRateLessThanNormal.contains(w)).forEach(words::add);
+//        }
+//        return words;
+//    }
 
-        List<Word> words = getUniqueWords(lang, srcWordsWhereRateLessThanNormal, trgtWordsWhereRateLessThanNormal);
-        return new ArrayList<>(words);
-    }
+//    private List<Word> getLang2WordsForSet(Integer setId, Integer lang) {
+//        WordSet set = wordSetService.findById(setId);
+//        List<Word> words = getUniqueWordsForSet(set, lang);
+//        return words;
+//    }
 
-    private List<Word> getUniqueWords(Integer lang, List<Word> srcWordsWhereRateLessThanNormal, List<Word> trgtWordsWhereRateLessThanNormal) {
-        List<Word>words = new ArrayList<>();
-        if (lang == 0){
-            srcWordsWhereRateLessThanNormal.stream().filter(w -> !trgtWordsWhereRateLessThanNormal.contains(w)).forEach(words::add);
-        } else {
-            trgtWordsWhereRateLessThanNormal.stream().filter(w -> !srcWordsWhereRateLessThanNormal.contains(w)).forEach(words::add);
-        }
-        return words;
-    }
-
-    private List<Word> getLang2WordsForSet(Integer setId, Integer lang) {
-        WordSet set = wordSetService.findById(setId);
-        List<Word> words = getUniqueWordsForSet(set, lang);
-        return words;
-    }
-
-    private List<Word> getUniqueWordsForSet(WordSet set, Integer lang) {
-        List<Word> allByWordSetAndSrcRateLessThanAndWordSet_srcTimesPracticedGreaterThan =
-                wordRepository.findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(set, 0.92f, 0);
-        List<Word> allByWordSetAndTrgtRateLessThanAndWordSet_targetTimesPracticedGreaterThan =
-                wordRepository.findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(set, 0.92f, 0);
-        return getUniqueWords(lang, allByWordSetAndSrcRateLessThanAndWordSet_srcTimesPracticedGreaterThan,
-                allByWordSetAndTrgtRateLessThanAndWordSet_targetTimesPracticedGreaterThan);
-    }
+//    private List<Word> getUniqueWordsForSet(WordSet set, Integer lang) {
+//        List<Word> allByWordSetAndSrcRateLessThanAndWordSet_srcTimesPracticedGreaterThan =
+//                wordRepository.findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(set, 0.92f, 0);
+//        List<Word> allByWordSetAndTrgtRateLessThanAndWordSet_targetTimesPracticedGreaterThan =
+//                wordRepository.findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(set, 0.92f, 0);
+//        return getUniqueWords(lang, allByWordSetAndSrcRateLessThanAndWordSet_srcTimesPracticedGreaterThan,
+//                allByWordSetAndTrgtRateLessThanAndWordSet_targetTimesPracticedGreaterThan);
+//    }
 
 
 }

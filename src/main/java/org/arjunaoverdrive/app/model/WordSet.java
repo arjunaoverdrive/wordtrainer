@@ -2,7 +2,9 @@ package org.arjunaoverdrive.app.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class WordSet implements Comparable<WordSet>{
@@ -11,19 +13,35 @@ public class WordSet implements Comparable<WordSet>{
     private int id;
     @Column(nullable = false)
     private String name;
-    @Column(name = "src_times_practiced", columnDefinition = "INT DEFAULT 0")
-    private int srcTimesPracticed;
 
     @Column(name = "created_on", nullable = false, columnDefinition = "DATETIME")
     private Timestamp createdOn;
-    @Column(name = "last_practiced", columnDefinition = "DATETIME")
-    private Timestamp lastPracticed;
-
-    @Column(name = "target_times_practiced", columnDefinition = "INT DEFAULT 0")
-    private int targetTimesPracticed;
 
     @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)
     private List<Word>wordList;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "sets_2_users",
+    joinColumns = @JoinColumn(
+            name = "set_id", referencedColumnName = "id"
+    ),
+    inverseJoinColumns = @JoinColumn(
+            name = "user_id", referencedColumnName = "id"
+    ))
+    private Set<User> practicedBy;
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
 
     public void setId(int id) {
         this.id = id;
@@ -57,28 +75,12 @@ public class WordSet implements Comparable<WordSet>{
         this.wordList = wordList;
     }
 
-    public int getSrcTimesPracticed() {
-        return srcTimesPracticed;
+    public Set<User> getPracticedBy() {
+        return practicedBy;
     }
 
-    public void setSrcTimesPracticed(int srcTimesPracticed) {
-        this.srcTimesPracticed = srcTimesPracticed;
-    }
-
-    public Timestamp getLastPracticed() {
-        return lastPracticed;
-    }
-
-    public void setLastPracticed(Timestamp lastPracticed) {
-        this.lastPracticed = lastPracticed;
-    }
-
-    public int getTargetTimesPracticed() {
-        return targetTimesPracticed;
-    }
-
-    public void setTargetTimesPracticed(int targetTimesPracticed) {
-        this.targetTimesPracticed = targetTimesPracticed;
+    public void setPracticedBy(Set<User> practicedBy) {
+        this.practicedBy = practicedBy;
     }
 
     @Override

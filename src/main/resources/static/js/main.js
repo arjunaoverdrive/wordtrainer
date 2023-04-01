@@ -1,5 +1,10 @@
 let page = document.title;
 
+function showActive(){
+    
+
+}
+
 switch(page){
     case 'Practice':
     case 'Mistaken Words':
@@ -106,7 +111,7 @@ function processAddSetAndSetPage(){
 
         function doAjaxCall(id, setid) {
             let deleteCall = new XMLHttpRequest();
-            let url = "/sets/" + setid + "/words/delete/" + id;
+            let url = "/api/v1/sets/" + setid + "/words/delete/" + id;
 
             deleteCall.open("post", url);
             deleteCall.setRequestHeader("Content-type", "application/json");
@@ -189,7 +194,7 @@ function processCorrectMistakesPage(){
     function doAjaxToGetProblematicWordsL2() {
         let ajaxCall = new XMLHttpRequest();
 
-        let url = "/problematicWords/l2?lang=" + l2;
+        let url = "/api/v1/problematicWords/l2?lang=" + l2;
         url += setId === '0' ? "" : "&setId=" + setId;
 
         ajaxCall.open("GET", url, false);
@@ -241,7 +246,7 @@ function processStatisticsPage(){
     function openErrorsPage(event) {
         let setId = event.target.attributes.id.value;
         let lang = event.target.attributes.lang.value;
-        window.location.replace("/problematicWords?setId=" + setId + "&lang=" + lang);
+        window.location.replace("/api/v1/problematicWords?setId=" + setId + "&lang=" + lang);
     }
 }
 
@@ -260,16 +265,42 @@ function processHomePage(){
 
     function handleSetClick(event) {
         let setid = event.target.attributes.id.value;
-        window.location.replace("/sets/" + setid);
+        window.location.replace("/api/v1/sets/" + setid);
     }
 
     function handlePracticeClick(event) {
         let setid = event.target.attributes.id.value;
-        window.location.replace("/practice/" + setid);
+        window.location.replace("/api/v1/practice/" + setid);
     }
 }
 
+//import page ================================================================================
+
 function processImportPage(){
+
+    const customDelimiter = document.getElementById('custom');
+    const predefinedDelimiters = document.getElementsByClassName('standard-delimiter');
+    setform = document.getElementById('form');
+
+    // setform.addEventListener('submit', validateData);
+
+    customDelimiter.addEventListener('click', disableStandardInput);
+
+    for(el of predefinedDelimiters){
+        el.addEventListener('click', disableCustomInput);
+    }
+
+    function disableCustomInput(){
+        customDelimiter.value = "";
+    }
+
+    function disableStandardInput(){
+        for(el of predefinedDelimiters){
+            el.checked = false;
+        }
+    }
+
+
     markDefaultRadioBtnSelected();
 
     function markDefaultRadioBtnSelected() {
@@ -277,6 +308,9 @@ function processImportPage(){
         defaultDelimiter.checked = "checked";
     }
 }
+
+
+//practice page =======================================================
 
 function processPracticePage(){
     const translation = document.getElementById("translation");
@@ -319,12 +353,12 @@ function processPracticePage(){
     const resultObject = createResultObject();
 
     function cacheWordObjects() {
-        let words = hiddenListContent.substring(1, hiddenListContent.length - 1);
-        const wordsArr = words.split(", ");
+
+        const wordsArr = JSON.parse(hiddenListContent);
         const wordObjects = new Array();
 
         for (w in wordsArr) {
-            let word = JSON.parse(wordsArr[w]);
+            let word = wordsArr[w];
             if (originalLanguage == true) {
                 wordObjects.push(word);
             } else {
@@ -498,11 +532,12 @@ function processPracticePage(){
     function doAjaxCallToPersistResults(result) {
         let ajaxCall = new XMLHttpRequest();
         let setId = getSetId();
-        let url = "/results/save/" + setId;
+        let url = "/api/v1/results/save/";
 
         let dto = {};
         dto.lang = originalLanguage;
         dto.result = result;
+        dto.setId = setId;
 
         let json = JSON.stringify(dto);
         console.log(json);
@@ -514,7 +549,7 @@ function processPracticePage(){
 
     function doAjaxCallToUpdateWordsRates(result){
         let ajaxCall = new XMLHttpRequest();
-        let url = "/results/mistaken";
+        let url = "/api/v1/results/mistaken";
 
         let json = JSON.stringify(result);
         console.log(json);
@@ -607,32 +642,3 @@ function processPracticePage(){
         return (Math.round(keyCount / sum * 100 - 1) % 100) + 1;
     }
 }
-// if (document.title === "Practice" || document.title === "Mistaken Words") {
-
-    
-
-// }
-
-// else if (document.title === "Import") {
-   
-// }
-
-// else 
-// if (document.title === "Home Page" || document.title === "Choose Set") {
-
-    
-// }
-
-// else if (document.title == "Statistics") {
-   
-// }
-
-// else if (document.title == "Correct Mistakes") {
-    
-// }
-
-// else {
-
-
-// }
-

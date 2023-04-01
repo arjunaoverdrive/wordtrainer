@@ -8,11 +8,9 @@
     <script defer src="/js/main.js"></script>
 </head>
 <body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
 <div id="central-container">
     <h1>Welcome to the best words training app!</h1>
-    <div>
-        <a href="/api/v1/">Return home</a>
-    </div>
     <input type="hidden" id="set-id" name="id" value="-1">
     <form id="add-set-form" th:method="post" enctype="application/json" th:object="${words}">
         <div id="name-container">

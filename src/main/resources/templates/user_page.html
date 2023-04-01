@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Account Settings</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
+</head>
+
+<body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
+<div id="central-container">
+    <h1>Welcome to the best words training app!</h1>
+    <h2 th:text="'Hello ' + ${user.firstName}"></h2>
+    <h3 class="my-sets" th:text="'My sets: ' + ${user.userSets.size()}"></h3>
+    <div sets th:each="set : ${user.userSets}">
+        <details>
+            <summary class="set-title" th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"></summary>
+            <div class="set-created"
+                 th:text="'Created: ' + ${#dates.format(set.createdOn, 'MMM, dd yyyy HH:mm')}"></div>
+            <div class="set-practiced"
+                 th:text="'Last practiced: ' + ${#dates.format(set.lastPracticed, 'MMM, dd yyyy HH:mm')}"></div>
+            <div class="set-times-practiced"
+                 th:text="'Times practiced (source/target) ' + ${set.srcTimesPracticed} + '/' + ${set.targetTimesPracticed}">
+            </div>
+        </details>
+    </div>
+    <hr>
+    <h3 class="practiced-by-me">Practiced Sets</h3>
+    <div class="my-practiced-cont" th:each="set: ${user.practicedSets}">
+        <details>
+            <summary class="set-title" th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"></summary>
+            <div class="set-created"
+                 th:text="'Created: ' + ${#dates.format(set.createdOn, 'dd/MMM/yyyy HH:mm')}"></div>
+            <div class="set-practiced"
+                 th:text="'Last practiced: ' + ${#dates.format(set.lastPracticed)}"></div>
+            <div class="set-times-practiced"
+                 th:text="'Times practiced (source/target) ' + ${set.srcTimesPracticed} + '/' + ${set.targetTimesPracticed}">
+            </div>
+            <div class="created-by" th:text="${set.createdBy.email}"></div>
+        </details>
+    </div>
+</div>
+
+</body>
+
+</html>

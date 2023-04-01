@@ -3,6 +3,7 @@ package org.arjunaoverdrive.app.services;
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.DAO.WordRepository;
 import org.arjunaoverdrive.app.DAO.WordSetRepository;
+import org.arjunaoverdrive.app.services.ImportService;
 import org.arjunaoverdrive.app.web.DTO.ImportDto;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class ImportServiceImpl implements ImportService{
+public class ImportServiceImpl implements ImportService {
 
     private final WordRepository wordRepository;
     private final WordSetRepository wordSetRepository;
@@ -46,6 +47,7 @@ public class ImportServiceImpl implements ImportService{
         List<Word> wordList = new ArrayList<>();
         String[] wordPairs = words.split("\n");
         for (String pair : wordPairs) {
+            delimiter = validateDelimiter(delimiter);
             String[] wordPair = pair.split(delimiter);
             Word word = new Word();
             word.setWord(wordPair[0].trim());
@@ -55,4 +57,10 @@ public class ImportServiceImpl implements ImportService{
         return wordList;
     }
 
+    private String validateDelimiter(String delimiter){
+        if(delimiter.equals("*") || delimiter.equals("?") || delimiter.equals(".")){
+            delimiter = "\\" + delimiter;
+        }
+        return delimiter;
+    }
 }

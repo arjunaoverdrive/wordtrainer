@@ -2,8 +2,8 @@ package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.web.DTO.ResultDto;
 import org.arjunaoverdrive.app.web.DTO.WordRes;
-import org.arjunaoverdrive.app.services.SetResultService;
-import org.arjunaoverdrive.app.services.SetResultServiceImpl;
+import org.arjunaoverdrive.app.services.statistics.SetResultService;
+import org.arjunaoverdrive.app.services.statistics.SetResultServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +23,9 @@ public class SetResultController {
     }
 
     @PreAuthorize("hasAuthority('set:write')")
-    @PostMapping("/results/save/{id}")
-    public void saveResults(@PathVariable("id") Integer id, @RequestBody ResultDto result) {
-        service.save(id, result);
+    @PostMapping("/results/save/")
+    public void saveResults(@RequestBody ResultDto result) {
+        service.save( result);
     }
 
     @PreAuthorize("hasAuthority('set:write')")

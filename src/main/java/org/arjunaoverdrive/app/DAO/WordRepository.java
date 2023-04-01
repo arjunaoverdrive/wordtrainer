@@ -11,11 +11,11 @@ import java.util.List;
 public interface WordRepository extends JpaRepository<Word, Long> {
     List<Word> findAllByWordSet(WordSet set);
 
-    List<Word> findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(WordSet set, float i, int timesPracticed);
-
-    List<Word> findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(WordSet set, float i, int timesPracticed);
-
-    List<Word> findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(float i, int timesPracticed);
-
-    List<Word> findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(float i, int timesPracticed);
+//    List<Word> findAllByWordSetAndSrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(WordSet set, float i, int timesPracticed);
+//
+//    List<Word> findAllByWordSetAndTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(WordSet set, float i, int timesPracticed);
+//
+//    List<Word> findAllBySrcRateLessThanAndWordSet_SrcTimesPracticedGreaterThan(float i, int timesPracticed);
+//
+//    List<Word> findAllByTrgtRateLessThanAndWordSet_TargetTimesPracticedGreaterThan(float i, int timesPracticed);
 }

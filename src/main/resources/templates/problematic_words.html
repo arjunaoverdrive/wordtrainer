@@ -7,11 +7,9 @@
     <script defer src="/js/main.js"></script>
 </head>
 <body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
 <div id="central-container">
     <h2>Here's the list of words to pay additional attention to!</h2>
-    <div>
-        <a href="/api/v1/">Return home</a>
-    </div>
     <input type="hidden" id="set-id" th:value="${setId}">
     <input type="hidden" id="lang" th:value="${lang}">
     <form id="add-set-form" enctype="application/json" th:object="${words}">

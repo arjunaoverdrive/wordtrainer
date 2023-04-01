@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.services;
+package org.arjunaoverdrive.app.services.statistics;
 
 import org.arjunaoverdrive.app.web.DTO.OverallStatistics;
 import org.arjunaoverdrive.app.web.DTO.SetStats;

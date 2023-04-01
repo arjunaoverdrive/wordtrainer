@@ -9,11 +9,11 @@
 </head>
 
 <body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
 <div id="central-container">
     <div id="header">
         <h2>Practice this set until progress is 100%</h2>
         <div id="links">
-            <a href="/api/v1/">Return Home</a>
             <a th:href="@{/api/v1/sets/{setId}(setId=${setStats.setId})}">Set Page</a>
         </div>
     </div>
