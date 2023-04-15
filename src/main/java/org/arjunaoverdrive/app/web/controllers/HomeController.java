@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/v1")
+@RequestMapping("/")
 public class HomeController {
 
     private final WordSetService wordSetService;
@@ -28,7 +28,7 @@ public class HomeController {
 
     @ModelAttribute("sets")
     public List<WordSet>wordSetList(){
-        return wordSetService.findAllRecent();
+        return wordSetService.findAllRecent(user());
     }
 
     @ModelAttribute("user")

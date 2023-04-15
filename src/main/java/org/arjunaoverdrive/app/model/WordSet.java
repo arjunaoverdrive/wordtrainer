@@ -2,9 +2,7 @@ package org.arjunaoverdrive.app.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class WordSet implements Comparable<WordSet>{
@@ -14,8 +12,8 @@ public class WordSet implements Comparable<WordSet>{
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "created_on", nullable = false, columnDefinition = "DATETIME")
-    private Timestamp createdOn;
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
+    private Timestamp createdAt;
 
     @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)
     private List<Word>wordList;
@@ -24,15 +22,9 @@ public class WordSet implements Comparable<WordSet>{
     @JoinColumn(name = "created_by_id")
     private User createdBy;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "sets_2_users",
-    joinColumns = @JoinColumn(
-            name = "set_id", referencedColumnName = "id"
-    ),
-    inverseJoinColumns = @JoinColumn(
-            name = "user_id", referencedColumnName = "id"
-    ))
-    private Set<User> practicedBy;
+    @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)
+    private List<WordSetStats> wordSetStats;
+
 
     public User getCreatedBy() {
         return createdBy;
@@ -41,7 +33,6 @@ public class WordSet implements Comparable<WordSet>{
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
-
 
     public void setId(int id) {
         this.id = id;
@@ -59,12 +50,12 @@ public class WordSet implements Comparable<WordSet>{
         this.name = name;
     }
 
-    public Timestamp getCreatedOn() {
-        return createdOn;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedOn(Timestamp createdOn) {
-        this.createdOn = createdOn;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
     public List<Word> getWordList() {
@@ -75,16 +66,16 @@ public class WordSet implements Comparable<WordSet>{
         this.wordList = wordList;
     }
 
-    public Set<User> getPracticedBy() {
-        return practicedBy;
+    public List<WordSetStats> getWordSetStats() {
+        return wordSetStats;
     }
 
-    public void setPracticedBy(Set<User> practicedBy) {
-        this.practicedBy = practicedBy;
+    public void setWordSetStats(List<WordSetStats> wordSetStats) {
+        this.wordSetStats = wordSetStats;
     }
 
     @Override
     public int compareTo(WordSet ws) {
-        return ws.getCreatedOn().compareTo(createdOn);
+        return ws.getCreatedAt().compareTo(createdAt);
     }
 }

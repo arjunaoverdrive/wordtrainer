@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(value = "/api/v1/sets")
+@RequestMapping(value = "/sets")
 public class WordSetController {
 
     private final WordSetService wordSetService;
@@ -41,24 +41,23 @@ public class WordSetController {
 
     @PostMapping("/save")
     public String saveSet(@ModelAttribute("words") WordSet wordSet){
-        wordSet.setCreatedBy(user());
-        wordSetService.save(wordSet);
-        return "redirect:/api/v1/";
+        wordSetService.save(wordSet, user());
+        return "redirect:/";
     }
 
     @PreAuthorize("hasAuthority('set:write')")
     @PostMapping("/save/{id}")
     public String updateSet(@PathVariable("id")Integer id, @ModelAttribute("words") WordSet wordSet){
-        if(wordSetService.update(wordSet)){
-            return "redirect:/api/v1/sets/" + id;
+        if(wordSetService.update(wordSet, user())){
+            return "redirect:/sets/" + id;
         }
-        return "redirect:/api/v1/";
+        return "redirect:/";
     }
 
     @PreAuthorize("hasAuthority('set:write')")
     @PostMapping(value = "/delete/{id}")
     public String deleteSet(@PathVariable("id") Integer id){
         wordSetService.deleteSet(id);
-        return "redirect:/api/v1/";
+        return "redirect:/";
     }
 }

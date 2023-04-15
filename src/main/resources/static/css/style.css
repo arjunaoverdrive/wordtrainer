@@ -247,6 +247,26 @@
     width: 100%;
  }
 
+ details{
+   margin-bottom: 10px;
+}
+
+details>table{
+  width: 100%;
+}
+
+.stats-table-item>td{
+   text-align:center;
+}
+
+.word-stats-cell{
+   width: 35%;
+}
+
+.word-stats-cell-progress{
+   width: 15%;
+}
+
  .stats-item{
    border-top: 1px solid aliceblue;
    border-bottom: 1px solid azure;
@@ -420,6 +440,14 @@ nav{
 
 
 /*user page*/
-details>div{
-   margin-left: 20px;
+
+
+
+/*set statistics page*/
+.word-stats-table{
+    width:100%;
+}
+
+.word-stats-cell{
+    text-align: center;
 }

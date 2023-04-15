@@ -1,11 +1,11 @@
 let page = document.title;
 
-function showActive(){
-    
+function showActive() {
+
 
 }
 
-switch(page){
+switch (page) {
     case 'Practice':
     case 'Mistaken Words':
         processPracticePage();
@@ -21,7 +21,7 @@ switch(page){
         break;
 
     case 'Statistics':
-    case 'Set Statistics':    
+    case 'Set Statistics':
         processStatisticsPage();
         break;
 
@@ -29,11 +29,12 @@ switch(page){
         processCorrectMistakesPage();
         break;
 
+    //@todo not default
     default:
         processAddSetAndSetPage();
 }
 
-function processAddSetAndSetPage(){
+function processAddSetAndSetPage() {
     const more = document.getElementById("add-more");
     const setid = document.getElementById("set-id").value;
     const itemsBlock = document.getElementById("word-items-body");
@@ -60,16 +61,16 @@ function processAddSetAndSetPage(){
         }
     }
 
-    function getItemsCount(){
+    function getItemsCount() {
         let i = itemsBlock.childElementCount;
         return i;
     }
 
     function addOneItemMore() {
-        
+
         let oneMoreItemMarkup = generateOneMoreItemMarkup(itemsCount);
         itemsCount++;
-        
+
         let oneMore = itemsBlock.appendChild(document.createElement("tr"));
 
         oneMore.classList.add("word-item");
@@ -111,7 +112,7 @@ function processAddSetAndSetPage(){
 
         function doAjaxCall(id, setid) {
             let deleteCall = new XMLHttpRequest();
-            let url = "/api/v1/sets/" + setid + "/words/delete/" + id;
+            let url = "/sets/" + setid + "/words/delete/" + id;
 
             deleteCall.open("post", url);
             deleteCall.setRequestHeader("Content-type", "application/json");
@@ -154,7 +155,7 @@ function processAddSetAndSetPage(){
     }
 }
 
-function processCorrectMistakesPage(){
+function processCorrectMistakesPage() {
     const addL2Words = document.getElementById("add-l2-words");
     addL2Words.addEventListener("click", addProblematicWordsForLang2);
 
@@ -163,15 +164,15 @@ function processCorrectMistakesPage(){
     let setId = getSetId();
     let l2 = getOtherLang();
 
-    if(setId === '0'){
+    if (setId === '0') {
         moreWords.classList.add("hidden");
     }
 
-    function addProblematicWordsForLang2(){
-        return  addProblematicWordsForL2() 
+    function addProblematicWordsForLang2() {
+        return addProblematicWordsForL2()
     }
 
-    function getSetId(){
+    function getSetId() {
         return document.getElementById("set-id").value;
     }
 
@@ -194,7 +195,7 @@ function processCorrectMistakesPage(){
     function doAjaxToGetProblematicWordsL2() {
         let ajaxCall = new XMLHttpRequest();
 
-        let url = "/api/v1/problematicWords/l2?lang=" + l2;
+        let url = "/problematicWords/l2?lang=" + l2;
         url += setId === '0' ? "" : "&setId=" + setId;
 
         ajaxCall.open("GET", url, false);
@@ -236,7 +237,7 @@ function processCorrectMistakesPage(){
     }
 }
 
-function processStatisticsPage(){
+function processStatisticsPage() {
     const errorZoneBnts = document.getElementsByClassName("error-zone");
 
     for (btn of errorZoneBnts) {
@@ -246,11 +247,11 @@ function processStatisticsPage(){
     function openErrorsPage(event) {
         let setId = event.target.attributes.id.value;
         let lang = event.target.attributes.lang.value;
-        window.location.replace("/api/v1/problematicWords?setId=" + setId + "&lang=" + lang);
+        window.location.replace("/problematicWords?setId=" + setId + "&lang=" + lang);
     }
 }
 
-function processHomePage(){
+function processHomePage() {
     let setBtns = document.getElementsByClassName("set-page");
     let practiceBtns = document.getElementsByClassName("practice-set-btn");
 
@@ -265,18 +266,18 @@ function processHomePage(){
 
     function handleSetClick(event) {
         let setid = event.target.attributes.id.value;
-        window.location.replace("/api/v1/sets/" + setid);
+        window.location.replace("/sets/" + setid);
     }
 
     function handlePracticeClick(event) {
         let setid = event.target.attributes.id.value;
-        window.location.replace("/api/v1/practice/" + setid);
+        window.location.replace("/practice/" + setid);
     }
 }
 
 //import page ================================================================================
 
-function processImportPage(){
+function processImportPage() {
 
     const customDelimiter = document.getElementById('custom');
     const predefinedDelimiters = document.getElementsByClassName('standard-delimiter');
@@ -286,16 +287,16 @@ function processImportPage(){
 
     customDelimiter.addEventListener('click', disableStandardInput);
 
-    for(el of predefinedDelimiters){
+    for (el of predefinedDelimiters) {
         el.addEventListener('click', disableCustomInput);
     }
 
-    function disableCustomInput(){
+    function disableCustomInput() {
         customDelimiter.value = "";
     }
 
-    function disableStandardInput(){
-        for(el of predefinedDelimiters){
+    function disableStandardInput() {
+        for (el of predefinedDelimiters) {
             el.checked = false;
         }
     }
@@ -312,7 +313,7 @@ function processImportPage(){
 
 //practice page =======================================================
 
-function processPracticePage(){
+function processPracticePage() {
     const translation = document.getElementById("translation");
     const answerInput = document.getElementById("answer");
 
@@ -432,7 +433,7 @@ function processPracticePage(){
         wordObjectsArr.splice(0, 1);
         resultObject[currentWord]++;
         answerInput.value = "";
-        
+
         setTimeout(() => {
             answerInput.removeAttribute("style");
         }, 150)
@@ -513,18 +514,15 @@ function processPracticePage(){
     }
 
     function getMarkupForSortedResults() {
-        let sortedResultsObject = getSortedReultsArray();
-        if (document.title === "Practice") {
-            doAjaxCallToPersistResults(sortedResultsObject);
-        } else {
-            doAjaxCallToUpdateWordsRates(sortedResultsObject);
-        }
-
+        let sortedResultsObject = getSortedResultsObject();
+        doAjaxCallToPersistResults(sortedResultsObject);
+   
         let attemptsMarkup = document.createElement("div");
-        for (item of sortedResultsObject) {
-            for (key in item) {
-                attemptsMarkup.innerHTML += generateMarkupForWordResArray(key, item[key]);
-            }
+        console.log(sortedResultsObject);
+
+        keys = Object.keys(sortedResultsObject);
+        for (key in sortedResultsObject) {
+            attemptsMarkup.innerHTML += generateMarkupForWordResArray(key, sortedResultsObject[key]);
         }
         return attemptsMarkup.innerHTML;
     }
@@ -532,7 +530,7 @@ function processPracticePage(){
     function doAjaxCallToPersistResults(result) {
         let ajaxCall = new XMLHttpRequest();
         let setId = getSetId();
-        let url = "/api/v1/results/save/";
+        let url = "/results/save/";
 
         let dto = {};
         dto.lang = originalLanguage;
@@ -547,29 +545,14 @@ function processPracticePage(){
         ajaxCall.send(json);
     }
 
-    function doAjaxCallToUpdateWordsRates(result){
-        let ajaxCall = new XMLHttpRequest();
-        let url = "/api/v1/results/mistaken";
 
-        let json = JSON.stringify(result);
-        console.log(json);
-
-        ajaxCall.open("post", url);
-        ajaxCall.setRequestHeader("Content-type", "application/json");
-        ajaxCall.send(json);
-    }
-
-
-    function getSortedReultsArray() {
-        let sortedArray = new Array();
+    function getSortedResultsObject() {
+        let sortedObject = {};
         let attemptsArr = getAttemptsArray();
         for (i of attemptsArr) {
-            let wordResArr = populateWordResArray(i);
-            let resItem = {};
-            resItem[i] = wordResArr;
-            sortedArray.push(resItem);
+            sortedObject[i] = populateWordResArray(i); 
         }
-        return sortedArray;
+        return sortedObject;
     }
 
     function getAttemptsArray() {
@@ -583,24 +566,34 @@ function processPracticePage(){
         attemptsArr.reverse();
 
         return attemptsArr;
+
+  
+    for (word in resultObject) {
+        let attempts = resultObject[word];
+        attemptsArr[attempts] = attempts;
     }
+    attemptsArr = removeEmptySlots(attemptsArr);
+    attemptsArr.sort();
+    attemptsArr.reverse();
+
+    return attemptsArr;
+    }
+
 
     function removeEmptySlots(arr) {
         let res = [];
         for (i of arr) {
-            if (i == undefined) {
-                continue;
-            } res.push(i);
+            if (i) res.push(i);
         }
         return res;
     }
 
     function populateWordResArray(tries) {
         let resultWordsArr = [];
-        for (res in resultObject) {
-            if (resultObject[res] == tries) {
-                resultWordsArr.push(res);
-                delete resultObject[res];
+        for (word in resultObject) {
+            if (resultObject[word] == tries) {
+                resultWordsArr.push(word);
+                delete resultObject[word];
             }
         }
         return resultWordsArr;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/v1/choose")
+@RequestMapping("/choose")
 public class ChooseSetController {
 
     private final WordSetService wordSetService;

@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.web.DTO.user;
+package org.arjunaoverdrive.app.web.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.web.DTO;
+package org.arjunaoverdrive.app.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,4 +11,5 @@ public class ImportDto {
     private String name;
     private String words;
     private String delimiter;
+    private String customDelimiter;
 }

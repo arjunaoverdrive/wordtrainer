@@ -3,7 +3,6 @@ package org.arjunaoverdrive.app.model;
 import org.arjunaoverdrive.app.security.ApplicationUserRole;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -28,11 +27,11 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     private Set<WordSet> userSets;
 
-    @ManyToMany(mappedBy = "practicedBy")
-    private Set<WordSet> practicedSets;
+    @OneToMany(mappedBy = "practicedBy", fetch = FetchType.EAGER)
+    private Set<WordSetStats> practicedSets;
 
     public User() {
     }
@@ -110,11 +109,15 @@ public class User {
         this.userSets = userSets;
     }
 
-    public Collection<WordSet> getPracticedSets() {
+    public Set<WordSetStats> getPracticedSets() {
         return practicedSets;
     }
 
-    public void setPracticedSets(Set<WordSet> practicedSets) {
+    public void setPracticedSets(Set<WordSetStats> practicedSets) {
         this.practicedSets = practicedSets;
+    }
+
+    public void addPracticedSet(WordSetStats wordSetStats){
+        practicedSets.add(wordSetStats);
     }
 }

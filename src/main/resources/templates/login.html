@@ -15,7 +15,7 @@
         </div>
 
         <div class="login-form">
-            <form class="login-form-form" th:action="@{/api/v1/login}" th:method="post">
+            <form class="login-form-form" th:action="@{/login}" th:method="post">
                 <input type="email" class="email" name="username" placeholder="email" >
                 <input type="password" class="pass" name="password" placeholder="password" >
                 <input type="submit" value="Sign in"> 
@@ -23,7 +23,7 @@
         </div>
         <div class="sign-up">
             <span>Don't have an account yet?</span>
-            <a class="sign-up-link" th:href="@{/api/v1/registration}">Create one!</a>
+            <a class="sign-up-link" th:href="@{/registration}">Create one!</a>
         </div>
     </div>
 

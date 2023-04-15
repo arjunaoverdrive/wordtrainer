@@ -14,7 +14,7 @@
         <td>
             <form class="delete-set-form">
                 <button class="delete-set-btn" th:formmethod="post" th:type="submit" th:attr="data-id=${set.id}"
-                        th:formaction="@{/api/v1/sets/delete/{set.id}(set.id=${set.id})}">Delete set
+                        th:formaction="@{/sets/delete/{set.id}(set.id=${set.id})}">Delete set
                 </button>
             </form>
         </td>

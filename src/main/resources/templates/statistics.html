@@ -1,68 +1,51 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Statistics</title>-->
-<!--    <link rel="stylesheet" type="text/css" href="/css/style.css"/>-->
-<!--    <script defer src="/js/main.js"></script>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>-->
-<!--<div id="central-container">-->
-<!--    <h2>Here's your statistics. Practice more to progress more!</h2>-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
+<div id="central-container">
+    <h2>Here's your statistics. Practice more to progress more!</h2>
 
-<!--    <div id=statistics-container>-->
-<!--        <div class="avgResults" th:object="${stats}"-->
-<!--             th:with="-->
-<!--                rate=${stats.avgResults.srcTimesPracticed == 0} ?-->
-<!--                 0 : ${#numbers.formatDecimal(100*stats.avgResults.srcLangProgress,1,0)},-->
-<!--                trate=${stats.avgResults.targetTimesPracticed == 0} ?-->
-<!--                0 : ${#numbers.formatDecimal(100*stats.avgResults.targetLangProgress,1,0)},-->
-<!--                total=${stats.avgResults.srcTimesPracticed + stats.avgResults.targetTimesPracticed}">-->
-<!--            <h3>Overall statistics</h3>-->
+    <div id=statistics-container>
+        <h3><a th:text="${detailed.name}" th:href="@{/sets/{id}(id=${detailed.setId})}"></a></h3>
 
-<!--            <div class="avgResults src-lang">Language 1 progress: <span-->
-<!--                    th:text="${rate} + '%'"></span>-->
-<!--            </div>-->
-<!--            <div class="info-src" th:with="errorRate=${stats.avgResults.srcTimesPracticed == 0} ? 0 :-->
-<!--            ${#numbers.formatDecimal(100-100*stats.avgResults.srcLangProgress,1,0)}">-->
-<!--                <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%; height:15px;'"></div>-->
-<!--                <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%'"-->
-<!--                     title="Study problematic words"-->
-<!--                     th:attr="id=0, lang=0"></div>-->
-<!--            </div>-->
+        <table class="word-stats-table">
+            <tr>
+                <th>Word</th>
+                <th>Word Progress</th>
+                <th>Translation</th>
+                <th>Translation Progress</th>
+            </tr>
+            <tr th:each="word : ${detailed.wordStatsDtos}">
+                <td class="word-stats-cell" th:text="${word.word}"></td>
+                <td class="word-stats-cell-progress" th:with="rate=${#numbers.formatDecimal(100*word.rateSource, 1,0)},
+                    errorRate=${#numbers.formatDecimal(100-100*word.rateSource, 1,0)}">
+                    <div class="info-src">
+                        <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%; height:15px;'"></div>
+                        <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%;'"
+                             title="Study problematic words"></div>
+                    </div>
+                </td>
+                <td class="word-stats-cell" th:text="${word.translation}"></td>
+                <td class="word-stats-cell-progress"
+                    th:with="rate=${#numbers.formatDecimal(100*word.rateTarget, 1,0)},
+                    errorRate=${#numbers.formatDecimal(100-100*word.rateTarget, 1,0)}">
+                    <div class="info-trg">
+                        <div class="info-trg targetLangAccuracy" th:style="'width:' + ${rate} + '%; height:15px;'"></div>
+                        <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%;'"
+                             title="Study problematic words"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
 
-<!--            <div class="avgResults targ-lang">Language 2 progress: <span-->
-<!--                    th:text="${trate} + '%'"></span></div>-->
-<!--            <div class="info-trg"-->
-<!--                 th:with="errorRate=${stats.avgResults.targetTimesPracticed == 0} ? 0 :-->
-<!--                    ${#numbers.formatDecimal(100-100*stats.avgResults.targetLangProgress,1,0)}">-->
-<!--                <div class="info-trg targetLangAccuracy" th:style="'width:' + ${trate} + '%'"></div>-->
-<!--                <div class="info-trg error-zone" th:style="'width:' + ${errorRate} + '%'"-->
-<!--                     title="Study problematic words"-->
-<!--                     th:attr="id=0, lang=1"></div>-->
-<!--            </div>-->
-<!--            <div class="avgResults total">Total practiced: <span-->
-<!--                    th:text="${total} + ' (' + ${stats.avgResults.srcTimesPracticed} + '/' + ${stats.avgResults.targetTimesPracticed + ')'}"-->
-<!--            ></span>-->
-<!--            </div>-->
-<!--        </div>-->
+    </div>
+</div>
 
-<!--        <hr>-->
-
-<!--        <div class="detailedStats">-->
-<!--            <h3>Detailed statistics</h3>-->
-<!--            <div th:each="setStats : ${stats.setsStatsList}">-->
-<!--                <span>-->
-<!--                        <a class="detailed set-link" th:href="@{/api/v1/statistics/{setId}(setId=${setStats.setId})}"-->
-<!--                           th:text="${setStats.name}"></a>-->
-<!--                </span>-->
-<!--                <div th:replace="~{/fragments/stats_fragment :: statistics(${setStats})}"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </div>-->
-<!--</div>-->
-
-<!--</body>-->
-<!--</html>-->
+</body>
+</html>

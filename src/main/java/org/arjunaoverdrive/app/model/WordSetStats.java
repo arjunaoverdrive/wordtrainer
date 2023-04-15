@@ -10,26 +10,34 @@ public class WordSetStats {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "set_id")
-    private Integer setId;
-    @Column(name = "user_id")
-    private long userId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "set_id", referencedColumnName = "id")
+    private WordSet wordSet;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "practiced_by", referencedColumnName = "id")
+    private User practicedBy;
+
     private int lang;
+
     @Column(name = "accuracy", columnDefinition = "FLOAT DEFAULT 0.0")
     private Float accuracy;
+
     @Column(name = "practiced_at", columnDefinition = "DATETIME")
     private Timestamp practicedAt;
 
     @OneToMany(mappedBy = "wordSetStats", cascade = CascadeType.ALL)
     private Set<WordStat> wordStats;
 
+
     public WordSetStats() {
     }
 
-    public WordSetStats(long id, Integer setId, long userId, int lang, Float accuracy, Timestamp practicedAt, Set<WordStat> wordStats) {
+    public WordSetStats(long id, WordSet wordSet, User practicedBy, int lang, Float accuracy, Timestamp practicedAt, Set<WordStat> wordStats) {
         this.id = id;
-        this.setId = setId;
-        this.userId = userId;
+        this.wordSet = wordSet;
+        this.practicedBy = practicedBy;
         this.lang = lang;
         this.accuracy = accuracy;
         this.practicedAt = practicedAt;
@@ -44,20 +52,12 @@ public class WordSetStats {
         this.id = id;
     }
 
-    public Integer getSetId() {
-        return setId;
+    public WordSet getWordSet() {
+        return wordSet;
     }
 
-    public void setSetId(Integer setId) {
-        this.setId = setId;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setWordSet(WordSet wordSet) {
+        this.wordSet = wordSet;
     }
 
     public int getLang() {
@@ -90,5 +90,13 @@ public class WordSetStats {
 
     public void setWordStats(Set<WordStat> wordStats) {
         this.wordStats = wordStats;
+    }
+
+    public User getPracticedBy() {
+        return practicedBy;
+    }
+
+    public void setPracticedBy(User practicedBy) {
+        this.practicedBy = practicedBy;
     }
 }

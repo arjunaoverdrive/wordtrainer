@@ -3,7 +3,7 @@ package org.arjunaoverdrive.app.web.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.services.user.UserService;
-import org.arjunaoverdrive.app.web.DTO.ImportDto;
+import org.arjunaoverdrive.app.web.dto.ImportDto;
 import org.arjunaoverdrive.app.services.ImportService;
 import org.arjunaoverdrive.app.services.ImportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Slf4j
-@RequestMapping("/api/v1")
 public class ImportController {
 
 
@@ -49,7 +48,7 @@ public class ImportController {
     @PreAuthorize("hasAuthority('set:write')")
     public String importWords(ImportDto importDto){
         log.info("import new set " + importDto.getName());
-        importService.importSet(importDto);
-        return "redirect:/api/v1/";
+        importService.importSet(importDto, user());
+        return "redirect:/";
     }
 }

@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.DAO;
+package org.arjunaoverdrive.app.dao;
 
 import org.arjunaoverdrive.app.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

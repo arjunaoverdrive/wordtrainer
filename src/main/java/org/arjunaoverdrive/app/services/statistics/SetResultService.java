@@ -1,12 +1,9 @@
 package org.arjunaoverdrive.app.services.statistics;
 
-import org.arjunaoverdrive.app.web.DTO.ResultDto;
-import org.arjunaoverdrive.app.web.DTO.WordRes;
-
-import java.util.List;
+import org.arjunaoverdrive.app.model.User;
+import org.arjunaoverdrive.app.web.dto.ResultDto;
 
 public interface SetResultService {
-    void save(ResultDto result);
+    void save(ResultDto result, User userFromSecurityContext);
 
-    void updateWordsRates(List<WordRes> wordResultsList);
 }

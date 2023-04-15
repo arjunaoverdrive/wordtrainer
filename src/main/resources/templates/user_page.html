@@ -16,29 +16,56 @@
     <h3 class="my-sets" th:text="'My sets: ' + ${user.userSets.size()}"></h3>
     <div sets th:each="set : ${user.userSets}">
         <details>
-            <summary class="set-title" th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"></summary>
+            <summary class="set-title"><a th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"
+                                          th:href="@{/sets/{id}(id=${set.id})}"></a></summary>
             <div class="set-created"
-                 th:text="'Created: ' + ${#dates.format(set.createdOn, 'MMM, dd yyyy HH:mm')}"></div>
-            <div class="set-practiced"
-                 th:text="'Last practiced: ' + ${#dates.format(set.lastPracticed, 'MMM, dd yyyy HH:mm')}"></div>
-            <div class="set-times-practiced"
-                 th:text="'Times practiced (source/target) ' + ${set.srcTimesPracticed} + '/' + ${set.targetTimesPracticed}">
-            </div>
+                 th:text="'Created: ' + ${#dates.format(set.createdAt, 'MMM, dd yyyy HH:mm')}"></div>
         </details>
     </div>
     <hr>
     <h3 class="practiced-by-me">Practiced Sets</h3>
-    <div class="my-practiced-cont" th:each="set: ${user.practicedSets}">
+    <div class="my-practiced-cont" th:each="set: ${userStats.practicedStats}">
         <details>
-            <summary class="set-title" th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"></summary>
-            <div class="set-created"
-                 th:text="'Created: ' + ${#dates.format(set.createdOn, 'dd/MMM/yyyy HH:mm')}"></div>
-            <div class="set-practiced"
-                 th:text="'Last practiced: ' + ${#dates.format(set.lastPracticed)}"></div>
-            <div class="set-times-practiced"
-                 th:text="'Times practiced (source/target) ' + ${set.srcTimesPracticed} + '/' + ${set.targetTimesPracticed}">
-            </div>
-            <div class="created-by" th:text="${set.createdBy.email}"></div>
+            <summary class="set-title"><a th:text="${set.setName}" th:href="@{/statistics/{id}(id=${set.id})}"></a>
+            </summary>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Language 1</th>
+                    <th>Language 2</th>
+                </tr>
+                <tr class="stats-table-item">
+                    <td>Last Practiced</td>
+                    <td th:text="${#dates.format(set.lastPracticedSourceLang, 'dd MMM yy HH:mm')}"></td>
+                    <td th:text="${#dates.format(set.lastPracticedTargetLang, 'dd MMM yy HH:mm')}"></td>
+                </tr>
+                <tr class="stats-table-item">
+                    <td>Times Practiced</td>
+                    <td th:text="${set.timesPracticedSource}"></td>
+                    <td th:text="${set.timesPracticedTarget}"></td>
+                </tr>
+
+                <tr class="stats-table-item">
+                    <td>Average Result</td>
+                    <td th:with="avg1=${set.averageResultSourceLang == 0} ? 0 :
+                        ${#numbers.formatDecimal(set.averageResultSourceLang*100, 2, 0) + '%'}"
+                        th:text="${avg1}"></td>
+                    <td th:with="avg2=${set.averageResultTargetLang == 0} ? 0:
+                        ${#numbers.formatDecimal(set.averageResultTargetLang*100, 2, 0) + '%'}"
+                        th:text="${avg2}"></td>
+                </tr>
+
+                <tr class="stats-table-item">
+                    <td>Best Result</td>
+                    <td th:with="bestRes1=${set.bestResultSourceLang==0} ? 0 :
+                    ${#numbers.formatDecimal(set.bestResultSourceLang*100, 2, 0)}"
+                        th:text="${bestRes1} + '%'"></td>
+                    <td th:with="bestRes2=${set.bestResultTargetLang == 0} ? 0 :
+                        ${#numbers.formatDecimal(set.bestResultTargetLang*100, 2, 0)} + '%'"
+                        th:text="${bestRes2}"></td>
+
+                </tr>
+            </table>
         </details>
     </div>
 </div>

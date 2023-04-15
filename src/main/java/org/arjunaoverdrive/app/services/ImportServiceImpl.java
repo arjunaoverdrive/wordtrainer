@@ -1,10 +1,10 @@
 package org.arjunaoverdrive.app.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arjunaoverdrive.app.DAO.WordRepository;
-import org.arjunaoverdrive.app.DAO.WordSetRepository;
-import org.arjunaoverdrive.app.services.ImportService;
-import org.arjunaoverdrive.app.web.DTO.ImportDto;
+import org.arjunaoverdrive.app.dao.WordRepository;
+import org.arjunaoverdrive.app.dao.WordSetRepository;
+import org.arjunaoverdrive.app.model.User;
+import org.arjunaoverdrive.app.web.dto.ImportDto;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +27,35 @@ public class ImportServiceImpl implements ImportService {
     }
 
     @Override
-    public void importSet(ImportDto importDto) {
+    public void importSet(ImportDto importDto, User user) {
         String words = importDto.getWords().trim();
-        String delimiter = importDto.getDelimiter();
+        String delimiter = importDto.getDelimiter() == null?
+                importDto.getCustomDelimiter() : importDto.getDelimiter();
         String name = importDto.getName();
+
+        WordSet set = getWordSet(user, name);
+        wordSetRepository.save(set);
+
+        log.info("save set " + set.getId());
+        List<Word> wordList = getWordList(words, delimiter, set);
+
+        wordRepository.saveAll(wordList);
+        log.info("save words " + wordList.size());
+    }
+
+    private List<Word> getWordList(String words, String delimiter, WordSet set) {
+        List<Word> wordList = parseWords(words, delimiter);
+        wordList.forEach(word -> word.setWordSet(set));
+        return wordList;
+    }
+
+    private WordSet getWordSet(User user, String name) {
         WordSet set = new WordSet();
         set.setName(name);
         Timestamp creationDate = new Timestamp(System.currentTimeMillis());
-        set.setCreatedOn(creationDate);
-        wordSetRepository.save(set);
-        log.info("save set " + set.getId());
-        List<Word> wordList = parseWords(words, delimiter);
-        wordList.forEach(word -> word.setWordSet(set));
-        wordRepository.saveAll(wordList);
-        log.info("save words " + wordList.size());
+        set.setCreatedAt(creationDate);
+        set.setCreatedBy(user);
+        return set;
     }
 
     private List<Word> parseWords(String words, String delimiter) {

@@ -2,7 +2,7 @@ package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.services.user.UserService;
-import org.arjunaoverdrive.app.web.DTO.WordsCreationDto;
+import org.arjunaoverdrive.app.web.dto.WordsCreationDto;
 import org.arjunaoverdrive.app.model.Word;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/v1/sets/add")
+@RequestMapping("/sets/add")
 public class AddSetController {
 
     private final UserService userService;

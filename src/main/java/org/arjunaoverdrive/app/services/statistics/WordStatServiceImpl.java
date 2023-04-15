@@ -1,12 +1,11 @@
 package org.arjunaoverdrive.app.services.statistics;
 
-import org.arjunaoverdrive.app.DAO.WordStatRepository;
+import org.arjunaoverdrive.app.dao.WordStatRepository;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSetStats;
 import org.arjunaoverdrive.app.model.WordStat;
 import org.arjunaoverdrive.app.services.WordSetService;
-import org.arjunaoverdrive.app.services.statistics.WordStatService;
-import org.arjunaoverdrive.app.web.DTO.ResultDto;
+import org.arjunaoverdrive.app.web.dto.ResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,34 +26,43 @@ public class WordStatServiceImpl implements WordStatService {
 
     @Override
     public void save(ResultDto resultDto, WordSetStats wordSetStats) {
-        Set<WordStat>wordStatSet = createWordStats(resultDto, wordSetStats);
+        Set<WordStat> wordStatSet = createWordStats(resultDto, wordSetStats);
         wordStatRepository.saveAll(wordStatSet);
     }
 
+    @Override
+    public Set<WordStat> findByWordSetStats(WordSetStats wordSetStats) {
+        return wordStatRepository.findByWordSetStats(wordSetStats);
+    }
+
     private Set<WordStat> createWordStats(ResultDto resultDto, WordSetStats wordSetStats) {
-        Set<WordStat> wordStatList = new HashSet<>();
-
-        List<Map<String, List<String>>> results = resultDto.getResult();
+        
+        Map<String, List<String>> results = resultDto.getResult();
         int setId = resultDto.getSetId();
-        Map<String, Long> words2ids = word2ids(getWords(setId));
+        boolean lang = resultDto.isLang();
+        Map<String, Long> words2ids = word2ids(getWords(setId), lang);
 
-        for (Map<String, List<String>> m : results) {
-            int attempts = Integer.parseInt(m.keySet().stream().findFirst().get());
-            int rate = attempts;
-            m.values().forEach(
-                    v -> {
-                        v.forEach(s -> {
-                                    WordStat wordStat = new WordStat();
-                                    wordStat.setWordId(words2ids.get(s));
-                                    wordStat.setRate(rate);
-                                    wordStat.setWordSetStats(wordSetStats);
-                                    wordStatList.add(wordStat);
-                                }
-                        );
+        Set<WordStat> wordStatSet = populateWordStats(wordSetStats, results, words2ids);
+        return wordStatSet;
+    }
+
+    private Set<WordStat> populateWordStats(WordSetStats wordSetStats, Map<String, List<String>> results, Map<String, Long> words2ids) {
+        Set<WordStat> wordStatSet = new HashSet<>();
+        for (Map.Entry<String, List<String>> e : results.entrySet()) {
+            int rate = Integer.parseInt(e.getKey());
+
+            e.getValue().forEach(
+                    s -> {
+                        WordStat wordStat = new WordStat();
+                        wordStat.setWordId(words2ids.get(s));
+                        wordStat.setRate(rate);
+                        wordStat.setWordSetStats(wordSetStats);
+                        wordStatSet.add(wordStat);
                     }
             );
         }
-        return wordStatList;
+        
+        return wordStatSet;
     }
 
     private List<Word> getWords(int setId) {
@@ -62,9 +70,8 @@ public class WordStatServiceImpl implements WordStatService {
                 .getWordList();
     }
 
-    private Map<String, Long> word2ids(List<Word> words) {
-        Map<String, Long> word2id = words.stream()
-                .collect(Collectors.toMap(Word::getWord, Word::getId));
-        return word2id;
+    private Map<String, Long> word2ids(List<Word> words, boolean lang) {
+        return words.stream()
+                .collect(Collectors.toMap(lang ? Word::getWord : Word::getTranslation, Word::getId));
     }
 }

@@ -4,13 +4,13 @@
     <div class="navbar-container">
         <nav>
             <div id="links">
-                <a id="home" href="/api/v1/" class="navbar-link">Home</a>
-                <a id="add-set" href="/api/v1/sets/add" class="navbar-link">Add a Set</a>
-                <a id="import-set" href="/api/v1/import" class="navbar-link">Import a Set</a>
-                <a id="choose-set" href="/api/v1/choose" class="navbar-link">Choose a Set</a>
-                <a id="statistics" href="/api/v1/statistics" class="navbar-link">My Statistics</a>
-                <a th:href="@{/api/v1/user/{id}(id=${user.id})}" class="navbar-link">Profile</a>
-                <a href="/api/v1/logout" class="navbar-link">Exit</a>
+                <a id="home" href="/" class="navbar-link">Home</a>
+                <a id="add-set" href="/sets/add" class="navbar-link">Add a Set</a>
+                <a id="import-set" href="/import" class="navbar-link">Import a Set</a>
+                <a id="choose-set" href="/choose" class="navbar-link">Choose a Set</a>
+                <a id="statistics" th:href="@{/statistics/user/{id}(id=${user.id})}" class="navbar-link">My Statistics</a>
+                <a th:href="@{/user/{id}(id=${user.id})}" class="navbar-link">Profile</a>
+                <a href="/logout" class="navbar-link">Exit</a>
             </div>
         </nav>
     </div>

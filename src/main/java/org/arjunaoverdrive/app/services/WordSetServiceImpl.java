@@ -1,11 +1,11 @@
 package org.arjunaoverdrive.app.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arjunaoverdrive.app.DAO.WordRepository;
-import org.arjunaoverdrive.app.DAO.WordSetRepository;
+import org.arjunaoverdrive.app.dao.WordRepository;
+import org.arjunaoverdrive.app.dao.WordSetRepository;
+import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
-import org.arjunaoverdrive.app.services.WordSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +26,35 @@ public class WordSetServiceImpl implements WordSetService {
         this.wordRepository = wordRepository;
     }
 
+    public void save(WordSet wordSet, User user) {
+        Timestamp createdOn = new Timestamp(System.currentTimeMillis());
+        wordSet.setCreatedAt(createdOn);
+        wordSet.setCreatedBy(user);
+        WordSet set = this.wordSetRepository.save(wordSet);
+        log.info("save set " + set.getId());
+
+        List<Word> wordList = wordSet.getWordList();
+        wordList.forEach(word -> word.setWordSet(set));
+        this.wordRepository.saveAll(wordList);
+        log.info("save words set " + set.getId());
+    }
+
+    @Override
+    public List<WordSet> findAllRecent(User user) {
+        List<WordSet> res = findAll()
+                .stream()
+                .filter(ws -> ws.getCreatedBy().equals(user))
+                .sorted(Comparator.comparing(WordSet::getCreatedAt).reversed())
+                .collect(Collectors.toList());
+        return res.size() < 10 ? res :
+                res.stream().limit(10).collect(Collectors.toList());
+    }
+
     public List<WordSet> findAll() {
         return this.wordSetRepository.findAll().isEmpty() ? new ArrayList<>() :
                 this.wordSetRepository.findAll()
                         .stream()
-                        .sorted(Comparator.comparing(WordSet::getCreatedOn).reversed())
+                        .sorted(Comparator.comparing(WordSet::getCreatedAt).reversed())
                         .collect(Collectors.toList());
     }
 
@@ -45,51 +69,27 @@ public class WordSetServiceImpl implements WordSetService {
         return wordList;
     }
 
+    @Override
+    public Set<WordSet> findAllByCreatedBy(User user) {
+        return wordSetRepository.findAllByCreatedBy(user);
+    }
+
     public void deleteSet(Integer id) {
         WordSet ws = findById(id);
         this.wordSetRepository.delete(ws);
         log.info("delete set " + id);
     }
 
-    @Override
-    public List<WordSet> findAllRecent() {
-        List<WordSet> res = findAll()
-                .stream()
-                .sorted(Comparator.comparing(WordSet::getCreatedOn).reversed())
-                .collect(Collectors.toList());
-        return res.size() < 10 ? res :
-                res.stream().limit(10).collect(Collectors.toList());
-    }
-
-    public void save(WordSet wordSet) {
-        Timestamp createdOn = new Timestamp(System.currentTimeMillis());
-        wordSet.setCreatedOn(createdOn);
-        WordSet set = this.wordSetRepository.save(wordSet);
-        log.info("save set " + set.getId());
-
-        List<Word> wordList = wordSet.getWordList();
-        wordList.forEach(word -> word.setWordSet(set));
-        this.wordRepository.saveAll(wordList);
-        log.info("save words set " + set.getId());
-    }
-
-    public void updateStats(WordSet wordSet) {
-        List<Word> words = wordSet.getWordList().stream().filter(w -> w.getWord() != null).collect(Collectors.toList());
-        wordSet.setWordList(words);
-        this.wordSetRepository.save(wordSet);
-        log.info("update set statistics" + wordSet.getId());
-    }
-
-    public boolean update(WordSet wordSet) {
+    public boolean update(WordSet wordSet, User user) {
         if (wordSet.getWordList() == null) {
             deleteSet(wordSet.getId());
             log.info("word list is empty. Delete set " + wordSet.getId());
             return false;
         }
-
         List<Word> words = updateWordsStats(wordSet);
         this.wordRepository.saveAll(words);
 
+        wordSet.setCreatedBy(user);
         populateWordSetFields(wordSet, words);
         this.wordSetRepository.save(wordSet);
 
@@ -99,7 +99,7 @@ public class WordSetServiceImpl implements WordSetService {
 
     private void populateWordSetFields(WordSet wordSet, List<Word> words) {
         WordSet fromDb = findById(wordSet.getId());
-        wordSet.setCreatedOn(fromDb.getCreatedOn());
+        wordSet.setCreatedAt(fromDb.getCreatedAt());
         wordSet.setWordList(words);
     }
 
@@ -144,12 +144,5 @@ public class WordSetServiceImpl implements WordSetService {
         Map<String, Word> res = new HashMap<>();
         wordList.stream().filter(w -> w.getWord() != null).forEach(w -> res.put(w.getWord(), w));
         return res;
-    }
-
-
-    @Override
-    public String getSetNameById(Integer setId) {
-        return setId == 0 ? "all sets" :
-                findById(setId).getName();
     }
 }

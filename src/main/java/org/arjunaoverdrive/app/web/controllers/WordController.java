@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/v1/sets")
+@RequestMapping("/sets")
 @Slf4j
 public class WordController {
 
@@ -26,6 +26,6 @@ public class WordController {
     public String deleteWord(@PathVariable("setid")Integer setId, @PathVariable("id") Long id){
         wordService.deleteWord(id);
         log.info("delete word " + id);
-        return "redirect:/api/v1/sets/" + setId;
+        return "redirect:/sets/" + setId;
     }
 }

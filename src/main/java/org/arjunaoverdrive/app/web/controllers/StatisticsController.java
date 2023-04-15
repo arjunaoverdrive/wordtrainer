@@ -1,49 +1,51 @@
-//package org.arjunaoverdrive.app.web.controllers;
-//
-//import org.arjunaoverdrive.app.model.User;
-//import org.arjunaoverdrive.app.services.user.UserService;
-//import org.arjunaoverdrive.app.web.DTO.OverallStatistics;
-//import org.arjunaoverdrive.app.services.statistics.StatisticsService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.ModelAttribute;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//
-//@Controller
-//@RequestMapping("/api/v1/statistics")
-//public class StatisticsController {
-//
-//    private final StatisticsService statisticsService;
-//    private final UserService userService;
-//
-//    @Autowired
-//    public StatisticsController(StatisticsService statisticsService, UserService userService) {
-//        this.statisticsService = statisticsService;
-//        this.userService = userService;
-//    }
-//
-//    @ModelAttribute("user")
-//    public User user(){
-//        return userService.getUserFromSecurityContext();
-//    }
-//
-//    @PreAuthorize("hasAuthority('set:read')")
-//    @GetMapping
-//    public String getOverallStatistics(Model model){
-//        OverallStatistics stats = statisticsService.getOverallStatistics();
-//        model.addAttribute("stats", stats);
-//        return "/statistics";
-//    }
-//
-//    @PreAuthorize("hasAuthority('set:read')")
-//    @GetMapping("/{setId}")
-//    public String getSetStatistics(@PathVariable("setId") Integer setId, Model model){
-//        model.addAttribute("setStats", statisticsService.getSetStatistics(setId));
-//        model.addAttribute("words", statisticsService.getWordsStatistics(setId));
-//        return "/set_stats";
-//    }
-//}
+package org.arjunaoverdrive.app.web.controllers;
+
+import org.arjunaoverdrive.app.model.User;
+import org.arjunaoverdrive.app.services.statistics.UserStatisticsService;
+import org.arjunaoverdrive.app.services.statistics.WordSetStatsService;
+import org.arjunaoverdrive.app.services.user.UserService;
+import org.arjunaoverdrive.app.web.dto.statistics.WordSetDetailedStatsDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/statistics")
+public class StatisticsController {
+
+    private final UserService userService;
+    private final WordSetStatsService wordSetStatsService;
+    private final UserStatisticsService userStatisticsService;
+
+    @Autowired
+    public StatisticsController(UserService userService, WordSetStatsService wordSetStatsService, UserStatisticsService userStatisticsService) {
+        this.userService = userService;
+        this.wordSetStatsService = wordSetStatsService;
+        this.userStatisticsService = userStatisticsService;
+    }
+
+    @ModelAttribute("user")
+    public User user(){
+        return userService.getUserFromSecurityContext();
+    }
+
+
+    @GetMapping("/{id}")
+    public String statistics(@PathVariable("id") Integer id, Model model){
+        WordSetDetailedStatsDto wordSetDetailedStats = wordSetStatsService.getWordSetDetailedStats(id, user());
+        model.addAttribute("detailed", wordSetDetailedStats);
+        return "statistics";
+    }
+
+    @GetMapping("/user/{id}")
+    public String accountPage(@PathVariable("id") Long id, Model model){
+        User user = userService.getUserFromSecurityContext();
+        model.addAttribute("user", user);
+        model.addAttribute("userStats", userStatisticsService.getStatistics(user));
+        return "user_page";
+    }
+}

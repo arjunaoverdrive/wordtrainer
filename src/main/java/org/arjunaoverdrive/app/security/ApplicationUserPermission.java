@@ -1,9 +1,5 @@
 package org.arjunaoverdrive.app.security;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.Set;
-
 public enum ApplicationUserPermission {
     STUDENT_READ("student:read"),
     STUDENT_WRITE("student:write"),

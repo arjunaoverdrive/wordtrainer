@@ -15,7 +15,7 @@
     </div>
     <h2>Create an account!</h2>
     <div class="register-form">
-        <form class="register-form-form" th:action="@{/api/v1/registration/signup}" method="post" enctype="multipart/form-data"
+        <form class="register-form-form" th:action="@{/registration/signup}" method="post" enctype="multipart/form-data"
               th:object="${registerForm}">
             <input type="text" class="first-name" placeholder="Type your first name" th:field="*{firstName}" required>
             <input type="text" class="second-name" placeholder="Type your second name" th:field="*{lastName}" required>
@@ -32,7 +32,7 @@
     </div>
     <div class="sign-in">
         <span>Already have an account?</span>
-        <a class="sign-in-link" th:href="@{/api/v1/login}">Log in</a>
+        <a class="sign-in-link" th:href="@{/login}">Log in</a>
     </div>
 </div>
 

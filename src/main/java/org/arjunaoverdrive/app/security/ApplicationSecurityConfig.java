@@ -32,14 +32,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/v1/registration/**", "/css/*", "/js/*").permitAll()
+                .antMatchers("/registration/**", "/css/*", "/js/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/api/v1/login")
+                    .loginPage("/login")
                     .permitAll()
-                    .defaultSuccessUrl("/api/v1/", true)
+                    .defaultSuccessUrl("/", true)
                     .passwordParameter("password")
                     .usernameParameter("username")
                 .and()
@@ -47,8 +47,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
                     .deleteCookies("JSESSIONID")
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/logout"))
-                    .logoutSuccessUrl("/api/v1/login?logout")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
 

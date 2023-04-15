@@ -15,7 +15,7 @@
     <h1>Welcome to the best words training app!</h1>
     <h3>Import a set of words</h3>
     <div id="form-div">
-        <form id="form" th:action="@{/api/v1/import}" method="post" th:object="${importDto}" enctype="application/json"
+        <form id="form" th:action="@{/import}" method="post" th:object="${importDto}" enctype="application/json"
               autocomplete="off">
             <label for="name">Name</label><br>
             <input id="name" required="required" type="text" th:field="*{name}" autofocus="autofocus"
@@ -47,7 +47,7 @@
             </div>
             <div id="custom-delimiter-cont">
                 <label for="custom">Custom</label>
-                <input class="delimiter" id="custom" type="text"  th:field="*{delimiter}" th:value="*{delimiter}"
+                <input class="delimiter" id="custom" type="text"  th:field="*{customDelimiter}" th:value="*{customDelimiter}"
                        placeholder="Your custom delimiter">
             </div>
             <div id="submit-cont">

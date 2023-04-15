@@ -1,10 +1,10 @@
 package org.arjunaoverdrive.app.services.user;
 
-import org.arjunaoverdrive.app.DAO.UserRepository;
+import org.arjunaoverdrive.app.dao.UserRepository;
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.security.ApplicationUserRole;
 import org.arjunaoverdrive.app.security.SecurityUser;
-import org.arjunaoverdrive.app.web.DTO.user.RegisterForm;
+import org.arjunaoverdrive.app.web.dto.user.RegisterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,6 +42,11 @@ public class UserServiceImpl implements UserService {
                 getRoleFromFormData(formData.getRole()),
                 true);
         return userRepository.save(user).getId();
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override

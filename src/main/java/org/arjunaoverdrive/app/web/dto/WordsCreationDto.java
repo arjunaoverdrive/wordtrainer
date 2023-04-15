@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.web.DTO;
+package org.arjunaoverdrive.app.web.dto;
 
 import org.arjunaoverdrive.app.model.Word;
 

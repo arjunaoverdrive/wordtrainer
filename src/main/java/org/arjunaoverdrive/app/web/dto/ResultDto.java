@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.web.DTO;
+package org.arjunaoverdrive.app.web.dto;
 
 import java.util.List;
 import java.util.Map;
@@ -6,9 +6,9 @@ import java.util.Map;
 public class ResultDto {
     private final int setId;
     private final boolean lang;
-    private final List<Map<String, List<String>>> result;
+    private final Map<String, List<String>> result;
 
-    public ResultDto(int setId, boolean lang, List<Map<String, List<String>>> result) {
+    public ResultDto(int setId, boolean lang, Map<String, List<String>> result) {
         this.setId = setId;
         this.lang = lang;
         this.result = result;
@@ -18,7 +18,7 @@ public class ResultDto {
         return setId;
     }
 
-    public List<Map<String, List<String>>> getResult() {
+    public Map<String, List<String>> getResult() {
         return result;
     }
 

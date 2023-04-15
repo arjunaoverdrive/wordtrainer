@@ -1,7 +1,7 @@
 package org.arjunaoverdrive.app.web.controllers.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arjunaoverdrive.app.web.DTO.user.RegisterForm;
+import org.arjunaoverdrive.app.web.dto.user.RegisterForm;
 import org.arjunaoverdrive.app.services.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/v1/registration")
+@RequestMapping("/registration")
 @Slf4j
 public class RegistrationController {
     private final UserServiceImpl userService;
@@ -36,7 +36,7 @@ public class RegistrationController {
         }
         catch (Exception e){
             log.warn(String.format("Cannot sign up with these %s credentials.\n", registerForm) + e.getMessage());
-            return "redirect:/api/v1/registration?error";
+            return "redirect:/registration?error";
         }
         return "redirect:/login";
     }
