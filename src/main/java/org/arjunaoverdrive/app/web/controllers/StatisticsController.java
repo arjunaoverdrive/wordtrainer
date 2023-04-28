@@ -34,18 +34,19 @@ public class StatisticsController {
     }
 
 
-    @GetMapping("/{id}")
-    public String statistics(@PathVariable("id") Integer id, Model model){
+    @GetMapping("/{setid}")
+    public String statistics(@PathVariable("setid") Integer id, Model model){
         WordSetDetailedStatsDto wordSetDetailedStats = wordSetStatsService.getWordSetDetailedStats(id, user());
         model.addAttribute("detailed", wordSetDetailedStats);
         return "statistics";
     }
 
-    @GetMapping("/user/{id}")
-    public String accountPage(@PathVariable("id") Long id, Model model){
+    @GetMapping("/user/{userid}")
+    public String accountPage(@PathVariable("userid") Long userId,
+                              Model model){
         User user = userService.getUserFromSecurityContext();
         model.addAttribute("user", user);
         model.addAttribute("userStats", userStatisticsService.getStatistics(user));
-        return "user_page";
+        return "user_statistics_page";
     }
 }

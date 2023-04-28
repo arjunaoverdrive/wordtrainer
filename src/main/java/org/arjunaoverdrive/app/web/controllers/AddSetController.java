@@ -42,6 +42,4 @@ public class AddSetController {
         return "add_set";
     }
 
-
-    // TODO: 02.11.2022 add logic that removes duplicates if a word has errorRateGreaterThan 1 in both languages 
 }

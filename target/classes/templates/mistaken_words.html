@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mistaken Words</title>
+    <script defer src="/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+</head>
+<body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
+<div id="central-container">
+    <h2>Keep practicing until you get 100%!</h2>
+    <div id=main>
+        <div id="words-container" >
+            <div id="hiddenList" style="display:none" th:text="${words}"></div>
+        </div>
+        <button type="button" id="change-lang-btn">Change language</button>
+        <div id="word-item-container">
+            <div id="word-item"></div>
+            <div>
+                <button id="showTranslation" type="button">I don't remember</button>
+            </div>
+        </div>
+
+        <div id="answer-container">
+            <input id="answer" type="text" placeholder="type your answer and hit Enter" autocomplete="off" autofocus>
+        </div>
+        <div id="translation" class="hidden">
+            <span> </span>
+            <button type="button" id="typo" class="hidden">I mistyped</button><br>
+            <span id="prompt">Copy the translation and press Enter</span>
+        </div>
+    </div>
+    <div id="finish-block" class="hidden">
+
+
+    </div>
+
+    <div id="navigation-links" class="hidden">
+        <a href="#" id="start-over">Start over</a><br><br>
+    </div>
+
+</div>
+</body>
+</html>

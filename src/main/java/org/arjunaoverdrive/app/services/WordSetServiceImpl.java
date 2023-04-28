@@ -97,6 +97,7 @@ public class WordSetServiceImpl implements WordSetService {
 
     }
 
+
     private void populateWordSetFields(WordSet wordSet, List<Word> words) {
         WordSet fromDb = findById(wordSet.getId());
         wordSet.setCreatedAt(fromDb.getCreatedAt());

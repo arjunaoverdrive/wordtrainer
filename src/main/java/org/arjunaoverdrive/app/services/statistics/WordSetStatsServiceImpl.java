@@ -57,7 +57,7 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
                 .reduce(Integer::sum)
                 .get();
 
-         return (float) wordsCount / attemptsCount;
+        return (float) wordsCount / attemptsCount;
     }
 
 
@@ -73,14 +73,14 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         wordSetDetailedStatsDto.setSetId(setId);
         wordSetDetailedStatsDto.setName(ws.getName());
 
-        List<WordStatsDto> wordStatsDtos = createWordStatsDtos(ws);
+        List<WordStatsDto> wordStatsDtos = createWordStatsDtos(ws, user);
         wordSetDetailedStatsDto.setWordStatsDtos(wordStatsDtos);
 
         return wordSetDetailedStatsDto;
     }
 
-    private List<WordStatsDto> createWordStatsDtos( WordSet ws) {
-        List<WordSetStats> wordSetStats = wordSetStatsRepository.findByWordSet(ws);
+    private List<WordStatsDto> createWordStatsDtos(WordSet ws, User user) {
+        List<WordSetStats> wordSetStats = wordSetStatsRepository.findByWordSetAndPracticedBy(ws, user);
 
         Map<Long, Float> wordIdsToRateSource = getWordIdsToRate(wordSetStats, 1);
         Map<Long, Float> wordIdsToRateTarget = getWordIdsToRate(wordSetStats, 0);
@@ -88,11 +88,11 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         List<Word> words = getSortedWords(ws);
 
         List<WordStatsDto> wordStatsDtos = new ArrayList<>();
-        for(Word w : words){
+        for (Word w : words) {
             WordStatsDto wsd = new WordStatsDto();
             wsd.setWord(w.getWord());
             wsd.setTranslation(w.getTranslation());
-            wsd.setRateSource(wordIdsToRateSource.computeIfAbsent( w.getId(), k -> 0f));
+            wsd.setRateSource(wordIdsToRateSource.computeIfAbsent(w.getId(), k -> 0f));
             wsd.setRateTarget(wordIdsToRateTarget.computeIfAbsent(w.getId(), k -> 0f));
             wordStatsDtos.add(wsd);
         }
@@ -124,15 +124,18 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
     private Map<Long, Float> getWordIdsToRate(List<Set<WordStat>> wordStatsSetsList) {
         Map<Long, Float> idToRate = new HashMap<>();
 
-        for(Set<WordStat> wordStatSet : wordStatsSetsList){
-            for(WordStat wordStat : wordStatSet){
+        for (Set<WordStat> wordStatSet : wordStatsSetsList) {
+            for (WordStat wordStat : wordStatSet) {
                 idToRate.compute(wordStat.getWordId(),
                         (k, v) -> v == null ? 1f / wordStat.getRate() : (v += (1f / wordStat.getRate())));
             }
         }
         int count = wordStatsSetsList.size();
 
-        idToRate.entrySet().forEach(e -> e.setValue((e.getValue() / count)));
+        idToRate.entrySet().forEach(e ->
+                e.setValue(count < 7 ?
+                        (e.getValue() *  ((float) count / (count * 10)))
+                        : e.getValue() / count));
 
         return idToRate;
     }

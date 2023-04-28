@@ -11,6 +11,6 @@ public class Main {
 }
 
 // TODO: 21.10.2022
-//  add logic for adding other sets words
-//  enable delete buttons on the Correct Mistakes page
-//  add logic to persist practice mistaken words results ???
+//  add logic to practice mistaken words for one set
+//  from a few sets
+//  add logic to persist practice mistaken words results

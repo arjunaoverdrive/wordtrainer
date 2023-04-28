@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Set</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
+</head>
+<body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
+<div id="central-container">
+    <h1>Welcome to the best words training app!</h1>
+    <input type="hidden" id="set-id" name="id" value="-1">
+    <form id="add-set-form" th:method="post" enctype="application/json" th:object="${words}">
+        <div id="name-container">
+            <input type="text" id="new-set-name" name="name" th:field="*{name}" required autofocus="autofocus"
+                   placeholder="Set name"></div>
+
+        <table id="words-container">
+            <thead>
+            <th>Word</th>
+            <th>Translation</th>
+            </thead>
+            <tbody id="word-items-body">
+            <tr class="word-item" th:each="word, status :*{wordList}">
+                <td>
+                    <input type="text" class="input word" th:name="|wordList[${status.index}].word|" required
+                           th:value="${word.word}">
+                </td>
+                <td>
+                    <input type="text" class="input translation" th:name="|wordList[${status.index}].translation|"
+                           required
+                           th:value="${word.translation}">
+                </td>
+                <td>
+                    <button class="delete-item" type="button">Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="add-set-btns">
+            <button id="add-more" type="button">Add more</button>
+            <button id="save-changes" type="submit" th:formmethod="post"
+                    th:formaction="@{/sets/save}">Save changes
+            </button>
+        </div>
+    </form>
+    <br>
+
+</div>
+</body>
+
+</html>

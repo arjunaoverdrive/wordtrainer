@@ -13,5 +13,5 @@ import java.util.Set;
 public interface WordSetStatsRepository extends JpaRepository<WordSetStats, Long> {
     Set<WordSetStats> findAllByPracticedBy(User user);
 
-    List<WordSetStats> findByWordSet(WordSet ws);
+    List<WordSetStats> findByWordSetAndPracticedBy(WordSet ws, User user);
 }

@@ -28,7 +28,7 @@ public class HomeController {
 
     @ModelAttribute("sets")
     public List<WordSet>wordSetList(){
-        return wordSetService.findAllRecent(user());
+        return wordSetService.findAll();
     }
 
     @ModelAttribute("user")

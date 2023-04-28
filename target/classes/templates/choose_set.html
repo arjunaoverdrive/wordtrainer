@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Choose Set</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script defer src="/js/main.js"></script>
+</head>
+
+<body>
+<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
+<div id="central-container">
+    <h1>Welcome to the best words training app!</h1>
+    <div id="main-container">
+
+        <h3 id="choose-set">Select a set to practice</h3>
+        <div th:replace="~{fragments/sets_fragment :: sets_container(${sets})}"></div>
+        <br>
+    </div>
+</div>
+</body>
+
+</html>

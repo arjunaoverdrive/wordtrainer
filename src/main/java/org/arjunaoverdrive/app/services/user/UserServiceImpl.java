@@ -4,6 +4,7 @@ import org.arjunaoverdrive.app.dao.UserRepository;
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.security.ApplicationUserRole;
 import org.arjunaoverdrive.app.security.SecurityUser;
+import org.arjunaoverdrive.app.web.dto.user.AccountDto;
 import org.arjunaoverdrive.app.web.dto.user.RegisterForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +20,6 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -27,9 +27,17 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public User findUserById(long id) {
         User user = Optional.ofNullable(userRepository.findUserById(id))
                 .orElseThrow(() -> new RuntimeException("User with this id: " + id + " doesn't exist"));
+        return user;
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User user = Optional.ofNullable(userRepository.findUserByEmail(email))
+                .orElseThrow(() -> new RuntimeException("User with this email is not found " + email));
         return user;
     }
 
@@ -56,6 +64,19 @@ public class UserServiceImpl implements UserService {
         User appUser = Optional.ofNullable(userRepository.findUserByEmail(user.getUsername()))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + user.getUsername()));
         return appUser;
+    }
+
+    @Override
+    public User saveChanges(Integer id, AccountDto dto) {
+        User user = findUserById(id);
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        String password = user.getPassword().equals(dto.getPassword()) ?
+                user.getPassword() : passwordEncoder.encode(dto.getPassword());
+        user.setPassword(password);
+
+        return userRepository.save(user);
     }
 
     @Override

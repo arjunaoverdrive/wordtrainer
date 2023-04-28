@@ -30,7 +30,7 @@ public class User {
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.LAZY)
     private Set<WordSet> userSets;
 
-    @OneToMany(mappedBy = "practicedBy", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "practicedBy", fetch = FetchType.LAZY)
     private Set<WordSetStats> practicedSets;
 
     public User() {

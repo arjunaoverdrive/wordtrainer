@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sets_container(sets)">
+<table id="sets-container">
+    <tr class="set-item" th:each="set : ${sets}">
+        <td>
+            <button class="set-page"
+                    th:attr="id=${set.id}"
+                    th:with="words=${set.wordList}, size=${#lists.size(words)}"
+                    th:text="${set.name} + '  (' + ${size} + ' words)'"
+            ></button>
+        </td>
+        <td><button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button></td>
+        <td>
+            <form class="delete-set-form">
+                <button class="delete-set-btn" th:formmethod="post" th:type="submit" th:attr="data-id=${set.id}"
+                        th:formaction="@{/sets/delete/{set.id}(set.id=${set.id})}">Delete set
+                </button>
+            </form>
+        </td>
+    </tr>
+</table>
+</div>
+</html>
