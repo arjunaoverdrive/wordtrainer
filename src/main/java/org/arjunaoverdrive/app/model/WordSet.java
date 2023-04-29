@@ -15,6 +15,12 @@ public class WordSet implements Comparable<WordSet>{
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME")
     private Timestamp createdAt;
 
+    @Column(name = "src_lang", nullable = false)
+    private String sourceLanguage;
+
+    @Column(name = "trgt_lang", nullable = false)
+    private String targetLanguage;
+
     @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)
     private List<Word>wordList;
 
@@ -72,6 +78,22 @@ public class WordSet implements Comparable<WordSet>{
 
     public void setWordSetStats(List<WordSetStats> wordSetStats) {
         this.wordSetStats = wordSetStats;
+    }
+
+    public String getSourceLanguage() {
+        return sourceLanguage;
+    }
+
+    public void setSourceLanguage(String sourceLanguage) {
+        this.sourceLanguage = sourceLanguage;
+    }
+
+    public String getTargetLanguage() {
+        return targetLanguage;
+    }
+
+    public void setTargetLanguage(String targetLanguage) {
+        this.targetLanguage = targetLanguage;
     }
 
     @Override

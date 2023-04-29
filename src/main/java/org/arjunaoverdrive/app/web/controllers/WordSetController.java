@@ -2,9 +2,10 @@ package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.WordSet;
-import org.arjunaoverdrive.app.services.user.UserService;
 import org.arjunaoverdrive.app.services.WordSetService;
 import org.arjunaoverdrive.app.services.WordSetServiceImpl;
+import org.arjunaoverdrive.app.services.user.UserService;
+import org.arjunaoverdrive.app.web.dto.WordSetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -40,8 +41,8 @@ public class WordSetController {
     }
 
     @PostMapping("/save")
-    public String saveSet(@ModelAttribute("words") WordSet wordSet){
-        wordSetService.save(wordSet, user());
+    public String saveSet(@ModelAttribute("words") WordSetDto wordSetDto){
+        wordSetService.save(wordSetDto, user());
         return "redirect:/";
     }
 

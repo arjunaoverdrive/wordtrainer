@@ -6,6 +6,7 @@ import org.arjunaoverdrive.app.dao.WordSetRepository;
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.web.dto.WordSetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +27,35 @@ public class WordSetServiceImpl implements WordSetService {
         this.wordRepository = wordRepository;
     }
 
-    public void save(WordSet wordSet, User user) {
-        Timestamp createdOn = new Timestamp(System.currentTimeMillis());
-        wordSet.setCreatedAt(createdOn);
-        wordSet.setCreatedBy(user);
-        WordSet set = this.wordSetRepository.save(wordSet);
-        log.info("save set " + set.getId());
+    public void save(WordSetDto wordSetDto, User user) {
+        WordSet set = persistWordSet(wordSetDto, user);
+        persistWordList(wordSetDto, set);
+    }
 
-        List<Word> wordList = wordSet.getWordList();
+    private void persistWordList(WordSetDto wordSetDto, WordSet set) {
+        List<Word> wordList = wordSetDto.getWordList();
         wordList.forEach(word -> word.setWordSet(set));
         this.wordRepository.saveAll(wordList);
         log.info("save words set " + set.getId());
+    }
+
+    private WordSet persistWordSet(WordSetDto wordSetDto, User user) {
+        WordSet wordSet = populateWordSetFields(wordSetDto, user);
+        WordSet set = this.wordSetRepository.save(wordSet);
+        log.info("save set " + set.getId());
+        return set;
+    }
+
+    private WordSet populateWordSetFields(WordSetDto wordSetDto, User user) {
+        WordSet wordSet = new WordSet();
+        wordSet.setName(wordSetDto.getName());
+        Timestamp createdOn = new Timestamp(System.currentTimeMillis());
+        wordSet.setCreatedAt(createdOn);
+        wordSet.setCreatedBy(user);
+        wordSet.setSourceLanguage(wordSetDto.getSourceLanguage());
+        wordSet.setTargetLanguage(wordSetDto.getTargetLanguage());
+        wordSet.setWordList(wordSetDto.getWordList());
+        return wordSet;
     }
 
     @Override
@@ -86,7 +105,7 @@ public class WordSetServiceImpl implements WordSetService {
             log.info("word list is empty. Delete set " + wordSet.getId());
             return false;
         }
-        List<Word> words = updateWordsStats(wordSet);
+        List<Word> words = updateWords(wordSet);
         this.wordRepository.saveAll(words);
 
         wordSet.setCreatedBy(user);
@@ -104,8 +123,7 @@ public class WordSetServiceImpl implements WordSetService {
         wordSet.setWordList(words);
     }
 
-
-    private List<Word> updateWordsStats(WordSet clientSet) {
+    private List<Word> updateWords(WordSet clientSet) {
         int setId = clientSet.getId();
         List<Word> dbList = findById(setId).getWordList();
         List<Word> clientList = clientSet.getWordList();

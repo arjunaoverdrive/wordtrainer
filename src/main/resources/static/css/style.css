@@ -163,12 +163,13 @@
  }
 
  #name {
-    width: 96%;
+    width: 95%;
     padding: 5px 10px;
     margin: 5px auto;
  }
 
- .input {
+ .input,
+ .input.language {
     width: 85%;
     margin: 5px auto;
     background-color: aliceblue;
@@ -176,10 +177,23 @@
     text-align: center;
  }
 
+ .input.language{
+   display: flex;
+ }
+
+ .input.language:enabled{
+   background-color: beige;
+ }
+
  .input:enabled {
     background-color: #7bfd7c5e;
  }
 
+
+ .select-language-row,
+ .select-language-cell{
+   display:flex;
+ }
  
 
  #typo {
@@ -351,6 +365,18 @@ details>table{
    font-size: 16px;
    background-color: aliceblue;
    border-radius: 3px;
+}
+
+.language-setting-cont{
+   color: #4d46b4;
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+
+.language-setting{
+   width: 45%;
+   text-align: center;
 }
 
 #submit-cont{

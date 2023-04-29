@@ -23,6 +23,17 @@
             <th>Translation</th>
             </thead>
             <tbody id="word-items-body">
+            <tr>
+                <td >
+                    <input type="text" name="sourceLanguage" th:field="*{sourceLanguage}" id="src-lang"
+                           placeholder="Type source language" class="input language" required>
+                </td>
+                <td >
+                    <input type="text" name="targetLanguage" th:field="*{targetLanguage}" id="trgt-lang"
+                           placeholder="Type translation language" class="input language"  required>
+                </td>
+            </tr>
+
             <tr class="word-item" th:each="word, status :*{wordList}">
                 <td>
                     <input type="text" class="input word" th:name="|wordList[${status.index}].word|" required

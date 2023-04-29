@@ -12,4 +12,6 @@ public class ImportDto {
     private String words;
     private String delimiter;
     private String customDelimiter;
+    private String sourceLanguage;
+    private String targetLanguage;
 }

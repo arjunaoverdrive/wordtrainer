@@ -20,6 +20,7 @@ public class ImportServiceImpl implements ImportService {
 
     private final WordRepository wordRepository;
     private final WordSetRepository wordSetRepository;
+
     @Autowired
     public ImportServiceImpl(WordRepository wordRepository, WordSetRepository wordSetRepository) {
         this.wordRepository = wordRepository;
@@ -28,19 +29,37 @@ public class ImportServiceImpl implements ImportService {
 
     @Override
     public void importSet(ImportDto importDto, User user) {
+        WordSet set = saveSet(importDto, user);
+        saveWords(importDto, set);
+    }
+
+    private void saveWords(ImportDto importDto, WordSet set) {
+        List<Word> wordList = initWords(importDto, set);
+        wordRepository.saveAll(wordList);
+        log.info("save words " + wordList.size());
+    }
+
+    private WordSet saveSet(ImportDto importDto, User user) {
+        WordSet set = initWordSet(importDto, user);
+        wordSetRepository.save(set);
+        log.info("save set " + set.getId());
+        return set;
+    }
+
+    private List<Word> initWords(ImportDto importDto, WordSet set) {
         String words = importDto.getWords().trim();
         String delimiter = importDto.getDelimiter() == null?
                 importDto.getCustomDelimiter() : importDto.getDelimiter();
-        String name = importDto.getName();
-
-        WordSet set = getWordSet(user, name);
-        wordSetRepository.save(set);
-
-        log.info("save set " + set.getId());
         List<Word> wordList = getWordList(words, delimiter, set);
+        return wordList;
+    }
 
-        wordRepository.saveAll(wordList);
-        log.info("save words " + wordList.size());
+    private WordSet initWordSet(ImportDto importDto, User user) {
+        String name = importDto.getName();
+        WordSet set = getWordSet(user, name);
+        set.setSourceLanguage(importDto.getSourceLanguage());
+        set.setTargetLanguage(importDto.getTargetLanguage());
+        return set;
     }
 
     private List<Word> getWordList(String words, String delimiter, WordSet set) {

@@ -122,20 +122,6 @@ function processAddSetAndSetPage() {
             deleteCall.send();
         }
 
-        function handleEditClick(event) {
-            let target = event.target;
-
-            toggleElement(target);
-            enableInputs(target);
-        }
-
-        function toggleElement(elem) {
-            elem.classList.toggle("hidden");
-
-            let siblingSave = elem.nextElementSibling;
-            siblingSave.classList.toggle("hidden");
-        }
-
         function enableInputs() {
             for (let item of inputs) {
                 item.attributes.removeNamedItem("disabled");
@@ -150,7 +136,8 @@ function processAddSetAndSetPage() {
         }
 
         function autofocusFirstWord() {
-            let firstWord = document.querySelector("#word-items-body > tr:nth-child(1) > td:nth-child(3) > input");
+            let firstWord = document.querySelector("#word-items-body > tr:nth-child(2) > td:nth-child(3) > input");
+            
             let text = firstWord.value;
             firstWord.focus();
             firstWord.setSelectionRange(0, text.length);

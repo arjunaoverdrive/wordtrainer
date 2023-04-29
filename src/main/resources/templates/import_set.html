@@ -17,10 +17,14 @@
     <div id="form-div">
         <form id="form" th:action="@{/import}" method="post" th:object="${importDto}" enctype="application/json"
               autocomplete="off">
-            <label for="name">Name</label><br>
+
             <input id="name" required="required" type="text" th:field="*{name}" autofocus="autofocus"
                    placeholder="Set title"><br>
-            <label for="import">Words</label><br>
+            <div class="language-setting-cont">
+                <input type="text" name="sourceLanguage" id="src-lang" class="language-setting" th:field="*{sourceLanguage}" required placeholder="Type source language">
+                <input type="text" name="targetLanguage" id="trgt-lang" class="language-setting" th:field="*{targetLanguage}" required placeholder="Type translation language">
+            </div>
+
             <textarea id="import" required="required" cols="50" rows="15"
                       placeholder="Word-translation pairs separated by a delimiter" th:field="*{words}"></textarea>
             <br>
@@ -51,7 +55,7 @@
                        placeholder="Your custom delimiter">
             </div>
             <div id="submit-cont">
-                <button id="submit" type="submit">Send</button>
+                <button id="submit" type="submit">Import</button>
             </div>
         </form>
     </div>

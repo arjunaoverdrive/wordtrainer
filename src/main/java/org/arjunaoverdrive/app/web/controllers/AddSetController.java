@@ -1,9 +1,9 @@
 package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.model.User;
-import org.arjunaoverdrive.app.services.user.UserService;
-import org.arjunaoverdrive.app.web.dto.WordsCreationDto;
 import org.arjunaoverdrive.app.model.Word;
+import org.arjunaoverdrive.app.services.user.UserService;
+import org.arjunaoverdrive.app.web.dto.WordSetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,8 +23,8 @@ public class AddSetController {
     }
 
     @ModelAttribute("words")
-    public WordsCreationDto words() {
-        WordsCreationDto words = new WordsCreationDto();
+    public WordSetDto words() {
+        WordSetDto words = new WordSetDto();
         for (int i = 0; i < 5; i++) {
             words.addWord(new Word());
         }
