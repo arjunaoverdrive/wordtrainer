@@ -15,7 +15,7 @@ public class WordSetStats {
     @JoinColumn(name = "set_id", referencedColumnName = "id")
     private WordSet wordSet;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "practiced_by", referencedColumnName = "id")
     private User practicedBy;
 
@@ -34,7 +34,9 @@ public class WordSetStats {
     public WordSetStats() {
     }
 
-    public WordSetStats(long id, WordSet wordSet, User practicedBy, int lang, Float accuracy, Timestamp practicedAt, Set<WordStat> wordStats) {
+    public WordSetStats(long id, WordSet wordSet, User practicedBy, int lang, Float accuracy, Timestamp practicedAt
+            , Set<WordStat> wordStats
+    ) {
         this.id = id;
         this.wordSet = wordSet;
         this.practicedBy = practicedBy;

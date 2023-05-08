@@ -16,6 +16,7 @@ public class WordStat {
     private int rate;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "set_stats_id", referencedColumnName = "id")
     private WordSetStats wordSetStats;
 

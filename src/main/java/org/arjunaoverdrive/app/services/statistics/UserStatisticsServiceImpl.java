@@ -63,7 +63,8 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
     private void buildWordSetStats(Map<Integer, List<WordSetStats>> wordSetIdsToWordSetStatsList, int id, WordSetStatsDto wss) {
         wss.setId(id);
         List<WordSetStats> values = wordSetIdsToWordSetStatsList.get(id);
-        wss.setSetName(getSetName(id));
+        populateSetDataFields(id, wss);
+//        wss.setSetName(getSetName(id));
         populateStatisticsFields(wss, values);
     }
 
@@ -99,6 +100,13 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
                 .stream()
                 .filter(setStats -> setStats.getLang() == lang)
                 .count();
+    }
+
+    private void populateSetDataFields(int id, WordSetStatsDto wss) {
+        WordSet ws = wordSetService.findById(id);
+        wss.setSetName(ws.getName());
+        wss.setSourceLanguage(ws.getSourceLanguage());
+        wss.setTargetLanguage(ws.getTargetLanguage());
     }
 
     private String getSetName(int id) {

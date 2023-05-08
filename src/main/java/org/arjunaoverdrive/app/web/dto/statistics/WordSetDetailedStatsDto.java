@@ -5,6 +5,8 @@ import java.util.List;
 public class WordSetDetailedStatsDto {
     private Integer setId;
     private String name;
+    private String sourceLanguage;
+    private String targetLanguage;
     private List<WordStatsDto> wordStatsDtos;
 
     public WordSetDetailedStatsDto() {
@@ -24,6 +26,22 @@ public class WordSetDetailedStatsDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSourceLanguage() {
+        return sourceLanguage;
+    }
+
+    public void setSourceLanguage(String sourceLanguage) {
+        this.sourceLanguage = sourceLanguage;
+    }
+
+    public String getTargetLanguage() {
+        return targetLanguage;
+    }
+
+    public void setTargetLanguage(String targetLanguage) {
+        this.targetLanguage = targetLanguage;
     }
 
     public List<WordStatsDto> getWordStatsDtos() {

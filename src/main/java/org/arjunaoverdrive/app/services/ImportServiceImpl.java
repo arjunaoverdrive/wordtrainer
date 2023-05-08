@@ -73,6 +73,7 @@ public class ImportServiceImpl implements ImportService {
         set.setName(name);
         Timestamp creationDate = new Timestamp(System.currentTimeMillis());
         set.setCreatedAt(creationDate);
+
         set.setCreatedBy(user);
         return set;
     }

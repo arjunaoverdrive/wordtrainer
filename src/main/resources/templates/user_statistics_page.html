@@ -22,13 +22,13 @@
     <h3 class="practiced-by-me">Practiced Sets</h3>
     <div class="my-practiced-cont" th:each="set: ${userStats.practicedStats}">
         <details>
-            <summary class="set-title"><a th:text="${set.setName}" th:href="@{/statistics/{id}(id=${set.id})}"></a>
+            <summary class="set-title"><a th:text="${set.setName}" th:href="@{/statistics/{id}(id=${set.id})}" title="Click to see detailed info"></a>
             </summary>
             <table>
                 <tr>
                     <th></th>
-                    <th>Language 1</th>
-                    <th>Language 2</th>
+                    <th th:text="${set.sourceLanguage}">Language 1</th>
+                    <th th:text="${set.targetLanguage}">Language 2</th>
                 </tr>
                 <tr class="stats-table-item">
                     <td>Last Practiced</td>

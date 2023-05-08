@@ -70,8 +70,12 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
     public WordSetDetailedStatsDto getWordSetDetailedStats(Integer setId, User user) {
         WordSetDetailedStatsDto wordSetDetailedStatsDto = new WordSetDetailedStatsDto();
         WordSet ws = wordSetService.findById(setId);
+
         wordSetDetailedStatsDto.setSetId(setId);
         wordSetDetailedStatsDto.setName(ws.getName());
+
+        wordSetDetailedStatsDto.setSourceLanguage(ws.getSourceLanguage());
+        wordSetDetailedStatsDto.setTargetLanguage(ws.getTargetLanguage());
 
         List<WordStatsDto> wordStatsDtos = createWordStatsDtos(ws, user);
         wordSetDetailedStatsDto.setWordStatsDtos(wordStatsDtos);

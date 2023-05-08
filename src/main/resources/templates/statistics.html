@@ -16,9 +16,9 @@
 
         <table class="word-stats-table">
             <tr>
-                <th>Word</th>
+                <th th:text="${detailed.sourceLanguage}">Word</th>
                 <th>Word Progress</th>
-                <th>Translation</th>
+                <th th:text="${detailed.targetLanguage}">Translation</th>
                 <th>Translation Progress</th>
             </tr>
             <tr th:each="word : ${detailed.wordStatsDtos}">
@@ -27,7 +27,7 @@
                     errorRate=${#numbers.formatDecimal(100-100*word.rateSource, 1,0)}">
                     <div class="info-src">
                         <div class="info-src srcLangAccuracy" th:style="'width:' + ${rate} + '%; height:15px;'"
-                        th:title="${rate} + '%'"></div>
+                             th:title="${rate} + '%'"></div>
                         <div class="info-src error-zone" th:style="'width:' + ${errorRate} + '%;'"
                              title="Study problematic words"></div>
                     </div>

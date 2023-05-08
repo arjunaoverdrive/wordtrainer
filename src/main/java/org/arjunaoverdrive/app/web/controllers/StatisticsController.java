@@ -42,7 +42,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/user/{userid}")
-    public String accountPage(@PathVariable("userid") Long userId,
+    public String userStatisticsPage(@PathVariable("userid") Long userId,
                               Model model){
         User user = userService.getUserFromSecurityContext();
         model.addAttribute("user", user);

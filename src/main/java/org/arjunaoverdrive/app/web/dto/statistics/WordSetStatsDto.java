@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 public class WordSetStatsDto {
     private long id;
     private String setName;
+    private String sourceLanguage;
+    private String targetLanguage;
 
     private Timestamp lastPracticedSourceLang;
     private Timestamp lastPracticedTargetLang;

@@ -20,8 +20,8 @@ switch (page) {
         processHomePage();
         break;
 
+    case 'My Statistics':
     case 'Statistics':
-    case 'Set Statistics':
         processStatisticsPage();
         break;
 
@@ -65,7 +65,7 @@ function processAddSetAndSetPage() {
     }
 
     function getItemsCount() {
-        let i = itemsBlock.childElementCount;
+        let i = itemsBlock.childElementCount - 1; //one item is language inputs
         return i;
     }
 
@@ -617,7 +617,7 @@ function processPracticePage() {
 }
 // account settings page =========================================================================    
 function processAccountSettingsPage() {
-    const form = document.getElementsByClassName('user-settings')[0];
+    // const form = document.getElementsByClassName('user-settings')[0];
     const changePswdBtn = document.getElementsByClassName('change-password-btn')[0];
     const changePswdBlock = document.getElementsByClassName('change-password-block')[0];
 
@@ -643,12 +643,13 @@ function processAccountSettingsPage() {
     }
 
     function validatePassword() {
-        if (pswd.value === pswdCheck.value && passwordChange()) {
+        if (pswd.value === pswdCheck.value && changePasswordBlockExpanded()) {
             message.textContent = "Password has been updated!";
             toggleChangePasswordBlock();
             doAjaxToUpdateUser();
         }
-        else if (!passwordChange()) {
+
+        else if ((pswd.value !== pswdCheck.value && passwordCheckNotActive()) || !changePasswordBlockExpanded()){
             message.textContent = "User has been updated!"
             doAjaxToUpdateUser();
         }
@@ -661,8 +662,12 @@ function processAccountSettingsPage() {
         }, 1500)
     }
 
-    function passwordChange() {
+    function changePasswordBlockExpanded() {
         return changePswdBtn.classList.contains('hidden');
+    }
+
+    function passwordCheckNotActive(){
+        return pswdCheck.hasAttribute('disabled');
     }
 
     function enableSubmitField() {

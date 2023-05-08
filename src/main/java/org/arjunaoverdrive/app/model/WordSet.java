@@ -25,7 +25,7 @@ public class WordSet implements Comparable<WordSet>{
     private List<Word>wordList;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_id")
+    @JoinColumn(name = "created_by")
     private User createdBy;
 
     @OneToMany(mappedBy = "wordSet", cascade = CascadeType.ALL)

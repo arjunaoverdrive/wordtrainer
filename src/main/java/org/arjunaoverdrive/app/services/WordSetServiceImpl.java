@@ -91,6 +91,7 @@ public class WordSetServiceImpl implements WordSetService {
     @Override
     public Set<WordSet> findAllByCreatedBy(User user) {
         return wordSetRepository.findAllByCreatedBy(user);
+//        return user.getUserSets();
     }
 
     public void deleteSet(Integer id) {
@@ -99,6 +100,7 @@ public class WordSetServiceImpl implements WordSetService {
         log.info("delete set " + id);
     }
 
+    // TODO: 08.05.2023 write check if the user is the author before deletion 
     public boolean update(WordSet wordSet, User user) {
         if (wordSet.getWordList() == null) {
             deleteSet(wordSet.getId());
