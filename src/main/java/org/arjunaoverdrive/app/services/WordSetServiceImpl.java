@@ -91,22 +91,29 @@ public class WordSetServiceImpl implements WordSetService {
     @Override
     public Set<WordSet> findAllByCreatedBy(User user) {
         return wordSetRepository.findAllByCreatedBy(user);
-//        return user.getUserSets();
     }
 
-    public void deleteSet(Integer id) {
+    public void deleteSet(Integer id, User user) {
         WordSet ws = findById(id);
+        if(!ws.getCreatedBy().equals(user)){
+            throw new RuntimeException("Cannot delete another user's set");
+        }
         this.wordSetRepository.delete(ws);
         log.info("delete set " + id);
     }
 
-    // TODO: 08.05.2023 write check if the user is the author before deletion 
     public boolean update(WordSet wordSet, User user) {
+        if(!wordSet.getCreatedBy().equals(user)){
+            log.info("cannot update another user's set");
+            return false;
+        }
+
         if (wordSet.getWordList() == null) {
-            deleteSet(wordSet.getId());
+            deleteSet(wordSet.getId(), user);
             log.info("word list is empty. Delete set " + wordSet.getId());
             return false;
         }
+
         List<Word> words = updateWords(wordSet);
         this.wordRepository.saveAll(words);
 
@@ -115,7 +122,6 @@ public class WordSetServiceImpl implements WordSetService {
         this.wordSetRepository.save(wordSet);
 
         return true;
-
     }
 
 

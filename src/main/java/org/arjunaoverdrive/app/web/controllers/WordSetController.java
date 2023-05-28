@@ -58,7 +58,7 @@ public class WordSetController {
     @PreAuthorize("hasAuthority('set:write')")
     @PostMapping(value = "/delete/{id}")
     public String deleteSet(@PathVariable("id") Integer id){
-        wordSetService.deleteSet(id);
+        wordSetService.deleteSet(id, user());
         return "redirect:/";
     }
 }

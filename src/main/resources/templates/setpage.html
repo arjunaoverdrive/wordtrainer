@@ -33,6 +33,7 @@
             <input type="hidden" id="set-id" name="id" th:value="${id}">
             <input type="hidden" name="name" th:value="${title}">
             <input type="hidden" name="createdAt" th:field="*{createdAt}">
+            <input type="hidden" name="createdBy" th:field="*{createdBy}">
             <table id="words-container">
                 <thead>
                     <th>Word</th>

@@ -18,7 +18,7 @@ public interface WordSetService {
 
     boolean update(WordSet wordSet, User user);
 
-    void deleteSet(Integer id);
+    void deleteSet(Integer id, User user);
 
     List<WordSet> findAllRecent(User user);
 
