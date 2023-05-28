@@ -14,7 +14,7 @@
         <h1>Welcome to the best words training app!</h1>
         <div id="main-container">
             <h3 id="recent">Recent sets</h3>
-            <div th:replace="~{/fragments/sets_fragment :: sets_container(${sets})}"></div>
+            <div th:replace="~{/fragments/sets_fragment :: sets_container(${sets}, ${user})}"></div>
         </div>
     </div>
 </body>
