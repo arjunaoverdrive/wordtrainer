@@ -65,7 +65,7 @@ function processAddSetAndSetPage() {
     }
 
     function getItemsCount() {
-        let i = itemsBlock.childElementCount - 1; //one item is language inputs
+        let i = itemsBlock.childElementCount; //one item is language inputs
         return i;
     }
 
@@ -124,7 +124,7 @@ function processAddSetAndSetPage() {
 
         function enableInputs() {
             for (let item of inputs) {
-                item.attributes.removeNamedItem("disabled");
+                item.attributes.disabled = false;
             }
             autofocusFirstWord();
         }
