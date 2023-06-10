@@ -168,13 +168,17 @@
     margin: 5px auto;
  }
 
- .input,
- .input.language {
+ .input{
     width: 85%;
     margin: 5px auto;
     background-color: aliceblue;
     border: none;
     text-align: center;
+ }
+
+ .input.language {
+   width: 91%;
+   height: 40px;
  }
 
  .input.language{
@@ -383,7 +387,10 @@ details>table{
 }
 
 .language-setting{
-   width: 45%;
+   width: 49%;
+   height: 40px;
+   font-family: cursive;
+   color: grey;
    text-align: center;
 }
 

@@ -124,7 +124,7 @@ function processAddSetAndSetPage() {
 
         function enableInputs() {
             for (let item of inputs) {
-                item.attributes.disabled = false;
+                item.disabled = false;
             }
             autofocusFirstWord();
         }
