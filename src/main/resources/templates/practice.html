@@ -13,6 +13,10 @@
     <div id=main>
         <div id="words-container">
             <div id="hiddenList" style="display:none" th:text="${words}" th:attr="setid=${id}"></div>
+            <div class="languages" style="display: none;">
+                <div id="source" th:attr="source=${source}"></div>
+                <div id="target" th:attr="target=${target}"></div>
+            </div>
         </div>
         <button type="button" id="change-lang-btn">Change language</button>
         <div id="word-item-container">

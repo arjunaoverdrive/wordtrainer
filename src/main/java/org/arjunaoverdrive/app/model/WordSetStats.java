@@ -19,7 +19,7 @@ public class WordSetStats {
     @JoinColumn(name = "practiced_by", referencedColumnName = "id")
     private User practicedBy;
 
-    private int lang;
+    private String language;
 
     @Column(name = "accuracy", columnDefinition = "FLOAT DEFAULT 0.0")
     private Float accuracy;
@@ -34,13 +34,13 @@ public class WordSetStats {
     public WordSetStats() {
     }
 
-    public WordSetStats(long id, WordSet wordSet, User practicedBy, int lang, Float accuracy, Timestamp practicedAt
+    public WordSetStats(long id, WordSet wordSet, User practicedBy, String language, Float accuracy, Timestamp practicedAt
             , Set<WordStat> wordStats
     ) {
         this.id = id;
         this.wordSet = wordSet;
         this.practicedBy = practicedBy;
-        this.lang = lang;
+        this.language = language;
         this.accuracy = accuracy;
         this.practicedAt = practicedAt;
         this.wordStats = wordStats;
@@ -62,12 +62,12 @@ public class WordSetStats {
         this.wordSet = wordSet;
     }
 
-    public int getLang() {
-        return lang;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setLang(int lang) {
-        this.lang = lang;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public Float getAccuracy() {

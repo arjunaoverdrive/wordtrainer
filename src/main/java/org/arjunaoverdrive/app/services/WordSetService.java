@@ -22,7 +22,6 @@ public interface WordSetService {
 
     List<WordSet> findAllRecent(User user);
 
-    List<Word> getWordList(Integer id);
 
     Set<WordSet> findAllByCreatedBy(User user);
 }

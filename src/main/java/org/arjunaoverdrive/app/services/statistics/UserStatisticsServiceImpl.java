@@ -31,7 +31,7 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
 
         Set<WordSetStats> wordSetStatsForUser = wordSetStatsService.getWordSetStatsForUser(user);
 
-        Set<WordSetStatsDto> practicedSetsStats = getPracticedSetsStats(wordSetStatsForUser);
+        Set<WordSetStatsDto> practicedSetsStats = createWordSetStatsDtos(wordSetStatsForUser);
         userStats.setPracticedStats(practicedSetsStats);
 
         Set<WordSet> wordSetsCreatedByUser = wordSetService.findAllByCreatedBy(user);
@@ -40,109 +40,102 @@ public class UserStatisticsServiceImpl implements UserStatisticsService {
         return userStats;
     }
 
-    private Set<WordSetStatsDto> getPracticedSetsStats(Set<WordSetStats> wordSetStatsForUser) {
+    private Set<WordSetStatsDto> createWordSetStatsDtos(Set<WordSetStats> wordSetStats) {
+        Map<WordSet, List<WordSetStats>> wordSetsToWordSetStatsList =
+                getWordSet2WordSetStatsListMap(wordSetStats);
+        return populateWordSetStats( wordSetsToWordSetStatsList);
+    }
+
+    private Set<WordSetStatsDto> populateWordSetStats(Map<WordSet, List<WordSetStats>> wordSetsToWordSetStatsList) {
         Set<WordSetStatsDto> practicedSetStats = new HashSet<>();
-        createWordSetStatsDtos(practicedSetStats, wordSetStatsForUser);
+        Set<WordSet> wordSets = wordSetsToWordSetStatsList.keySet();
+        for (WordSet ws : wordSets) {
+            WordSetStatsDto wss = new WordSetStatsDto();
+            populateWordSetStatsDtoDataFields(ws, wss);
+            populateStatisticsFields(wss, wordSetsToWordSetStatsList.get(ws));
+            practicedSetStats.add(wss);
+        }
         return practicedSetStats;
     }
 
-    private void createWordSetStatsDtos(Set<WordSetStatsDto> practicedSetStats, Set<WordSetStats> wordSetStats) {
-        Map<Integer, List<WordSetStats>> wordSetIdsToWordSetStatsList = getWordSet2WordSetStatsListMap(wordSetStats);
-        populateWordSetStats(practicedSetStats, wordSetIdsToWordSetStatsList);
+    private void populateWordSetStatsDtoDataFields(WordSet ws, WordSetStatsDto wss) {
+        wss.setId(ws.getId());
+        wss.setSetName(ws.getName());
+        wss.setSourceLanguage(ws.getSourceLanguage().getLanguage());
+        wss.setTargetLanguage(ws.getTargetLanguage().getLanguage());
     }
 
-    private void populateWordSetStats(Set<WordSetStatsDto> practicedSetStats, Map<Integer, List<WordSetStats>> wordSetIdsToWordSetStatsList) {
-        Set<Integer> ids = wordSetIdsToWordSetStatsList.keySet();
-        for (int id : ids) {
-            WordSetStatsDto wss = new WordSetStatsDto();
-            buildWordSetStats(wordSetIdsToWordSetStatsList, id, wss);
-            practicedSetStats.add(wss);
-        }
-    }
-
-    private void buildWordSetStats(Map<Integer, List<WordSetStats>> wordSetIdsToWordSetStatsList, int id, WordSetStatsDto wss) {
-        wss.setId(id);
-        List<WordSetStats> values = wordSetIdsToWordSetStatsList.get(id);
-        populateSetDataFields(id, wss);
-//        wss.setSetName(getSetName(id));
-        populateStatisticsFields(wss, values);
-    }
 
     private void populateStatisticsFields(WordSetStatsDto wss, List<WordSetStats> values) {
-        setBestResult(wss, values);
-        setLastPracticed(wss, values);
-        setAverageResult(wss, values);
-        setTimesPracticed(wss, values);
+        String sourceLanguage = wss.getSourceLanguage();
+        String targetLanguage = wss.getTargetLanguage();
+
+        setBestResult(wss, values, sourceLanguage, targetLanguage);
+        setLastPracticed(wss, values, sourceLanguage, targetLanguage);
+        setAverageResult(wss, values, sourceLanguage, targetLanguage);
+        setTimesPracticed(wss, values, sourceLanguage, targetLanguage);
     }
 
-    private void setTimesPracticed(WordSetStatsDto wss, List<WordSetStats> values) {
-        wss.setTimesPracticedSource(calculateTimesPracticedForLang(values, 1));
-        wss.setTimesPracticedTarget(calculateTimesPracticedForLang(values, 0));
+    private void setTimesPracticed(WordSetStatsDto wss, List<WordSetStats> values, String sourceLanguage, String targetLanguage) {
+
+
+        wss.setTimesPracticedSource(calculateTimesPracticedForLang(values, sourceLanguage));
+        wss.setTimesPracticedTarget(calculateTimesPracticedForLang(values, targetLanguage));
     }
 
-    private void setAverageResult(WordSetStatsDto wss, List<WordSetStats> values) {
-        wss.setAverageResultSourceLang(calculateAverageResultForLang(values, 1));
-        wss.setAverageResultTargetLang(calculateAverageResultForLang(values, 0));
+    private void setAverageResult(WordSetStatsDto wss, List<WordSetStats> values, String sourceLanguage, String targetLanguage) {
+        wss.setAverageResultSourceLang(calculateAverageResultForLang(values, sourceLanguage));
+        wss.setAverageResultTargetLang(calculateAverageResultForLang(values, targetLanguage));
     }
 
-    private void setLastPracticed(WordSetStatsDto wss, List<WordSetStats> values) {
-        wss.setLastPracticedSourceLang(getLastPracticedForLang(values, 1));
-        wss.setLastPracticedTargetLang(getLastPracticedForLang(values, 0));
+    private void setLastPracticed(WordSetStatsDto wss, List<WordSetStats> values, String sourceLanguage, String targetLanguage) {
+        wss.setLastPracticedSourceLang(getLastPracticedForLang(values, sourceLanguage));
+        wss.setLastPracticedTargetLang(getLastPracticedForLang(values, targetLanguage));
     }
 
-    private void setBestResult(WordSetStatsDto wss, List<WordSetStats> values) {
-        wss.setBestResultSourceLang(calculateBestResultForLang(values, 1));
-        wss.setBestResultTargetLang(calculateBestResultForLang(values, 0));
+    private void setBestResult(WordSetStatsDto wss, List<WordSetStats> values, String sourceLanguage, String targetLanguage) {
+        wss.setBestResultSourceLang(calculateBestResultForLang(values, sourceLanguage));
+        wss.setBestResultTargetLang(calculateBestResultForLang(values, targetLanguage));
     }
 
-    private int calculateTimesPracticedForLang(List<WordSetStats> values, int lang) {
+    private int calculateTimesPracticedForLang(List<WordSetStats> values, String lang) {
         return (int) values
                 .stream()
-                .filter(setStats -> setStats.getLang() == lang)
+                .filter(setStats -> setStats.getLanguage().equals(lang))
                 .count();
     }
 
-    private void populateSetDataFields(int id, WordSetStatsDto wss) {
-        WordSet ws = wordSetService.findById(id);
-        wss.setSetName(ws.getName());
-        wss.setSourceLanguage(ws.getSourceLanguage());
-        wss.setTargetLanguage(ws.getTargetLanguage());
-    }
 
-    private String getSetName(int id) {
-        return wordSetService.findById(id).getName();
-    }
-
-    private float calculateAverageResultForLang(List<WordSetStats> values, int lang) {
-        int timesPracticed = calculateTimesPracticedForLang(values, lang);
+    private float calculateAverageResultForLang(List<WordSetStats> values, String language) {
+        int timesPracticed = calculateTimesPracticedForLang(values, language);
         return timesPracticed == 0 ? (float) timesPracticed : values.stream()
-                .filter(setStats -> setStats.getLang() == lang)
+                .filter(setStats -> setStats.getLanguage().equals(language))
                 .map(WordSetStats::getAccuracy)
                 .reduce(Float::sum)
                 .get() /
                 timesPracticed;
     }
 
-    private Timestamp getLastPracticedForLang( List<WordSetStats> values, int lang) {
-        int timesPracticed = calculateTimesPracticedForLang(values, lang);
+    private Timestamp getLastPracticedForLang( List<WordSetStats> values, String language) {
+        int timesPracticed = calculateTimesPracticedForLang(values, language);
         return timesPracticed == 0 ? null : values
                 .stream()
-                .filter(setStats -> setStats.getLang() == lang)
+                .filter(setStats -> setStats.getLanguage().equals(language))
                 .max(Comparator.comparing(WordSetStats::getPracticedAt))
                 .get()
                 .getPracticedAt();
     }
 
-    private float calculateBestResultForLang(List<WordSetStats> values, int lang) {
+    private float calculateBestResultForLang(List<WordSetStats> values, String language) {
         Optional<WordSetStats> bestResult =  values
                 .stream()
-                .filter(setStats -> setStats.getLang() == lang)
+                .filter(setStats -> setStats.getLanguage().equals(language))
                 .max(Comparator.comparing(WordSetStats::getAccuracy));
         return bestResult.isEmpty() ? 0f : bestResult.get().getAccuracy();
     }
 
-    private Map<Integer, List<WordSetStats>> getWordSet2WordSetStatsListMap(Set<WordSetStats> wordSetStatsForUser) {
+    private Map<WordSet, List<WordSetStats>> getWordSet2WordSetStatsListMap(Set<WordSetStats> wordSetStatsForUser) {
         return wordSetStatsForUser.stream()
-                .collect(Collectors.groupingBy(wss -> wss.getWordSet().getId()));
+                .collect(Collectors.groupingBy(WordSetStats::getWordSet));
     }
 }

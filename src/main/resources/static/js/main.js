@@ -136,8 +136,8 @@ function processAddSetAndSetPage() {
         }
 
         function autofocusFirstWord() {
-            let firstWord = document.querySelector("#word-items-body > tr:nth-child(2) > td:nth-child(3) > input");
-            
+            let firstWord = document.querySelector("#word-items-body > tr:nth-child(1) > td:nth-child(3) > input");
+
             let text = firstWord.value;
             firstWord.focus();
             firstWord.setSelectionRange(0, text.length);
@@ -304,16 +304,23 @@ function processImportPage() {
 //practice page =======================================================
 
 function processPracticePage() {
+
+    const sourceLang = document.getElementById("source").attributes.getNamedItem("source").value;
+    const targetLang = document.getElementById("target").attributes.getNamedItem("target").value;
+
     const translation = document.getElementById("translation");
     const answerInput = document.getElementById("answer");
 
     let translationBtn = document.getElementById("showTranslation");
-    let originalLanguage = getOriginalLanguage();
+    let practiceLanguage = getPracticeLanguage();
 
     const startOverBtn = document.getElementById("start-over");
     const typo = document.getElementById("typo");
     const hiddenListContent = document.getElementById("hiddenList").textContent;
     const changeLang = document.getElementById("change-lang-btn");
+
+    
+
 
     changeLang.addEventListener("click", swapLanguages);
 
@@ -328,16 +335,23 @@ function processPracticePage() {
 
     //get language to practice from session storage
 
-    function getOriginalLanguage() {
-        let originalLang = sessionStorage.getItem("originalLang");
-        let lang;
-        if (originalLang == null) {
-            lang = true;
-        } else {
-            lang = originalLang == "true";
-        }
-        return lang;
+    function getPracticeLanguage() {
+        let practiceLanguage = sessionStorage.getItem("practiceLanguage");
+
+        if (practiceLanguage == null) {
+            return sourceLang;
+        } 
+        return sessionStorage.getItem("practiceLanguage");
     }
+
+    function getAudio() {
+        let speech = new SpeechSynthesisUtterance();
+        speech.lang = practiceLanguage;
+        let textToSpeak = document.getElementById("word-item").innerText;
+        speech.text = textToSpeak;
+        window.speechSynthesis.speak(speech);
+    }
+
 
     //read words to an array of words
     const wordObjectsArr = cacheWordObjects();
@@ -350,7 +364,7 @@ function processPracticePage() {
 
         for (w in wordsArr) {
             let word = wordsArr[w];
-            if (originalLanguage == true) {
+            if (practiceLanguage === sourceLang) {
                 wordObjects.push(word);
             } else {
                 let inverted = {};
@@ -375,7 +389,13 @@ function processPracticePage() {
     //swap languages
 
     function swapLanguages() {
-        sessionStorage.setItem("originalLang", !originalLanguage);
+        
+        if(practiceLanguage === sourceLang){
+            sessionStorage.setItem("practiceLanguage", targetLang);
+        } else {
+            sessionStorage.setItem("practiceLanguage", targetLang);
+        }
+
         window.location.reload(true);
     }
 
@@ -388,6 +408,7 @@ function processPracticePage() {
     function displayWord(word) {
         const wordItemContainer = document.getElementById("word-item");
         wordItemContainer.innerHTML = word;
+        getAudio();
     }
 
     //answer input and answer button handler
@@ -422,6 +443,7 @@ function processPracticePage() {
         answerInput.setAttribute("style", "background-color:#7bfd7c5e");
         wordObjectsArr.splice(0, 1);
         resultObject[currentWord]++;
+
         answerInput.value = "";
 
         setTimeout(() => {
@@ -523,7 +545,7 @@ function processPracticePage() {
         let url = "/results/save/";
 
         let dto = {};
-        dto.lang = originalLanguage;
+        dto.lang = practiceLanguage;
         dto.result = result;
         dto.setId = setId;
 
@@ -649,7 +671,7 @@ function processAccountSettingsPage() {
             doAjaxToUpdateUser();
         }
 
-        else if ((pswd.value !== pswdCheck.value && passwordCheckNotActive()) || !changePasswordBlockExpanded()){
+        else if ((pswd.value !== pswdCheck.value && passwordCheckNotActive()) || !changePasswordBlockExpanded()) {
             message.textContent = "User has been updated!"
             doAjaxToUpdateUser();
         }
@@ -658,7 +680,7 @@ function processAccountSettingsPage() {
         }
 
         setTimeout(() => {
-           message.textContent = "";
+            message.textContent = "";
         }, 1500)
     }
 
@@ -666,7 +688,7 @@ function processAccountSettingsPage() {
         return changePswdBtn.classList.contains('hidden');
     }
 
-    function passwordCheckNotActive(){
+    function passwordCheckNotActive() {
         return pswdCheck.hasAttribute('disabled');
     }
 

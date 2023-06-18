@@ -36,7 +36,11 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         setStats.setWordSet(wordSetService.findById(result.getSetId()));
         setStats.setPracticedBy(user);
         setStats.setPracticedAt(new Timestamp(System.currentTimeMillis()));
-        setStats.setLang(result.isLang() ? 1 : 0);
+        String language = Arrays.stream(Language.values())
+                .filter(l -> l.getLocale().equals(result.getLanguage()))
+                .map(Language::getLanguage).
+                findFirst().orElseThrow(() -> new RuntimeException("Language not found " + result.getLanguage()));
+        setStats.setLanguage(language);
         setStats.setAccuracy(calculateAccuracy(result));
         WordSetStats saved = wordSetStatsRepository.save(setStats);
         user.addPracticedSet(saved);
@@ -74,8 +78,8 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         wordSetDetailedStatsDto.setSetId(setId);
         wordSetDetailedStatsDto.setName(ws.getName());
 
-        wordSetDetailedStatsDto.setSourceLanguage(ws.getSourceLanguage());
-        wordSetDetailedStatsDto.setTargetLanguage(ws.getTargetLanguage());
+        wordSetDetailedStatsDto.setSourceLanguage(ws.getSourceLanguage().getLanguage());
+        wordSetDetailedStatsDto.setTargetLanguage(ws.getTargetLanguage().getLanguage());
 
         List<WordStatsDto> wordStatsDtos = createWordStatsDtos(ws, user);
         wordSetDetailedStatsDto.setWordStatsDtos(wordStatsDtos);
@@ -85,9 +89,11 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
 
     private List<WordStatsDto> createWordStatsDtos(WordSet ws, User user) {
         List<WordSetStats> wordSetStats = wordSetStatsRepository.findByWordSetAndPracticedBy(ws, user);
+        String sourceLanguage = ws.getSourceLanguage().getLanguage();
+        String targetLanguage = ws.getTargetLanguage().getLanguage();
 
-        Map<Long, Float> wordIdsToRateSource = getWordIdsToRate(wordSetStats, 1);
-        Map<Long, Float> wordIdsToRateTarget = getWordIdsToRate(wordSetStats, 0);
+        Map<Long, Float> wordIdsToRateSource = getWordIdsToRate(wordSetStats, sourceLanguage);
+        Map<Long, Float> wordIdsToRateTarget = getWordIdsToRate(wordSetStats, targetLanguage);
 
         List<Word> words = getSortedWords(ws);
 
@@ -111,7 +117,7 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         return words;
     }
 
-    private Map<Long, Float> getWordIdsToRate(List<WordSetStats> wordSetStats, int lang) {
+    private Map<Long, Float> getWordIdsToRate(List<WordSetStats> wordSetStats, String lang) {
         List<WordSetStats> wss = getWordSetStatsByLang(wordSetStats, lang);
         List<Set<WordStat>> wordStats = getWordStatSetsList(wss);
         Map<Long, Float> wordIdsToRate = getWordIdsToRate(wordStats);
@@ -144,9 +150,9 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         return idToRate;
     }
 
-    private List<WordSetStats> getWordSetStatsByLang(List<WordSetStats> wordSetStats, int lang) {
+    private List<WordSetStats> getWordSetStatsByLang(List<WordSetStats> wordSetStats, String lang) {
         List<WordSetStats> filtered = wordSetStats.stream()
-                .filter(wss -> wss.getLang() == lang)
+                .filter(wss -> wss.getLanguage().equals(lang))
                 .collect(Collectors.toList());
         return filtered;
     }

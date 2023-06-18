@@ -3,6 +3,7 @@ package org.arjunaoverdrive.app.services;
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.dao.WordRepository;
 import org.arjunaoverdrive.app.dao.WordSetRepository;
+import org.arjunaoverdrive.app.model.Language;
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
@@ -52,10 +53,20 @@ public class WordSetServiceImpl implements WordSetService {
         Timestamp createdOn = new Timestamp(System.currentTimeMillis());
         wordSet.setCreatedAt(createdOn);
         wordSet.setCreatedBy(user);
-        wordSet.setSourceLanguage(wordSetDto.getSourceLanguage());
-        wordSet.setTargetLanguage(wordSetDto.getTargetLanguage());
+        Language sourceLang = getLanguage(wordSetDto.getSourceLanguage());
+        wordSet.setSourceLanguage(sourceLang);
+        Language targetLang = getLanguage(wordSetDto.getTargetLanguage());
+        wordSet.setTargetLanguage(targetLang);
         wordSet.setWordList(wordSetDto.getWordList());
         return wordSet;
+    }
+
+    // TODO: 17.06.2023 write a utility class to handle language input
+    private Language getLanguage(String lang) {
+        return Arrays.stream(Language.values())
+                .filter(l -> l.getLanguage().equals(lang.toUpperCase()))
+                .findFirst()
+                .get();
     }
 
     @Override
@@ -82,11 +93,7 @@ public class WordSetServiceImpl implements WordSetService {
                 .orElseThrow(() -> new RuntimeException("Set with this id is not found"));
     }
 
-    public List<Word> getWordList(Integer id) {
-        List<Word> wordList = findById(id).getWordList();
-        Collections.shuffle(wordList);
-        return wordList;
-    }
+
 
     @Override
     public Set<WordSet> findAllByCreatedBy(User user) {

@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class ResultDto {
     private final int setId;
-    private final boolean lang;
+    private final String language;
     private final Map<String, List<String>> result;
 
-    public ResultDto(int setId, boolean lang, Map<String, List<String>> result) {
+    public ResultDto(int setId, String lang, Map<String, List<String>> result) {
         this.setId = setId;
-        this.lang = lang;
+        this.language = lang;
         this.result = result;
     }
 
@@ -22,7 +22,7 @@ public class ResultDto {
         return result;
     }
 
-    public boolean isLang() {
-        return lang;
+    public String getLanguage() {
+        return language;
     }
 }

@@ -2,6 +2,7 @@ package org.arjunaoverdrive.app.services.statistics;
 
 import org.arjunaoverdrive.app.dao.WordStatRepository;
 import org.arjunaoverdrive.app.model.Word;
+import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.model.WordSetStats;
 import org.arjunaoverdrive.app.model.WordStat;
 import org.arjunaoverdrive.app.services.WordSetService;
@@ -39,8 +40,9 @@ public class WordStatServiceImpl implements WordStatService {
         
         Map<String, List<String>> results = resultDto.getResult();
         int setId = resultDto.getSetId();
-        boolean lang = resultDto.isLang();
-        Map<String, Long> words2ids = word2ids(getWords(setId), lang);
+        String language = resultDto.getLanguage();
+
+        Map<String, Long> words2ids = word2ids(setId, language);
 
         Set<WordStat> wordStatSet = populateWordStats(wordSetStats, results, words2ids);
         return wordStatSet;
@@ -65,13 +67,15 @@ public class WordStatServiceImpl implements WordStatService {
         return wordStatSet;
     }
 
-    private List<Word> getWords(int setId) {
-        return wordSetService.findById(setId)
-                .getWordList();
+    private WordSet getWordSet(int setId){
+        return wordSetService.findById(setId);
     }
 
-    private Map<String, Long> word2ids(List<Word> words, boolean lang) {
+    private Map<String, Long> word2ids(int setId, String language) {
+        WordSet wordSet = getWordSet(setId);
+        List<Word> words = wordSet.getWordList();
+        String sourceLanguageLocale = wordSet.getSourceLanguage().getLocale();
         return words.stream()
-                .collect(Collectors.toMap(lang ? Word::getWord : Word::getTranslation, Word::getId));
+                .collect(Collectors.toMap(language.equals(sourceLanguageLocale) ? Word::getWord : Word::getTranslation, Word::getId));
     }
 }

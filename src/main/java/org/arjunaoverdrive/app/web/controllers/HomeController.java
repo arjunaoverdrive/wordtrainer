@@ -30,6 +30,7 @@ public class HomeController {
     public List<WordSet>wordSetList(){
         return wordSetService.findAll();
     }
+    // TODO: 17.06.2023 replace List<WordSet> with responseDtos
 
     @ModelAttribute("user")
     public User user(){
