@@ -5,7 +5,7 @@ import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.model.WordSetStats;
 import org.arjunaoverdrive.app.model.WordStat;
-import org.arjunaoverdrive.app.services.WordSetService;
+import org.arjunaoverdrive.app.services.wordset.WordSetService;
 import org.arjunaoverdrive.app.web.dto.ResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

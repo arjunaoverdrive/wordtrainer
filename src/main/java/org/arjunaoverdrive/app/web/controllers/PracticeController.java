@@ -1,9 +1,6 @@
 package org.arjunaoverdrive.app.web.controllers;
 
-import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.services.PracticeService;
-import org.arjunaoverdrive.app.services.WordSetService;
-import org.arjunaoverdrive.app.services.WordSetServiceImpl;
 import org.arjunaoverdrive.app.web.dto.PracticeSetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/practice")

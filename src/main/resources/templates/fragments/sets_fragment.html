@@ -6,8 +6,7 @@
         <td>
             <button class="set-page"
                     th:attr="id=${set.id}"
-                    th:with="words=${set.wordList}, size=${#lists.size(words)}"
-                    th:text="${set.name} + '  (' + ${size} + ' words)'"
+                    th:text="${set.name} + '  (' + ${set.size} + ' words)'"
             ></button>
         </td>
         <td class="practice-set-btn-cell"><button class="practice-set-btn" type="button" th:attr="id=${set.id}">Practice</button></td>

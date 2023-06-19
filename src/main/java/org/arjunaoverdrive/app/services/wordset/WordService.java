@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.services;
+package org.arjunaoverdrive.app.services.wordset;
 
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;

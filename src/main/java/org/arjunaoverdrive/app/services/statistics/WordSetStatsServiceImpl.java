@@ -2,7 +2,7 @@ package org.arjunaoverdrive.app.services.statistics;
 
 import org.arjunaoverdrive.app.dao.WordSetStatsRepository;
 import org.arjunaoverdrive.app.model.*;
-import org.arjunaoverdrive.app.services.WordSetService;
+import org.arjunaoverdrive.app.services.wordset.WordSetService;
 import org.arjunaoverdrive.app.services.user.UserService;
 import org.arjunaoverdrive.app.web.dto.ResultDto;
 import org.arjunaoverdrive.app.web.dto.statistics.WordSetDetailedStatsDto;

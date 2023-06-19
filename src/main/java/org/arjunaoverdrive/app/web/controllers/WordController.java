@@ -1,7 +1,7 @@
 package org.arjunaoverdrive.app.web.controllers;
 
 import lombok.extern.slf4j.Slf4j;
-import org.arjunaoverdrive.app.services.WordService;
+import org.arjunaoverdrive.app.services.wordset.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

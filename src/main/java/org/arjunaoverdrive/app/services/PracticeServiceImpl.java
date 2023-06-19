@@ -2,6 +2,7 @@ package org.arjunaoverdrive.app.services;
 
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.services.wordset.WordSetService;
 import org.arjunaoverdrive.app.web.dto.PracticeSetDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

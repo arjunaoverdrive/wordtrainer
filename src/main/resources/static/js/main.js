@@ -319,9 +319,6 @@ function processPracticePage() {
     const hiddenListContent = document.getElementById("hiddenList").textContent;
     const changeLang = document.getElementById("change-lang-btn");
 
-    
-
-
     changeLang.addEventListener("click", swapLanguages);
 
     startOverBtn.addEventListener("click", (event) => {
@@ -344,11 +341,10 @@ function processPracticePage() {
         return sessionStorage.getItem("practiceLanguage");
     }
 
-    function getAudio() {
+    function getAudio(text) {
         let speech = new SpeechSynthesisUtterance();
         speech.lang = practiceLanguage;
-        let textToSpeak = document.getElementById("word-item").innerText;
-        speech.text = textToSpeak;
+        speech.text = text;
         window.speechSynthesis.speak(speech);
     }
 
@@ -387,7 +383,6 @@ function processPracticePage() {
     }
 
     //swap languages
-
     function swapLanguages() {
         
         if(practiceLanguage === sourceLang){
@@ -408,7 +403,7 @@ function processPracticePage() {
     function displayWord(word) {
         const wordItemContainer = document.getElementById("word-item");
         wordItemContainer.innerHTML = word;
-        getAudio();
+        getAudio(word);
     }
 
     //answer input and answer button handler

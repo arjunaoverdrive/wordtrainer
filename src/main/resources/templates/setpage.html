@@ -40,8 +40,8 @@
                    class="input language" >
             <table id="words-container">
                 <thead>
-                    <th th:text="${words.sourceLanguage}">Word</th>
-                    <th th:text="${words.targetLanguage}">Translation</th>
+                    <th th:text="${words.sourceLanguage.getLanguage()}">Word</th>
+                    <th th:text="${words.targetLanguage.getLanguage()}">Translation</th>
                 </thead>
                 <tbody id="word-items-body">
 

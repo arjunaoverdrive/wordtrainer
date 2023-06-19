@@ -2,8 +2,8 @@ package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.WordSet;
-import org.arjunaoverdrive.app.services.WordSetService;
-import org.arjunaoverdrive.app.services.WordSetServiceImpl;
+import org.arjunaoverdrive.app.services.wordset.WordSetService;
+import org.arjunaoverdrive.app.services.wordset.WordSetServiceImpl;
 import org.arjunaoverdrive.app.services.user.UserService;
 import org.arjunaoverdrive.app.web.dto.WordSetDto;
 import org.springframework.beans.factory.annotation.Autowired;

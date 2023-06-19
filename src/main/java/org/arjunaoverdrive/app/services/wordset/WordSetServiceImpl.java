@@ -1,4 +1,4 @@
-package org.arjunaoverdrive.app.services;
+package org.arjunaoverdrive.app.services.wordset;
 
 import lombok.extern.slf4j.Slf4j;
 import org.arjunaoverdrive.app.dao.WordRepository;
@@ -49,24 +49,19 @@ public class WordSetServiceImpl implements WordSetService {
 
     private WordSet populateWordSetFields(WordSetDto wordSetDto, User user) {
         WordSet wordSet = new WordSet();
+
         wordSet.setName(wordSetDto.getName());
         Timestamp createdOn = new Timestamp(System.currentTimeMillis());
         wordSet.setCreatedAt(createdOn);
         wordSet.setCreatedBy(user);
-        Language sourceLang = getLanguage(wordSetDto.getSourceLanguage());
+
+        Language sourceLang = Language.getLanguage(wordSetDto.getSourceLanguage());
         wordSet.setSourceLanguage(sourceLang);
-        Language targetLang = getLanguage(wordSetDto.getTargetLanguage());
+        Language targetLang = Language.getLanguage(wordSetDto.getTargetLanguage());
         wordSet.setTargetLanguage(targetLang);
+
         wordSet.setWordList(wordSetDto.getWordList());
         return wordSet;
-    }
-
-    // TODO: 17.06.2023 write a utility class to handle language input
-    private Language getLanguage(String lang) {
-        return Arrays.stream(Language.values())
-                .filter(l -> l.getLanguage().equals(lang.toUpperCase()))
-                .findFirst()
-                .get();
     }
 
     @Override
@@ -152,7 +147,10 @@ public class WordSetServiceImpl implements WordSetService {
     }
 
     private void addNewWordsToResult(List<Word> clientList, List<Word> result) {
-        List<Word> newWords = clientList.stream().filter(word -> word.getId() == 0).filter(word -> word.getWord() != null).collect(Collectors.toList());
+        List<Word> newWords = clientList.stream()
+                .filter(word -> word.getId() == 0)
+                .filter(word -> word.getWord() != null)
+                .collect(Collectors.toList());
         result.addAll(newWords);
     }
 
@@ -176,7 +174,9 @@ public class WordSetServiceImpl implements WordSetService {
 
     private Map<String, Word> getString2WordMap(List<Word> wordList) {
         Map<String, Word> res = new HashMap<>();
-        wordList.stream().filter(w -> w.getWord() != null).forEach(w -> res.put(w.getWord(), w));
+        wordList.stream()
+                .filter(w -> w.getWord() != null)
+                .forEach(w -> res.put(w.getWord(), w));
         return res;
     }
 }

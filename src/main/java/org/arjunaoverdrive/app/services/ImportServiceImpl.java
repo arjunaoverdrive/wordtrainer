@@ -5,15 +5,14 @@ import org.arjunaoverdrive.app.dao.WordRepository;
 import org.arjunaoverdrive.app.dao.WordSetRepository;
 import org.arjunaoverdrive.app.model.Language;
 import org.arjunaoverdrive.app.model.User;
-import org.arjunaoverdrive.app.web.dto.ImportDto;
 import org.arjunaoverdrive.app.model.Word;
 import org.arjunaoverdrive.app.model.WordSet;
+import org.arjunaoverdrive.app.web.dto.ImportDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -59,19 +58,13 @@ public class ImportServiceImpl implements ImportService {
     private WordSet initWordSet(ImportDto importDto, User user) {
         String name = importDto.getName();
         WordSet set = getWordSet(user, name);
-        Language sourceLang = getLanguage(importDto.getSourceLanguage());
+        Language sourceLang = Language.getLanguage(importDto.getSourceLanguage());
         set.setSourceLanguage(sourceLang);
-        Language targetLang = getLanguage(importDto.getTargetLanguage());
+        Language targetLang = Language.getLanguage(importDto.getTargetLanguage());
         set.setTargetLanguage(targetLang);
         return set;
     }
 
-    private Language getLanguage(String lang) {
-        return Arrays.stream(Language.values())
-                .filter(l -> l.getLanguage().equals(lang))
-                .findFirst()
-                .get();
-    }
 
     private List<Word> getWordList(String words, String delimiter, WordSet set) {
         List<Word> wordList = parseWords(words, delimiter);

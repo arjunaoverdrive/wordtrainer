@@ -3,7 +3,7 @@ package org.arjunaoverdrive.app.services.statistics;
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.WordSet;
 import org.arjunaoverdrive.app.model.WordSetStats;
-import org.arjunaoverdrive.app.services.WordSetService;
+import org.arjunaoverdrive.app.services.wordset.WordSetService;
 import org.arjunaoverdrive.app.web.dto.statistics.WordSetStatsDto;
 import org.arjunaoverdrive.app.web.dto.user.UserStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;

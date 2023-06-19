@@ -2,9 +2,10 @@ package org.arjunaoverdrive.app.web.controllers;
 
 import org.arjunaoverdrive.app.model.User;
 import org.arjunaoverdrive.app.model.WordSet;
-import org.arjunaoverdrive.app.services.WordSetService;
-import org.arjunaoverdrive.app.services.WordSetServiceImpl;
+import org.arjunaoverdrive.app.services.WordSetPageService;
+import org.arjunaoverdrive.app.services.wordset.WordSetServiceImpl;
 import org.arjunaoverdrive.app.services.user.UserService;
+import org.arjunaoverdrive.app.web.dto.WordSetResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,18 +19,18 @@ import java.util.List;
 @RequestMapping("/choose")
 public class ChooseSetController {
 
-    private final WordSetService wordSetService;
+    private final WordSetPageService wordSetPageService;
     private final UserService userService;
 
     @Autowired
-    public ChooseSetController(WordSetServiceImpl wordSetService, UserService userService) {
-        this.wordSetService = wordSetService;
+    public ChooseSetController( WordSetPageService wordSetPageService, UserService userService) {
+        this.wordSetPageService = wordSetPageService;
         this.userService = userService;
     }
 
     @ModelAttribute("sets")
-    public List<WordSet> sets(){
-        return this.wordSetService.findAll();
+    public List<WordSetResponseDto> sets(){
+        return this.wordSetPageService.findWordSets();
     }
 
     @ModelAttribute("user")

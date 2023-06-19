@@ -1,5 +1,7 @@
 package org.arjunaoverdrive.app.model;
 
+import java.util.Arrays;
+
 public enum Language {
     ENGLISH("en", "English"),
     RUSSIAN("ru", "Русский"),
@@ -22,5 +24,12 @@ public enum Language {
 
     public String getLanguage() {
         return language;
+    }
+
+    public static Language getLanguage(String language){
+        return Arrays.stream(Language.values())
+                .filter(l -> l.getLanguage().equals(language.toUpperCase()))
+                .findFirst()
+                .get();
     }
 }
