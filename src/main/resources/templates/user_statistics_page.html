@@ -4,67 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <title>My Statistics</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <script defer src="/js/main.js"></script>
 </head>
 
 <body>
-<div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
-<div id="central-container">
-    <h1>Welcome to the best words training app!</h1>
-    <h2 th:text="'Hello ' + ${user.firstName}"></h2>
-    <h3 class="my-sets" th:text="'My sets: ' + ${user.userSets.size()}"></h3>
-    <div sets th:each="set : ${user.userSets}">
-        <div class="stats-set-title"><a th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"
-                                  th:href="@{/sets/{id}(id=${set.id})}"></a></div>
+    <div th:replace="~{/fragments/navbar_fragment :: navbar(${user})}"></div>
+    <div id="central-container">
+        <h1>Welcome to the best words training app!</h1>
+        <h2 th:text="'Hello ' + ${user.firstName}"></h2>
+
+        <hr>
+        <h3 class="practiced-by-me">Practiced Sets</h3>
+        <div class="my-practiced-cont" th:each="set: ${userStats.practicedStats}">
+            <div>
+                <h4 class="set-title"><a th:text="${set.setName}" th:href="@{/statistics/{id}(id=${set.id})}"></a>
+                </h4>
+                <div class="short-info">
+                    <span class="set-language-info" th:text="${set.sourceLanguage}"></span>
+                    <div class="set-progress-container"
+                        th:with="progressSource=${set.progressSource==0} ? 0 :
+                    ${#numbers.formatDecimal(set.progressSource*100, 1, 0)}, errorRate=${#numbers.formatDecimal(100-100*set.progressSource, 1,0)}"
+                        style="display:flex;">
+                        <div class="set-progress"
+                            th:style="'width:' + ${progressSource} + '%; background-color: green; height:15px;'" th:title="${progressSource} + '%'"></div>
+                        <div class="set-progress-errors"
+                            th:style="'width:' + ${errorRate} + '%; background-color:orange; height: 15px;'" th:title="${errorRate} + '%'"></div>
+                    </div>
+
+                    <span class="set-language-info" th:text="${set.targetLanguage}"></span>
+                    <div class="set-progress-container" th:with="progressTarget=${set.progressTarget==0} ? 0 :
+                    ${#numbers.formatDecimal(set.progressTarget*100, 1, 0)}, errorRate=${#numbers.formatDecimal(100-100*set.progressTarget, 1,0)}"
+                        style="display:flex;">
+                        <div class="set-progress"
+                            th:style="'width:' + ${progressTarget} + '%; background-color: green; height:15px;'" th:title="${progressTarget} + '%'"></div>
+                        <div class="set-progress-errors"
+                            th:style="'width:' + ${errorRate} + '%; background-color:orange; height: 15px;'" th:title="${errorRate} + '%'"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+        <hr>
+        <h3 class="my-sets" th:text="'My sets: ' + ${user.userSets.size()}"></h3>
+        <div sets th:each="set : ${user.userSets}">
+            <div class="stats-set-title"><a th:text="${set.name} + ' ' + ${set.wordList.size()} + ' words'"
+                    th:href="@{/sets/{id}(id=${set.id})}"></a></div>
+        </div>
     </div>
-    <hr>
-    <h3 class="practiced-by-me">Practiced Sets</h3>
-    <div class="my-practiced-cont" th:each="set: ${userStats.practicedStats}">
-        <details>
-            <summary class="set-title"><a th:text="${set.setName}" th:href="@{/statistics/{id}(id=${set.id})}" title="Click to see detailed info"></a>
-            </summary>
-            <table>
-                <tr>
-                    <th></th>
-                    <th th:text="${set.sourceLanguage}">Language 1</th>
-                    <th th:text="${set.targetLanguage}">Language 2</th>
-                </tr>
-                <tr class="stats-table-item">
-                    <td>Last Practiced</td>
-                    <td th:text="${#dates.format(set.lastPracticedSourceLang, 'dd MMM yy HH:mm')}"></td>
-                    <td th:text="${#dates.format(set.lastPracticedTargetLang, 'dd MMM yy HH:mm')}"></td>
-                </tr>
-                <tr class="stats-table-item">
-                    <td>Times Practiced</td>
-                    <td th:text="${set.timesPracticedSource}"></td>
-                    <td th:text="${set.timesPracticedTarget}"></td>
-                </tr>
-
-                <tr class="stats-table-item">
-                    <td>Average Result</td>
-                    <td th:with="avg1=${set.averageResultSourceLang == 0} ? 0 :
-                        ${#numbers.formatDecimal(set.averageResultSourceLang*100, 2, 0) + '%'}"
-                        th:text="${avg1}"></td>
-                    <td th:with="avg2=${set.averageResultTargetLang == 0} ? 0:
-                        ${#numbers.formatDecimal(set.averageResultTargetLang*100, 2, 0) + '%'}"
-                        th:text="${avg2}"></td>
-                </tr>
-
-                <tr class="stats-table-item">
-                    <td>Best Result</td>
-                    <td th:with="bestRes1=${set.bestResultSourceLang==0} ? 0 :
-                    ${#numbers.formatDecimal(set.bestResultSourceLang*100, 2, 0)}"
-                        th:text="${bestRes1} + '%'"></td>
-                    <td th:with="bestRes2=${set.bestResultTargetLang == 0} ? 0 :
-                        ${#numbers.formatDecimal(set.bestResultTargetLang*100, 2, 0)} + '%'"
-                        th:text="${bestRes2}"></td>
-
-                </tr>
-            </table>
-        </details>
-    </div>
-</div>
 
 </body>
 

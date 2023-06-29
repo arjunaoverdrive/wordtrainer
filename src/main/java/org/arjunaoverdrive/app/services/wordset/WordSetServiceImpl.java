@@ -34,7 +34,7 @@ public class WordSetServiceImpl implements WordSetService {
     }
 
     private void persistWordList(WordSetDto wordSetDto, WordSet set) {
-        List<Word> wordList = wordSetDto.getWordList();
+        List<Word> wordList = getWords(wordSetDto);
         wordList.forEach(word -> word.setWordSet(set));
         this.wordRepository.saveAll(wordList);
         log.info("save words set " + set.getId());
@@ -60,8 +60,17 @@ public class WordSetServiceImpl implements WordSetService {
         Language targetLang = Language.getLanguage(wordSetDto.getTargetLanguage());
         wordSet.setTargetLanguage(targetLang);
 
-        wordSet.setWordList(wordSetDto.getWordList());
+        List<Word> wordList = getWords(wordSetDto);
+        wordSet.setWordList(wordList);
         return wordSet;
+    }
+
+    private List<Word> getWords(WordSetDto wordSetDto) {
+        List<Word> wordList = wordSetDto.getWordList()
+                .stream()
+                .filter(w -> w.getWord() != null && w.getTranslation() != null)
+                .collect(Collectors.toList());
+        return wordList;
     }
 
     @Override

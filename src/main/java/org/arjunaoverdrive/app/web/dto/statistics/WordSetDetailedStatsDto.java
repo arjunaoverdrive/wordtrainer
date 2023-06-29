@@ -1,54 +1,32 @@
 package org.arjunaoverdrive.app.web.dto.statistics;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class WordSetDetailedStatsDto {
     private Integer setId;
     private String name;
     private String sourceLanguage;
     private String targetLanguage;
+    private Timestamp lastPracticedSourceLang;
+    private Timestamp lastPracticedTargetLang;
+
+    private float bestResultSourceLang;
+    private float bestResultTargetLang;
+
+    private float averageResultSourceLang;
+    private float averageResultTargetLang;
+
+    private int timesPracticedSource;
+    private int timesPracticedTarget;
+
     private List<WordStatsDto> wordStatsDtos;
 
-    public WordSetDetailedStatsDto() {
-    }
-
-    public Integer getSetId() {
-        return setId;
-    }
-
-    public void setSetId(Integer setId) {
-        this.setId = setId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSourceLanguage() {
-        return sourceLanguage;
-    }
-
-    public void setSourceLanguage(String sourceLanguage) {
-        this.sourceLanguage = sourceLanguage;
-    }
-
-    public String getTargetLanguage() {
-        return targetLanguage;
-    }
-
-    public void setTargetLanguage(String targetLanguage) {
-        this.targetLanguage = targetLanguage;
-    }
-
-    public List<WordStatsDto> getWordStatsDtos() {
-        return wordStatsDtos;
-    }
-
-    public void setWordStatsDtos(List<WordStatsDto> wordStatsDtos) {
-        this.wordStatsDtos = wordStatsDtos;
-    }
 }

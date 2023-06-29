@@ -14,4 +14,6 @@ public interface WordSetStatsRepository extends JpaRepository<WordSetStats, Long
     Set<WordSetStats> findAllByPracticedBy(User user);
 
     List<WordSetStats> findByWordSetAndPracticedBy(WordSet ws, User user);
+
+    List<WordSetStats> findAllByWordSet(WordSet ws);
 }

@@ -67,6 +67,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUser(Long userId){
+        User appUser = getUserFromSecurityContext();
+        User userById = findUserById(userId);
+        if(appUser != userById){
+            throw new RuntimeException("You don't have permissions to get this user info");
+        }
+        return appUser;
+    }
+
+    @Override
     public User saveChanges(Integer id, AccountDto dto) {
         User user = findUserById(id);
         user.setFirstName(dto.getFirstName());

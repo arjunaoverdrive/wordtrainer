@@ -44,9 +44,10 @@ public class StatisticsController {
     @GetMapping("/user/{userid}")
     public String userStatisticsPage(@PathVariable("userid") Long userId,
                               Model model){
-        User user = userService.getUserFromSecurityContext();
+        User user = userService.getUser(userId);
         model.addAttribute("user", user);
         model.addAttribute("userStats", userStatisticsService.getStatistics(user));
         return "user_statistics_page";
+        // TODO: 25.06.2023 implement exception handler to return you don't have permissions page
     }
 }

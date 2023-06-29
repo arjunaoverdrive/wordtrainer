@@ -3,14 +3,11 @@ package org.arjunaoverdrive.app.services.statistics;
 import org.arjunaoverdrive.app.dao.WordSetStatsRepository;
 import org.arjunaoverdrive.app.model.*;
 import org.arjunaoverdrive.app.services.wordset.WordSetService;
-import org.arjunaoverdrive.app.services.user.UserService;
-import org.arjunaoverdrive.app.web.dto.ResultDto;
 import org.arjunaoverdrive.app.web.dto.statistics.WordSetDetailedStatsDto;
 import org.arjunaoverdrive.app.web.dto.statistics.WordStatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,51 +16,18 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
 
     private final WordSetStatsRepository wordSetStatsRepository;
     private final WordSetService wordSetService;
-    private final UserService userService;
-
 
     @Autowired
-    public WordSetStatsServiceImpl(WordSetStatsRepository wordSetStatsRepository, WordSetService wordSetService, UserService userService) {
+    public WordSetStatsServiceImpl(WordSetStatsRepository wordSetStatsRepository, WordSetService wordSetService) {
         this.wordSetStatsRepository = wordSetStatsRepository;
         this.wordSetService = wordSetService;
-        this.userService = userService;
     }
-
 
     @Override
-    public WordSetStats saveResults(User user, ResultDto result) {
-        WordSetStats setStats = new WordSetStats();
-        setStats.setWordSet(wordSetService.findById(result.getSetId()));
-        setStats.setPracticedBy(user);
-        setStats.setPracticedAt(new Timestamp(System.currentTimeMillis()));
-        String language = Arrays.stream(Language.values())
-                .filter(l -> l.getLocale().equals(result.getLanguage()))
-                .map(Language::getLanguage).
-                findFirst().orElseThrow(() -> new RuntimeException("Language not found " + result.getLanguage()));
-        setStats.setLanguage(language);
-        setStats.setAccuracy(calculateAccuracy(result));
-        WordSetStats saved = wordSetStatsRepository.save(setStats);
-        user.addPracticedSet(saved);
-        userService.save(user);
-        return saved;
+    public WordSetStats save(WordSetStats wordSetStats){
+        wordSetStatsRepository.save(wordSetStats);
+        return wordSetStats;
     }
-
-    private float calculateAccuracy(ResultDto result) {
-        int attemptsCount = result.getResult().entrySet()
-                .stream()
-                .map(e -> e.getValue().size() * Integer.parseInt(e.getKey()))
-                .reduce(Integer::sum)
-                .get();
-
-        int wordsCount = result.getResult()
-                .values().stream()
-                .map(List::size)
-                .reduce(Integer::sum)
-                .get();
-
-        return (float) wordsCount / attemptsCount;
-    }
-
 
     @Override
     public Set<WordSetStats> getWordSetStatsForUser(User user) {
@@ -83,9 +47,20 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
 
         List<WordStatsDto> wordStatsDtos = createWordStatsDtos(ws, user);
         wordSetDetailedStatsDto.setWordStatsDtos(wordStatsDtos);
-
+        calculateSetStatistics(ws, wordSetDetailedStatsDto);
         return wordSetDetailedStatsDto;
     }
+
+    private void calculateSetStatistics(WordSet ws, WordSetDetailedStatsDto wordSetDetailedStatsDto){
+
+        List<WordSetStats> wordSetStats = wordSetStatsRepository.findAllByWordSet(ws);
+
+        WordSetStatsCalculator calculator = new WordSetStatsCalculator(wordSetStats,
+                ws.getSourceLanguage().getLanguage(), ws.getTargetLanguage().getLanguage());
+
+        calculator.calculateStatistics(wordSetDetailedStatsDto);
+    }
+
 
     private List<WordStatsDto> createWordStatsDtos(WordSet ws, User user) {
         List<WordSetStats> wordSetStats = wordSetStatsRepository.findByWordSetAndPracticedBy(ws, user);
@@ -120,7 +95,8 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
     private Map<Long, Float> getWordIdsToRate(List<WordSetStats> wordSetStats, String lang) {
         List<WordSetStats> wss = getWordSetStatsByLang(wordSetStats, lang);
         List<Set<WordStat>> wordStats = getWordStatSetsList(wss);
-        Map<Long, Float> wordIdsToRate = getWordIdsToRate(wordStats);
+        WordRateCalculator rateCalculator = new WordRateCalculator(wordStats);
+        Map<Long, Float> wordIdsToRate = rateCalculator.getWordIdsToRate();
         return wordIdsToRate;
     }
 
@@ -131,24 +107,7 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
         return wordStatsSetsList;
     }
 
-    private Map<Long, Float> getWordIdsToRate(List<Set<WordStat>> wordStatsSetsList) {
-        Map<Long, Float> idToRate = new HashMap<>();
 
-        for (Set<WordStat> wordStatSet : wordStatsSetsList) {
-            for (WordStat wordStat : wordStatSet) {
-                idToRate.compute(wordStat.getWordId(),
-                        (k, v) -> v == null ? 1f / wordStat.getRate() : (v += (1f / wordStat.getRate())));
-            }
-        }
-        int count = wordStatsSetsList.size();
-
-        idToRate.entrySet().forEach(e ->
-                e.setValue(count < 7 ?
-                        (e.getValue() *  ((float) count / (count * 10)))
-                        : e.getValue() / count));
-
-        return idToRate;
-    }
 
     private List<WordSetStats> getWordSetStatsByLang(List<WordSetStats> wordSetStats, String lang) {
         List<WordSetStats> filtered = wordSetStats.stream()
@@ -156,5 +115,4 @@ public class WordSetStatsServiceImpl implements WordSetStatsService {
                 .collect(Collectors.toList());
         return filtered;
     }
-
 }

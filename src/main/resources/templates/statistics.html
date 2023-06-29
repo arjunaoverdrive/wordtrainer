@@ -13,7 +13,47 @@
 
     <div id=stat-table-container>
         <h3><a th:text="${detailed.name}" th:href="@{/sets/{id}(id=${detailed.setId})}"></a></h3>
+        <h4>General statistics</h4>
+        <table class="general-set-statistics">
+            <tr>
+                <th></th>
+                <th th:text="${detailed.sourceLanguage}">Language 1</th>
+                <th th:text="${detailed.targetLanguage}">Language 2</th>
+            </tr>
+            <tr class="stats-table-item">
+                <td>Last Practiced</td>
+                <td th:text="${#dates.format(detailed.lastPracticedSourceLang, 'dd MMM yy HH:mm')}"></td>
+                <td th:text="${#dates.format(detailed.lastPracticedTargetLang, 'dd MMM yy HH:mm')}"></td>
+            </tr>
+            <tr class="stats-table-item">
+                <td>Times Practiced</td>
+                <td th:text="${detailed.timesPracticedSource}"></td>
+                <td th:text="${detailed.timesPracticedTarget}"></td>
+            </tr>
 
+            <tr class="stats-table-item">
+                <td>Average Result</td>
+                <td th:with="avg1=${detailed.averageResultSourceLang == 0} ? 0 :
+                                ${#numbers.formatDecimal(detailed.averageResultSourceLang*100, 2, 0) + '%'}"
+                    th:text="${avg1}"></td>
+                <td th:with="avg2=${detailed.averageResultTargetLang == 0} ? 0:
+                                ${#numbers.formatDecimal(detailed.averageResultTargetLang*100, 2, 0) + '%'}"
+                    th:text="${avg2}"></td>
+            </tr>
+
+            <tr class="stats-table-item">
+                <td>Best Result</td>
+                <td th:with="bestRes1=${detailed.bestResultSourceLang==0} ? 0 :
+                            ${#numbers.formatDecimal(detailed.bestResultSourceLang*100, 2, 0)}"
+                    th:text="${bestRes1} + '%'"></td>
+                <td th:with="bestRes2=${detailed.bestResultTargetLang == 0} ? 0 :
+                                ${#numbers.formatDecimal(detailed.bestResultTargetLang*100, 2, 0)} + '%'"
+                    th:text="${bestRes2}">
+                </td>
+
+        </table>
+
+        <h4>Words statistics</h4>
         <table class="word-stats-table">
             <tr>
                 <th th:text="${detailed.sourceLanguage}">Word</th>

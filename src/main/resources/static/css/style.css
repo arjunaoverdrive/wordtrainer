@@ -274,24 +274,25 @@
     width: 100%;
  }
 
- details{
-   margin-bottom: 10px;
+.general-set-statistics{
+    width:100%;
 }
 
-details>table{
-  width: 100%;
+.general-set-statistics>tbody>tr>th,
+.word-stats-table>tbody>tr>th{
+    text-align: start;
 }
 
 .stats-table-item>td{
-   text-align:center;
+   text-align:start;
 }
 
 .word-stats-cell{
-   width: 35%;
+   width: 25%;
 }
 
 .word-stats-cell-progress{
-   width: 15%;
+   width: 25%;
 }
 
  .stats-item{
@@ -507,7 +508,7 @@ nav{
 }
 
 .word-stats-cell{
-    text-align: center;
+    text-align: start;
 }
 
 .statistics-container{

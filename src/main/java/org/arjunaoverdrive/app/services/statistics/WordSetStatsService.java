@@ -8,7 +8,9 @@ import org.arjunaoverdrive.app.web.dto.statistics.WordSetDetailedStatsDto;
 import java.util.Set;
 
 public interface WordSetStatsService {
-    WordSetStats saveResults(User id, ResultDto result);
+//    WordSetStats saveResults(User id, ResultDto result);
+
+    WordSetStats save(WordSetStats wordSetStats);
 
     Set<WordSetStats> getWordSetStatsForUser(User user);
 

@@ -13,6 +13,7 @@ public interface UserService extends UserDetailsService {
     User save(User user);
 
     User getUserFromSecurityContext();
+    User getUser(Long userId);
 
     User saveChanges(Integer id, AccountDto dto);
 

@@ -15,15 +15,8 @@ public class WordSetStatsDto {
     private String sourceLanguage;
     private String targetLanguage;
 
-    private Timestamp lastPracticedSourceLang;
-    private Timestamp lastPracticedTargetLang;
+    private float progressSource;
+    private float progressTarget;
 
-    private float bestResultSourceLang;
-    private float bestResultTargetLang;
 
-    private float averageResultSourceLang;
-    private float averageResultTargetLang;
-
-    private int timesPracticedSource;
-    private int timesPracticedTarget;
 }

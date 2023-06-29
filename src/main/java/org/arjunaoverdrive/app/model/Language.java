@@ -10,8 +10,8 @@ public enum Language {
     SPANISH("sp", "Spanish");
 
 
-    private String locale;
-    private String language;
+    private final String locale;
+    private final String language;
 
     Language(String locale, String language) {
         this.locale = locale;
@@ -28,7 +28,7 @@ public enum Language {
 
     public static Language getLanguage(String language){
         return Arrays.stream(Language.values())
-                .filter(l -> l.getLanguage().equals(language.toUpperCase()))
+                .filter(l -> l.getLanguage().equals(language))
                 .findFirst()
                 .get();
     }

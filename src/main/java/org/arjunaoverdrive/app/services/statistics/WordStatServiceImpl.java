@@ -37,15 +37,14 @@ public class WordStatServiceImpl implements WordStatService {
     }
 
     private Set<WordStat> createWordStats(ResultDto resultDto, WordSetStats wordSetStats) {
-        
+
         Map<String, List<String>> results = resultDto.getResult();
         int setId = resultDto.getSetId();
         String language = resultDto.getLanguage();
 
         Map<String, Long> words2ids = word2ids(setId, language);
 
-        Set<WordStat> wordStatSet = populateWordStats(wordSetStats, results, words2ids);
-        return wordStatSet;
+        return populateWordStats(wordSetStats, results, words2ids);
     }
 
     private Set<WordStat> populateWordStats(WordSetStats wordSetStats, Map<String, List<String>> results, Map<String, Long> words2ids) {
@@ -63,11 +62,11 @@ public class WordStatServiceImpl implements WordStatService {
                     }
             );
         }
-        
+
         return wordStatSet;
     }
 
-    private WordSet getWordSet(int setId){
+    private WordSet getWordSet(int setId) {
         return wordSetService.findById(setId);
     }
 
@@ -76,6 +75,9 @@ public class WordStatServiceImpl implements WordStatService {
         List<Word> words = wordSet.getWordList();
         String sourceLanguageLocale = wordSet.getSourceLanguage().getLocale();
         return words.stream()
-                .collect(Collectors.toMap(language.equals(sourceLanguageLocale) ? Word::getWord : Word::getTranslation, Word::getId));
+                .collect(Collectors.toMap(
+                        language.equals(sourceLanguageLocale) ?
+                                Word::getWord : Word::getTranslation, Word::getId)
+                );
     }
 }

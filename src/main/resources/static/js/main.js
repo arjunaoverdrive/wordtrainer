@@ -25,10 +25,6 @@ switch (page) {
         processStatisticsPage();
         break;
 
-    case 'Correct Mistakes':
-        processCorrectMistakesPage();
-        break;
-
     case 'Account settings':
         processAccountSettingsPage();
         break;
@@ -48,29 +44,30 @@ function processAddSetAndSetPage() {
 
     more.addEventListener("click", addOneItemMore);
 
-    for (let delBtn of deleteBtns) {
-        delBtn.addEventListener("click", handleDeleteClick);
+    itemsBlock.onclick = function (e) {
+        if (!e.target.classList.contains("delete-item")) return;
+        handleDeleteClick(e);
     }
 
     function handleDeleteClick(event) {
-        let btn = event.target;
-        let wordItem = btn.parentElement.parentElement;
-
-        wordItem.parentElement.removeChild(wordItem);
+        let tr = event.target.closest('tr');
+        if (!tr) return;
+        tr.parentElement.removeChild(tr);
 
         if (setid != -1) {
-            let id = btn.attributes.id.value;
+            let id = event.target.id;
             doAjaxCall(id, setid);
         }
+        itemsCount--;
     }
 
+
     function getItemsCount() {
-        let i = itemsBlock.childElementCount; //one item is language inputs
+        let i = itemsBlock.childElementCount; 
         return i;
     }
 
     function addOneItemMore() {
-
         let oneMoreItemMarkup = generateOneMoreItemMarkup(itemsCount);
         itemsCount++;
 
@@ -78,10 +75,6 @@ function processAddSetAndSetPage() {
 
         oneMore.classList.add("word-item");
         oneMore.innerHTML += oneMoreItemMarkup;
-
-        let newItemDeleteBtn = oneMore.lastChild.children.item(0);
-        console.log("added new item");
-        newItemDeleteBtn.addEventListener("click", handleDeleteClick);
     }
 
     function generateOneMoreItemMarkup(i) {
@@ -103,7 +96,7 @@ function processAddSetAndSetPage() {
         editSet.addEventListener("click", toggleSaveAndEdit);
 
         function toggleSaveAndEdit() {
-            for (btn of visibleBtns) {
+            for (let btn of visibleBtns) {
                 btn.classList.toggle("hidden");
             }
 
@@ -145,113 +138,33 @@ function processAddSetAndSetPage() {
     }
 }
 
-function processCorrectMistakesPage() {
-    const addL2Words = document.getElementById("add-l2-words");
-    addL2Words.addEventListener("click", addProblematicWordsForLang2);
-
-    const moreWords = document.getElementById("add-more-words");
-
-    let setId = getSetId();
-    let l2 = getOtherLang();
-
-    if (setId === '0') {
-        moreWords.classList.add("hidden");
-    }
-
-    function addProblematicWordsForLang2() {
-        return addProblematicWordsForL2()
-    }
-
-    function getSetId() {
-        return document.getElementById("set-id").value;
-    }
-
-    function addProblematicWordsForL2() {
-        let otherLangWords = doAjaxToGetProblematicWordsL2();
-        generateMarkupForL2Words(otherLangWords);
-        addL2Words.classList.toggle("hidden");
-    }
-
-
-    function getOtherLang() {
-        return getCurrentLang() === '0' ? 1 : 0;
-    }
-
-    function getCurrentLang() {
-        let lang = document.getElementById("lang").value;
-        return lang;
-    }
-
-    function doAjaxToGetProblematicWordsL2() {
-        let ajaxCall = new XMLHttpRequest();
-
-        let url = "/problematicWords/l2?lang=" + l2;
-        url += setId === '0' ? "" : "&setId=" + setId;
-
-        ajaxCall.open("GET", url, false);
-        ajaxCall.setRequestHeader("Content-type", "application/json");
-
-        ajaxCall.send();
-        let response = ajaxCall.responseText;
-        let json = JSON.parse(response);
-        return json;
-    }
-
-    function generateMarkupForL2Words(response) {
-        let itemsBlock = document.getElementById("word-items-body");
-        let words = response.words;
-        for (let word of words) {
-            let currentItemsCount = itemsBlock.childElementCount;
-            let oneMoreItemMarkup = generateMarkupForOneL2Word(currentItemsCount, word);
-            let oneMore = itemsBlock.appendChild(document.createElement("tr"));
-            oneMore.classList.add("word-item");
-            oneMore.innerHTML += oneMoreItemMarkup;
-            let newItemDeleteBtn = oneMore.lastChild.children.item(0);
-            newItemDeleteBtn.addEventListener("click", handleDeleteClick);
-        }
-    }
-
-    function generateMarkupForOneL2Word(currentItemsCount, word) {
-        let wordValue = word.word;
-        let translationValue = word.translation;
-        const newItemMarkup = '<td><input type="text" class="input word" name="words[' + currentItemsCount + '].word" required value="' + wordValue + '"></td>' +
-            '<td><input type="text" class="input translation" name="words[' + currentItemsCount + '].translation" required value="' + translationValue + '"></td>' +
-            '<td><button class="delete-item" type="button">Delete</button></td>';
-        return newItemMarkup;
-    }
-
-    function handleDeleteClick(event) {
-        let btn = event.target;
-        let wordItem = btn.parentElement.parentElement;
-        wordItem.parentElement.removeChild(wordItem);
-    }
-}
 
 function processStatisticsPage() {
-    const errorZoneBnts = document.getElementsByClassName("error-zone");
+    // const errorZoneBnts = document.getElementsByClassName("error-zone");
 
-    for (btn of errorZoneBnts) {
-        btn.addEventListener("click", openErrorsPage);
-    }
+    // for (btn of errorZoneBnts) {
+    //     btn.addEventListener("click", openErrorsPage);
+    // }
 
-    function openErrorsPage(event) {
-        let setId = event.target.attributes.id.value;
-        let lang = event.target.attributes.lang.value;
-        window.location.replace("/problematicWords?setId=" + setId + "&lang=" + lang);
-    }
+    // function openErrorsPage(event) {
+    //     let setId = event.target.attributes.id.value;
+    //     let lang = event.target.attributes.lang.value;
+    //     window.location.replace("/problematicWords?setId=" + setId + "&lang=" + lang);
+    // }
 }
 
 function processHomePage() {
-    let setBtns = document.getElementsByClassName("set-page");
-    let practiceBtns = document.getElementsByClassName("practice-set-btn");
 
-    for (btn of setBtns) {
-        btn.addEventListener("click", handleSetClick);
-    }
+    const container = document.getElementById("sets-container");
 
-
-    for (btn of practiceBtns) {
-        btn.addEventListener("click", handlePracticeClick);
+    container.onclick = function(e){
+        if (e.target.classList.contains("set-page")){
+            handleSetClick(e);
+        } 
+         else if(e.target.classList.contains("practice-set-btn")){
+            handlePracticeClick(e);
+        } 
+        else return;
     }
 
     function handleSetClick(event) {
@@ -272,8 +185,6 @@ function processImportPage() {
     const customDelimiter = document.getElementById('custom');
     const predefinedDelimiters = document.getElementsByClassName('standard-delimiter');
     setform = document.getElementById('form');
-
-    // setform.addEventListener('submit', validateData);
 
     customDelimiter.addEventListener('click', disableStandardInput);
 
@@ -337,7 +248,7 @@ function processPracticePage() {
 
         if (practiceLanguage == null) {
             return sourceLang;
-        } 
+        }
         return sessionStorage.getItem("practiceLanguage");
     }
 
@@ -384,8 +295,8 @@ function processPracticePage() {
 
     //swap languages
     function swapLanguages() {
-        
-        if(practiceLanguage === sourceLang){
+
+        if (practiceLanguage === sourceLang) {
             sessionStorage.setItem("practiceLanguage", targetLang);
         } else {
             sessionStorage.setItem("practiceLanguage", targetLang);
@@ -525,7 +436,6 @@ function processPracticePage() {
         doAjaxCallToPersistResults(sortedResultsObject);
 
         let attemptsMarkup = document.createElement("div");
-        console.log(sortedResultsObject);
 
         keys = Object.keys(sortedResultsObject);
         for (key in sortedResultsObject) {
@@ -545,7 +455,6 @@ function processPracticePage() {
         dto.setId = setId;
 
         let json = JSON.stringify(dto);
-        console.log(json);
 
         ajaxCall.open("post", url);
         ajaxCall.setRequestHeader("Content-type", "application/json");
@@ -708,5 +617,3 @@ function processAccountSettingsPage() {
     }
 
 }
-
-
