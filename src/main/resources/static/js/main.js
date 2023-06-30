@@ -321,14 +321,38 @@ function processPracticePage() {
     answerInput.addEventListener("change", handleAnswer, false);
     translationBtn.addEventListener("click", handleEmptyAnswer, false);
 
+    function isCorrectAnswer(correctAnswer, answer){
+        let delimiter = correctAnswer.includes(',') ? ',' : (correctAnswer.includes('/') ? '/' : '');
+
+        if(!delimiter){
+            return correctAnswer === answer;
+        } 
+        
+        let correctAnswerParts = correctAnswer.split(delimiter);
+        for(let i = 0; i < correctAnswerParts.length; i++){
+            correctAnswerParts[i] = correctAnswerParts[i].trim();
+        }
+        correctAnswerParts.sort();
+
+        if(!answer.includes(delimiter)) return false;
+
+        let answerParts = answer.split(',');
+        for(let i = 0; i < answerParts.length; i++){
+            answerParts[i] = answerParts[i].trim();
+        }
+        answerParts.sort();
+        return JSON.stringify(correctAnswerParts) == JSON.stringify(answerParts); 
+    }
+
     function handleAnswer() {
         verifyAnswer(wordToDisplay, answerInput.value.trim());
     }
 
     function verifyAnswer(currentWord, answer) {
         let correctAnswer = wordObjectsArr[currentIndex].translation;
-        if (correctAnswer === answer) {
-            if (isShowTranslation == false) {
+        
+        if (isCorrectAnswer(correctAnswer, answer)) {
+            if (!isShowTranslation) {
                 handleCorrectAnswer(currentWord);
             } else {
                 wordObjectsArr.push(wordObjectsArr[currentIndex]);
@@ -340,10 +364,12 @@ function processPracticePage() {
                 hideTranslation();
                 isShowTranslation = false;
             }
-        } else if (answer != correctAnswer || answer.length == 0) {
+        } else if (!isCorrectAnswer(correctAnswer, answer) || answer.length == 0) {
             handleIncorrectAnswer(currentWord, answer);
         }
     }
+
+    
 
     function handleCorrectAnswer(currentWord) {
         answerInput.setAttribute("style", "background-color:#7bfd7c5e");
@@ -543,7 +569,7 @@ function processPracticePage() {
 }
 // account settings page =========================================================================    
 function processAccountSettingsPage() {
-    // const form = document.getElementsByClassName('user-settings')[0];
+    
     const changePswdBtn = document.getElementsByClassName('change-password-btn')[0];
     const changePswdBlock = document.getElementsByClassName('change-password-block')[0];
 
